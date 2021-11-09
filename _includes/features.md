@@ -51,6 +51,6 @@ This template can be edited and changed in _pages/features.md. Just pick the com
 ```components/features/feature-7.html ```
 {% include components/features/feature-6.html %}-->
 
----
+<!-- ---
 ```components/features/feature-8.html ```
-{% include components/accordion-B.html %} 
+{% include components/accordion-B.html %}  -->

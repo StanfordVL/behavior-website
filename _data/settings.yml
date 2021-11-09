@@ -1,6 +1,6 @@
 basic_settings:
   site_title: BEHAVIOR
-  favicon_image: /assets/img/behavior/b02.png
+  favicon_image: /assets/img/behavior/behicon.png
 
 header_settings:
   logo_image: /assets/img/behavior/b02.png
