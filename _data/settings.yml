@@ -1,6 +1,6 @@
 basic_settings:
-  site_title: Argon Jekyll Theme
-  favicon_image: /assets/img/favicon.png
+  site_title: BEHAVIOR
+  favicon_image: /assets/img/behavior/b02.png
 
 header_settings:
   logo_image: /assets/img/behavior/b02.png
@@ -14,7 +14,7 @@ home_settings:
   # Choose a layout for your home page:
     # landing – an example landing page made using the Argon design system
     # blog – use your blog posts as the home page
-  theme: landing
+  theme: landingb
 
 blog_settings:
   # Choose a format for your blog listings:
@@ -32,6 +32,7 @@ blog_settings:
 menu_settings:
   menu_items:
     - title: 'Home'
+      url: /
       # submenu_items:
       # - title: Landing Page
       #   url: /
@@ -40,7 +41,7 @@ menu_settings:
       #   url: /blog
       #   icon: ni-books text-primary
     # - title: 'Features'
-      url: '/features'     
+    #  url: '/features'     
     # - title: Pricing
     #   url: /pricing        
     # - title: 'Blog'
@@ -62,12 +63,13 @@ menu_settings:
     # - title: 'Contact'
     #   url: '/contact'
     - title: 'Workshops'
+      url: /iccv21
       submenu_items:
       - title: ICCV21
         url: /iccv21
 
 footer_settings:
-  footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and Collaborators.
+  footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and collaborators.
 
 # contact_settings:
 #   form_action: 'https://formspree.io/hello@jekyllthemes.io'
