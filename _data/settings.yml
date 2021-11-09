@@ -3,8 +3,8 @@ basic_settings:
   favicon_image: /assets/img/favicon.png
 
 header_settings:
-  logo_image: /assets/img/brand/white.png
-  mobile_logo_image: /assets/img/brand/blue.png
+  logo_image: /assets/img/behavior/b02.png
+  mobile_logo_image: /assets/img/behavior/b02.png
   # Choose a color for your header [blue, dark, light].
   theme: dark
   # If the page has a featured image, it turns transparent if allow_transparent is set to "yes".
@@ -32,49 +32,53 @@ blog_settings:
 menu_settings:
   menu_items:
     - title: 'Home'
-      submenu_items:
-      - title: Landing Page
-        url: /
-        icon: ni-spaceship text-success    
-      - title: Blog
-        url: /blog
-        icon: ni-books text-primary
-    - title: 'Features'
+      # submenu_items:
+      # - title: Landing Page
+      #   url: /
+      #   icon: ni-spaceship text-success    
+      # - title: Blog
+      #   url: /blog
+      #   icon: ni-books text-primary
+    # - title: 'Features'
       url: '/features'     
-    - title: Pricing
-      url: /pricing        
-    - title: 'Blog'
+    # - title: Pricing
+    #   url: /pricing        
+    # - title: 'Blog'
+    #   submenu_items:
+    #   - title: Blog
+    #     url: /blog
+    #     icon: ni-books text-primary
+    #   - title: Narrow Grid Example
+    #     url: /blog-narrow-example
+    #     icon: ni-align-center text-success
+    #   - title: Wide Grid Example
+    #     url: /blog-grid-example
+    #     icon: ni-image text-info
+    #   - title: List Example
+    #     url: /blog-list-example
+    #     icon: ni-bullet-list-67 text-default    
+    # - title: 'About'
+    #   url: '/about'
+    # - title: 'Contact'
+    #   url: '/contact'
+    - title: 'Workshops'
       submenu_items:
-      - title: Blog
-        url: /blog
-        icon: ni-books text-primary
-      - title: Narrow Grid Example
-        url: /blog-narrow-example
-        icon: ni-align-center text-success
-      - title: Wide Grid Example
-        url: /blog-grid-example
-        icon: ni-image text-info
-      - title: List Example
-        url: /blog-list-example
-        icon: ni-bullet-list-67 text-default    
-    - title: 'About'
-      url: '/about'
-    - title: 'Contact'
-      url: '/contact'
+      - title: ICCV21
+        url: /iccv21
 
 footer_settings:
-  footer_tagline: Argon & Jekyll, together at last.
+  footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and Collaborators.
 
-contact_settings:
-  form_action: 'https://formspree.io/hello@jekyllthemes.io'
-  confirmation_url: '/thanks'
-  email_subject: 'Contact form submission'
-  send_button_text: 'Send Message'
+# contact_settings:
+#   form_action: 'https://formspree.io/hello@jekyllthemes.io'
+#   confirmation_url: '/thanks'
+#   email_subject: 'Contact form submission'
+#   send_button_text: 'Send Message'
 
 social_settings:
-  facebook_url: 'https://www.facebook.com/jekyllthemes/'
-  twitter_url: 'https://twitter.com/jekyllthemesio'
-  instagram_url: 'https://twitter.com/jekyllthemesio'
+  facebook_url: ''
+  twitter_url: ''
+  instagram_url: ''
   youtube_url: ''
   vimeo_url: ''
   pinterest_url: ''
@@ -85,16 +89,16 @@ social_settings:
   reddit_url: ''
   linkedin_url: ''
 
-authors:
-  tom:
-    name: Tom
-    picture: /assets/img/faces/team-1.jpg
-  jane:
-    name: Jane
-    picture: /assets/img/faces/team-4.jpg
-  michael:
-    name: Michael
-    picture: /assets/img/faces/michael.jpg
+# authors:
+#   tom:
+#     name: Tom
+#     picture: /assets/img/faces/team-1.jpg
+#   jane:
+#     name: Jane
+#     picture: /assets/img/faces/team-4.jpg
+#   michael:
+#     name: Michael
+#     picture: /assets/img/faces/michael.jpg
 
 advanced_settings:
   analytics_code: 
