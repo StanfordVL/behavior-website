@@ -40,8 +40,8 @@ menu_settings:
       # - title: Blog
       #   url: /blog
       #   icon: ni-books text-primary
-    # - title: 'Features'
-    #  url: '/features'     
+    - title: 'Features'
+     url: '/features'     
     # - title: Pricing
     #   url: /pricing        
     # - title: 'Blog'
