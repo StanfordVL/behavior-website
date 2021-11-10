@@ -6,4 +6,4 @@ title: Creating BEHAVIOR Activities
 ---
 
 # How to create activities?
-Click [here](https://stanfordvl.github.io/behavior-activity-annotation) to access the activity annotation system.
+Click [here](https://stanfordvl.github.io/behavior-activity-annotation/) to access the activity annotation system.
