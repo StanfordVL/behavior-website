@@ -2,7 +2,7 @@
 title: BEHAVIOR
 subtitle: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments
 description: None
-featured_image: /assets/img/sections/unsplashs.jpg
+featured_image: /assets/img/behavior/behab_web1.mp4
 ---
 
 
