@@ -50,7 +50,7 @@
 <body>
   {% include header.html %}
   <div class="wrapper page">
-    {% if page.url != "/" and page.collection != "posts" and page.type != "blogListing" and page.type != "contact" %}
+    {% if page.collection != "posts" and page.type != "blogListing" and page.type != "contact" %}
     <!-- Is not a blog post or blog archive or contact page -->
     {% if page.featured_image %}
     <!-- Is a page with a banner -->
