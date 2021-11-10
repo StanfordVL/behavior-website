@@ -1,89 +1,17 @@
 ---
-title: Home
-layout: default
-description: Use the Argon Jekyll theme to build a landing page, blog or complete website.
-featured_image: /assets/img/social.jpg
+title: BEHAVIOR
+subtitle: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments
+description: None
+featured_image: /assets/img/sections/unsplashs.jpg
 ---
 
-<!--Replace this page with your landing page content -->
-{% if site.data.settings.home_settings.theme == "landingb" %}
-  <div class="features-7 fullWidth contentWrapper">
-    {% include features.md %}
-  </div>
-{% endif %}
 
-{% if site.data.settings.home_settings.theme == "landing" %}
-  {% include home-sample.html %}
-  <div class="features-7 fullWidth contentWrapper">
-    <div class="container mb-2">
-    <div class="row">
-        <div class="col-md-8 text-center mx-auto">
-            <h3 class="display-2">Blog</h3>
-            <p class="lead pb-5">The latest posts from our blog</p>
-        </div>
-    </div>
-    
-    </div>
-  </div>
-  {% include blogsHome.html %}
-{% endif %}
+#### What is BEHAVIOR?
 
-{% if site.data.settings.home_settings.theme == "blog" %}
-  <!-- Or turn your homepage into just a blog -->
-  {% if site.data.settings.blog_settings.theme == "narrow" %}
-  <div class="page-header page-header-small bg-secondary fullWidth ">
-      <div class="container contentWrapper">
-        <div class="row">
-          <div class="col-lg-10 mx-auto text-center pt-4">
-            <h2 class="display-2">Blog</h2>
-            <h2 class="lead pl-5 pr-5 pb-3 text-center">The latest posts from our blog</h2>
-          </div>
-        </div>
-      </div>
-    </div>
+BEHAVIOR is a simulation benchmark to evaluate Embodied AI solutions.
 
-      <section class="blog main-raised">
-          {% include blogsHome.html %}  
-      </section>
-          
-  {% endif %}
+Embodied artificial intelligence (EAI) is advancing. But where are we now? We propose to test EAI agents with the physical challenges humans solve in their everyday life: household activities such as picking up toys, setting the table, or cleaning floors. BEHAVIOR is a challenge in simulation where EAI agents need to plan and execute navigation and manipulation strategies based on sensor information to fulfill 100 household activities.
 
-  {% if site.data.settings.blog_settings.theme == "basic" %}
-  <div class="page-header page-header-small bg-secondary fullWidth ">
-      <div class="container contentWrapper">
-        <div class="row">
-          <div class="col-lg-10 mx-auto text-center pt-4">
-            <h2 class="display-2">Blog</h2>
-            <h2 class="lead pl-5 pr-5 pb-3 text-center">The latest posts from our blog</h2>
-          </div>
-        </div>
-      </div>
-    </div>
+BEHAVIOR tests the ability of agents to perceive the environment, plan, and execute complex long-horizon activities that involve multiple objects, rooms, and state changes, all with the reproducibility, safety and observability offered by a realistic physics simulation. To compare the performance of EAI agents to that of humans, we have collected human demonstrations in the same tasks and environments using virtual reality. The demonstrations serve as reference to compare EAI solutions, but they also be used to develop them.
 
-      <section class="blog mt-5">
-          {% include blogsHome.html %}  
-      </section>
-          
-  {% endif %}
-
-  {% if site.data.settings.blog_settings.theme == "grid" %}
-  <div class="page-header page-header-small bg-secondary fullWidth ">
-      <div class="container contentWrapper">
-        <div class="row">
-          <div class="col-lg-10 mx-auto text-center pt-4">
-            <h2 class="display-2">Blog</h2>
-            <h2 class="lead pl-5 pr-5 pb-3 text-center">The latest posts from our blog</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-
-      <section class="blog">
-          {% include blogsHome.html %}  
-      </section>
-          
-  {% endif %}
-
-{% endif %}
-
-
+{% include components/features/feature-3-B.html %}
