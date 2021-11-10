@@ -40,7 +40,7 @@ menu_settings:
     - title: 'List of Activities'
       url: /activity_list.html
     - title: 'Create your own activity'
-      url: https://behavior-annotations.herokuapp.com/
+      url: https://StanfordVL.github.io/behavior-activity-annotation/
       # submenu_items:
       # - title: Landing Page
       #   url: /
