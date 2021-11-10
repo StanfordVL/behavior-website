@@ -22,6 +22,7 @@ Do you want to benchmark your solution? Download and install the required infras
 
 {% include components/features/join-us.html %}
 
+#### The BEHAVIOR Team
 {% include components/features/feature-1-B.html %}
 
 #### References
