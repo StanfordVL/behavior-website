@@ -33,6 +33,14 @@ menu_settings:
   menu_items:
     - title: 'Home'
       url: /
+    - title: 'Benchmark Guide'
+      url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit?usp=sharing
+    - title: 'Code'
+      url: https://github.com/StanfordVL/BehaviorChallenge2021
+    - title: 'List of Activities'
+      url: /
+    - title: 'Create your own activity'
+      url: /
       # submenu_items:
       # - title: Landing Page
       #   url: /
@@ -40,8 +48,8 @@ menu_settings:
       # - title: Blog
       #   url: /blog
       #   icon: ni-books text-primary
-    - title: 'Features'
-      url: /features     
+    # - title: 'Features'
+    #   url: /features     
     # - title: Pricing
     #   url: /pricing        
     # - title: 'Blog'
