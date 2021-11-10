@@ -6,8 +6,9 @@ featured_image: /assets/img/behavior/iccv21.png
 ---
 
 
-{% include components/table.html %}
+{% include components/iccv21/schedule.html %}
 
+{% include components/iccv21/speakers.html %}
 
 <!-- 
 ```components/teams/team-carousel-1.html ```
