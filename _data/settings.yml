@@ -38,7 +38,7 @@ menu_settings:
     - title: 'Code'
       url: https://github.com/StanfordVL/BehaviorChallenge2021
     - title: 'List of Activities'
-      url: /activity-list.html
+      url: /activity_list.html
     - title: 'Create your own activity'
       url: https://behavior-annotations.herokuapp.com/
       # submenu_items:
