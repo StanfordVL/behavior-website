@@ -39,56 +39,30 @@ menu_settings:
       submenu_items:
       - title: 'Installation Instructions'
         url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit#heading=h.mpuld4k8chhh
-        icon: fa-wrench text-primary
+        icon: ni-bullet-list-67 text-success
       - title: 'BEHAVIOR Starter code'
         url: https://github.com/StanfordVL/BehaviorChallenge2021
         icon: ni-books text-primary
       - title: 'BEHAVIOR Baselines'
         url: https://github.com/StanfordVL/behavior-baselines
+        icon: ni-chart-bar-32 text-info
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
+        icon: ni-align-left-2 text-success
       - title: 'iGibson'
         url: https://github.com/StanfordVL/iGibson
+        icon: ni-diamond text-primary
     - title: 'List of Activities'
       url: /activity_list.html
-      icon: ni-books text-primary
     - title: 'Create your own activity'
       url: https://StanfordVL.github.io/behavior-activity-annotation/
-      # submenu_items:
-      # - title: Landing Page
-      #   url: /
-      #   icon: ni-spaceship text-success    
-      # - title: Blog
-      #   url: /blog
-      #   icon: ni-books text-primary
-    # - title: 'Features'
-    #   url: /features     
-    # - title: Pricing
-    #   url: /pricing        
-    # - title: 'Blog'
-    #   submenu_items:
-    #   - title: Blog
-    #     url: /blog
-    #     icon: ni-books text-primary
-    #   - title: Narrow Grid Example
-    #     url: /blog-narrow-example
-    #     icon: ni-align-center text-success
-    #   - title: Wide Grid Example
-    #     url: /blog-grid-example
-    #     icon: ni-image text-info
-    #   - title: List Example
-    #     url: /blog-list-example
-    #     icon: ni-bullet-list-67 text-default    
-    # - title: 'About'
-    #   url: '/about'
-    # - title: 'Contact'
-    #   url: '/contact'
     - title: 'Workshops'
       url: /iccv21
       icon: fa-wrench text-primary
       submenu_items:
       - title: ICCV21
         url: /iccv21
+        icon: ni-spaceship text-primary
 
 footer_settings:
   footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and collaborators.
