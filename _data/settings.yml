@@ -82,6 +82,7 @@ menu_settings:
     #   url: '/contact'
     - title: 'Workshops'
       url: /iccv21
+      icon: fa-wrench text-default
       submenu_items:
       - title: ICCV21
         url: /iccv21
