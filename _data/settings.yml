@@ -39,6 +39,7 @@ menu_settings:
       submenu_items:
       - title: 'Installation Instructions'
         url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit#heading=h.mpuld4k8chhh
+        icon: fa-wrench text-default
       - title: 'BEHAVIOR Starter code'
         url: https://github.com/StanfordVL/BehaviorChallenge2021
       - title: 'BEHAVIOR Baselines'
