@@ -10,8 +10,8 @@ In a nutshell, BEHAVIOR agents are tasked with fulfilling 100 activities in hous
 The following includes additional details about the setup.
 - 
 
-{% include components/iccv21/schedule.html %}
-{% include components/iccv21/speakers.html %}
+{% include components/benchmark_features/behavior_details.html %}
+{% include components/benchmark_features/behavior_setups.html %}
 
 <!-- 
 ```components/teams/team-carousel-1.html ```
