@@ -39,7 +39,7 @@ menu_settings:
       submenu_items:
       - title: 'Installation Instructions'
         url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit#heading=h.mpuld4k8chhh
-        icon: fa-wrench text-default
+        icon: fa-wrench text-primary
       - title: 'BEHAVIOR Starter code'
         url: https://github.com/StanfordVL/BehaviorChallenge2021
         icon: ni-books text-primary
@@ -51,6 +51,7 @@ menu_settings:
         url: https://github.com/StanfordVL/iGibson
     - title: 'List of Activities'
       url: /activity_list.html
+      icon: ni-books text-primary
     - title: 'Create your own activity'
       url: https://StanfordVL.github.io/behavior-activity-annotation/
       # submenu_items:
@@ -84,7 +85,7 @@ menu_settings:
     #   url: '/contact'
     - title: 'Workshops'
       url: /iccv21
-      icon: fa-wrench text-default
+      icon: fa-wrench text-primary
       submenu_items:
       - title: ICCV21
         url: /iccv21
