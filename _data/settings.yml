@@ -42,6 +42,7 @@ menu_settings:
         icon: fa-wrench text-default
       - title: 'BEHAVIOR Starter code'
         url: https://github.com/StanfordVL/BehaviorChallenge2021
+        icon: ni-world2 text-default
       - title: 'BEHAVIOR Baselines'
         url: https://github.com/StanfordVL/behavior-baselines
       - title: 'BDDL'
