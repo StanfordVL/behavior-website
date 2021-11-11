@@ -36,7 +36,17 @@ menu_settings:
     - title: 'Benchmark Guide'
       url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit?usp=sharing
     - title: 'Code'
-      url: https://github.com/StanfordVL/BehaviorChallenge2021
+      submenu_items:
+      - title: 'Installation Instructions'
+        url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit#heading=h.mpuld4k8chhh
+      - title: 'BEHAVIOR Starter code'
+        url: https://github.com/StanfordVL/BehaviorChallenge2021
+      - title: 'BEHAVIOR Baselines'
+        url: https://github.com/StanfordVL/behavior-baselines
+      - title: 'BDDL'
+        url: https://github.com/StanfordVL/bddl
+      - title: 'iGibson'
+        url: https://github.com/StanfordVL/iGibson
     - title: 'List of Activities'
       url: /activity_list.html
     - title: 'Create your own activity'
