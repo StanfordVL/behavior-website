@@ -53,7 +53,7 @@ menu_settings:
         url: https://github.com/StanfordVL/iGibson
         icon: ni-diamond text-primary
     - title: 'List of Activities'
-      url: /activity_list.html
+      url: /behavior-gallery/activity.html
     - title: 'Create your own activity'
       url: https://StanfordVL.github.io/behavior-activity-annotation/
     - title: 'Workshops'
