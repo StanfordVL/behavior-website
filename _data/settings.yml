@@ -48,16 +48,16 @@ menu_settings:
       submenu_items:
       - title: 'Installation Instructions'
         url: https://stanfordvl.github.io/behavior/installation.html
-        icon: ni-bullet-list-67 text-success
+        icon: ni-align-left-2 text-success
       - title: 'BEHAVIOR'
         url: https://github.com/StanfordVL/behavior
-        icon: ni-books text-primary
+        icon: ni-bullet-list-67 text-success
       - title: 'iGibson'
         url: https://github.com/StanfordVL/iGibson
-        icon: ni-chart-bar-32 text-info
+        icon: ni-books text-primary
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
-        icon: ni-align-left-2 text-success
+        icon: ni-chart-bar-32 text-info
     - title: 'List of Activities'
       url: /behavior-gallery/activity.html
     - title: 'Create your own activity'
