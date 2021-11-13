@@ -33,25 +33,31 @@ menu_settings:
   menu_items:
     - title: 'Home'
       url: /
-    - title: 'Benchmark Guide'
-      url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit?usp=sharing
+    - title: 'Documentation'
+      submenu_items:
+      - title: 'BEHAVIOR'
+        url: https://stanfordvl.github.io/behavior/
+        icon: ni-bullet-list-67 text-success
+      - title: 'iGibson'
+        url: http://svl.stanford.edu/igibson/docs/
+        icon: ni-books text-primary
+      - title: 'BDDL'
+        url: https://github.com/StanfordVL/bddl/blob/master/README.md
+        icon: ni-chart-bar-32 text-info
     - title: 'Code'
       submenu_items:
       - title: 'Installation Instructions'
-        url: https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit#heading=h.mpuld4k8chhh
+        url: https://stanfordvl.github.io/behavior/installation.html
         icon: ni-bullet-list-67 text-success
-      - title: 'BEHAVIOR Starter code'
-        url: https://github.com/StanfordVL/BehaviorChallenge2021
+      - title: 'BEHAVIOR'
+        url: https://github.com/StanfordVL/behavior
         icon: ni-books text-primary
-      - title: 'BEHAVIOR Baselines'
-        url: https://github.com/StanfordVL/behavior-baselines
+      - title: 'iGibson'
+        url: https://github.com/StanfordVL/iGibson
         icon: ni-chart-bar-32 text-info
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
         icon: ni-align-left-2 text-success
-      - title: 'iGibson'
-        url: https://github.com/StanfordVL/iGibson
-        icon: ni-diamond text-primary
     - title: 'List of Activities'
       url: /behavior-gallery/activity.html
     - title: 'Create your own activity'
