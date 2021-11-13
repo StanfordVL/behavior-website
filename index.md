@@ -2,10 +2,10 @@
 title: BEHAVIOR
 subtitle: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments
 description: None
-featured_image: <video autoplay loop muted playsinline src="/assets/img/behavior/hundred-tile-recording.m4v"></video>
+featured_image: /assets/img/behavior/megamosaic.gif
 ---
 
-<!-- /assets/img/behavior/megamosaic.gif -->
+
 #### What is BEHAVIOR?
 
 BEHAVIOR is a simulation benchmark to evaluate Embodied AI solutions.
