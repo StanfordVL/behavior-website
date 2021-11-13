@@ -5,10 +5,7 @@ description: The details about the benchmark
 featured_image: /assets/img/behavior/run.jpeg
 ---
 
-BEHAVIOR includes all challenging aspects of robotics and embodied AI: perception, decision making and control. 
-In a nutshell, BEHAVIOR agents are tasked with fulfilling 100 activities in household environments based on the information acquired by its onboard sensors using the interactions enabled by its physical body.  
-The following includes additional details about the setup.
-- 
+BEHAVIOR includes all challenging aspects of robotics and embodied AI: perception, decision making and control: agents are have to perform 100 activities in household environments based on the information acquired by its onboard sensors using the interactions enabled by its physical body.  
 
 {% include components/benchmark_features/behavior_details.html %}
 {% include components/benchmark_features/behavior_setups.html %}
