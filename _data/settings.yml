@@ -33,6 +33,8 @@ menu_settings:
   menu_items:
     - title: 'Home'
       url: /
+    - title: 'Benchmark Details'
+      url: /benchmark_guide
     - title: 'Documentation'
       submenu_items:
       - title: 'BEHAVIOR'
