@@ -36,13 +36,13 @@ menu_settings:
     - title: 'About BEHAVIOR'
       submenu_items:
       - title: 'Benchmark Setup'
-        url: /benchmark_guide.md
+        url: /benchmark_guide
         icon: ni-settings-gear-65 text-default
       - title: 'List of Activities'
         url: /behavior-gallery/activity.html
         icon: ni-bullet-list-67 text-success
       - title: 'Create your own activity'
-        url: /activity-annotation.md
+        url: /activity-annotation
         icon: ni-atom text-primary
     - title: 'Code'
       submenu_items:
@@ -70,8 +70,6 @@ menu_settings:
         url: https://github.com/StanfordVL/bddl/blob/master/README.md
         icon: ni-chart-bar-32 text-info
     - title: 'Workshops'
-      url: /iccv21
-      icon: fa-wrench text-primary
       submenu_items:
       - title: ICCV21
         url: /iccv21
