@@ -36,7 +36,7 @@ menu_settings:
     - title: 'Documentation'
       submenu_items:
       - title: 'BEHAVIOR'
-        url: https://stanfordvl.github.io/behavior/
+        url: https://stanfordvl.github.io/behavior/intro.html
         icon: ni-bullet-list-67 text-success
       - title: 'iGibson'
         url: http://svl.stanford.edu/igibson/docs/
