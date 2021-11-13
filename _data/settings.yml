@@ -36,7 +36,7 @@ menu_settings:
     - title: 'About BEHAVIOR'
       submenu_items:
       - title: 'Benchmark Setup'
-        url: /benchmark_guide
+        url: /benchmark-guide
         icon: ni-settings-gear-65 text-default
       - title: 'List of Activities'
         url: /behavior-gallery/activity.html
