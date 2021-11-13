@@ -44,6 +44,9 @@ menu_settings:
       - title: 'Create your own activity'
         url: /activity-annotation
         icon: ni-atom text-primary
+      - title: 'Dataset of VR Demos'
+        url: /vr-demos
+        icon: ni-glasses-2 text-info
     - title: 'Code'
       submenu_items:
       - title: 'Installation Instructions'
