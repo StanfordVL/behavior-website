@@ -2,7 +2,7 @@
 title: Benchmark Guidelines
 subtitle: Technical details, setup, embodiment, input/output
 description: The details about the benchmark
-featured_image: /assets/img/behavior/iccv21.png
+featured_image: /assets/img/behavior/run.jpeg
 ---
 
 BEHAVIOR includes all challenging aspects of robotics and embodied AI: perception, decision making and control. 
