@@ -33,19 +33,14 @@ menu_settings:
   menu_items:
     - title: 'Home'
       url: /
-    - title: 'Benchmark Details'
-      url: /benchmark_guide
-    - title: 'Documentation'
+    - title: 'About BEHAVIOR'
       submenu_items:
-      - title: 'BEHAVIOR'
-        url: https://stanfordvl.github.io/behavior/intro.html
-        icon: ni-bullet-list-67 text-success
-      - title: 'iGibson'
-        url: http://svl.stanford.edu/igibson/docs/
-        icon: ni-books text-primary
-      - title: 'BDDL'
-        url: https://github.com/StanfordVL/bddl/blob/master/README.md
-        icon: ni-chart-bar-32 text-info
+      - title: 'Benchmark Setup'
+        url: /benchmark_guide.md
+      - title: 'List of Activities'
+        url: /behavior-gallery/activity.html
+      - title: 'Create your own activity'
+        url: https://StanfordVL.github.io/behavior-activity-annotation/
     - title: 'Code'
       submenu_items:
       - title: 'Installation Instructions'
@@ -60,10 +55,17 @@ menu_settings:
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
         icon: ni-chart-bar-32 text-info
-    - title: 'List of Activities'
-      url: /behavior-gallery/activity.html
-    - title: 'Create your own activity'
-      url: https://StanfordVL.github.io/behavior-activity-annotation/
+    - title: 'Documentation'
+      submenu_items:
+      - title: 'BEHAVIOR'
+        url: https://stanfordvl.github.io/behavior/intro.html
+        icon: ni-bullet-list-67 text-success
+      - title: 'iGibson'
+        url: http://svl.stanford.edu/igibson/docs/
+        icon: ni-books text-primary
+      - title: 'BDDL'
+        url: https://github.com/StanfordVL/bddl/blob/master/README.md
+        icon: ni-chart-bar-32 text-info
     - title: 'Workshops'
       url: /iccv21
       icon: fa-wrench text-primary
