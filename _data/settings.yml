@@ -37,10 +37,13 @@ menu_settings:
       submenu_items:
       - title: 'Benchmark Setup'
         url: /benchmark_guide.md
+        icon: ni-setting-gear-65 text-success
       - title: 'List of Activities'
         url: /behavior-gallery/activity.html
+        icon: ni-bullet-list-67 text-success
       - title: 'Create your own activity'
         url: https://StanfordVL.github.io/behavior-activity-annotation/
+        icon: ni-atom text-success
     - title: 'Code'
       submenu_items:
       - title: 'Installation Instructions'
