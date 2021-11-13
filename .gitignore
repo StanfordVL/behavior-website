@@ -1,1 +1,4 @@
 .DS_store
+.jekyll-cache/
+Gemfile.lock
+_site/
