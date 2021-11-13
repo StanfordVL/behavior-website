@@ -58,8 +58,8 @@ menu_settings:
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
         icon: ni-chart-bar-32 text-info
-    - title: 'List of Activities'
-      url: /behavior-gallery/activity.html
+    # - title: 'List of Activities'
+    #   url: /behavior-gallery/activity.html
     - title: 'Create your own activity'
       url: https://StanfordVL.github.io/behavior-activity-annotation/
     - title: 'Workshops'
