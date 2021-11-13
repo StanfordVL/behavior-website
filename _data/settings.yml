@@ -42,13 +42,13 @@ menu_settings:
         url: /behavior-gallery/activity.html
         icon: ni-bullet-list-67 text-success
       - title: 'Create your own activity'
-        url: https://StanfordVL.github.io/behavior-activity-annotation/
+        url: /activity-annotation.md
         icon: ni-atom text-primary
     - title: 'Code'
       submenu_items:
       - title: 'Installation Instructions'
         url: https://stanfordvl.github.io/behavior/installation.html
-        icon: ni-align-left-2 text-default
+        icon: ni-single-copy-04 text-default
       - title: 'BEHAVIOR'
         url: https://github.com/StanfordVL/behavior
         icon: ni-bullet-list-67 text-success
