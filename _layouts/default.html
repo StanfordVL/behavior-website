@@ -52,11 +52,16 @@
   <div class="wrapper page">
     {% if page.collection != "posts" and page.type != "blogListing" and page.type != "contact" %}
     <!-- Is not a blog post or blog archive or contact page -->
-    {% if page.featured_image %}
+    {% if page.featured_image or page.featured_video %}
     <!-- Is a page with a banner -->
     <div class="page-header page-header-small header-filter mb-4">
+      {% if page.featured_video %}
+      <video class="page-header-image card-background" autoplay loop muted playsinline poster="{{ page.featured_image | relative_url }}" src="{{ page.featured_video | relative_url }}"></video>
+      {% elsif page.featured_image %}
       <div class="page-header-image card-background"
         style="background-image: url({{ page.featured_image | relative_url }});"></div>
+      {% endif %}
+      
       <div class="container contentWrapper">
         <div class="row">
           <div class="col-lg-10 mx-auto text-center pt-4">
