@@ -1,6 +1,6 @@
 ---
-title: Benchmark Guidelines
-subtitle: Technical details, setup, embodiment, input/output
+title: Benchmark Setups
+subtitle: Embodiments, input/output, metrics
 description: The details about the benchmark
 featured_image: /assets/img/behavior/run.jpeg
 ---
