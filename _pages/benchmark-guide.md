@@ -1,6 +1,6 @@
 ---
 title: Benchmark Setup
-subtitle: Embodiments, input/output, metrics
+subtitle: Embodiments, actuation, sensing, scene instances
 description: The details about the benchmark
 featured_image: /assets/img/behavior/run.jpeg
 ---
