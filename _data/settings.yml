@@ -42,7 +42,7 @@ menu_settings:
         url: /behavior-gallery/activity.html
         icon: ni-bullet-list-67 text-success
       - title: 'Create your own activity'
-        url: /activity-annotation
+        url: /activity-creation
         icon: ni-atom text-primary
       - title: 'Dataset of VR Demos'
         url: /vr-demos
