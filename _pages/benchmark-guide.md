@@ -1,5 +1,5 @@
 ---
-title: Benchmark Setups
+title: Benchmark Setup
 subtitle: Embodiments, input/output, metrics
 description: The details about the benchmark
 featured_image: /assets/img/behavior/run.jpeg
