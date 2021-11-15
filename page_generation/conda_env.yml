@@ -1,0 +1,12 @@
+name: behavior-website
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - google-cloud-storage
+  - google-auth
+  - jinja2
+#   - pip:
+#     - termcolor==1.1.0
