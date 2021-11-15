@@ -2,3 +2,5 @@
 .jekyll-cache/
 Gemfile.lock
 _site/
+page_generation/vr_demos.md
+page_generation/*.json
