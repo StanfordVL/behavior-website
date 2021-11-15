@@ -50,7 +50,7 @@ menu_settings:
     - title: 'Code'
       submenu_items:
       - title: 'Installation Instructions'
-        url: https://stanfordvl.github.io/behavior/installation.html
+        url: https://stanfordvl.github.io/iGibson/installation.html
         icon: ni-single-copy-04 text-default
       - title: 'BEHAVIOR'
         url: https://github.com/StanfordVL/behavior
