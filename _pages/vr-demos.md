@@ -5,9 +5,9 @@ subtitle: "500 successful human demonstrations in virtual reality"
 featured_image: /assets/img/behavior/building.jpg
 ---
 
-### Imitation learning dataset
+### Virtual reality demonstration dataset (VR_demos)
 
-The imitation learning dataset is described in the BEHAVIOR documentation. It includes all observation modalities (semantic segmentation, instance segmentation, RGB, depth, highlight), task observations, proprioception, and the action used by the agent. Additionally, each hdf5 contains metadata on the specific task.
+This processed dataset could be useful for imitation learning dataset, as described in the BEHAVIOR documentation. It includes all observation modalities (semantic segmentation, instance segmentation, RGB, depth, highlight), task observations, proprioception, and the action used by the agent. Additionally, each hdf5 contains metadata on the specific task.
 
 To download a single example demonstration (~1 gb):
 ```bash
@@ -19,7 +19,7 @@ To download the entire dataset (~250 gb)
 wget https://download.cs.stanford.edu/downloads/behavior/behavior_imitation_learning_v0.5.0.tar.gz
 ```
 
-### Virtual reality demonstration
+### Raw virtual reality demonstration dataset (VR_demos_raw)
 
 To download the raw hdf5s, which include eyetracking and individual pose of the VR sensors, please use the following command:
 
