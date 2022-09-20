@@ -77,6 +77,9 @@ menu_settings:
       - title: ICCV21
         url: /iccv21
         icon: ni-spaceship text-primary
+      - title: ECCV22
+        url: /eccv22
+        icon: ni-spaceship text-primary
 
 footer_settings:
   footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and collaborators.
