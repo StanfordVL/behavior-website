@@ -5,13 +5,11 @@ featured_image: /assets/img/behavior/eccv22-2.png
 ---
 
 {% include components/eccv22/video.html %}
-
-
+{% include components/eccv22/schedule.html %}
 <!-- 
 ```components/teams/team-carousel-1.html ```
 {% include components/teams/team-carousel-1.html %}
 
-{% include components/iccv21/schedule.html %}
 {% include components/iccv21/speakers.html %}
 
 ---
