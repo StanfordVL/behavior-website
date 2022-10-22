@@ -1,11 +1,10 @@
 ---
 title: 1st BEHAVIOR Tutorial @ ECCV22
-subtitle: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments
+subtitle: Benchmarking Embodied AI Solutions in Natural Tasks 
 featured_image: /assets/img/behavior/eccv22-2.png
 ---
-
-{% include components/eccv22/video.html %}
 {% include components/eccv22/schedule.html %}
+{% include components/eccv22/video.html %}
 <!-- 
 ```components/teams/team-carousel-1.html ```
 {% include components/teams/team-carousel-1.html %}
