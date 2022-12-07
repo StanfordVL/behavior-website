@@ -33,26 +33,27 @@ menu_settings:
   menu_items:
     - title: 'Home'
       url: /
-    - title: 'About BEHAVIOR'
+    - title: 'B1K'
       submenu_items:
+      - title: 'Overview'
+        url: /behavior-1k
+    - title: 'B100'
+      submenu_items:
+      - title: 'Overview'
+        url: /behavior-100
       - title: 'Benchmark Setup'
         url: /benchmark-guide
         icon: ni-settings-gear-65 text-default
       - title: 'List of Activities'
         url: /behavior-gallery/activity.html
         icon: ni-bullet-list-67 text-success
-      - title: 'Create your own activity'
-        url: /activity-creation
-        icon: ni-atom text-primary
       - title: 'Dataset of VR Demos'
         url: /vr-demos
         icon: ni-glasses-2 text-info
-    - title: 'Code'
-      submenu_items:
       - title: 'Installation Instructions'
         url: https://stanfordvl.github.io/behavior/installation.html
         icon: ni-single-copy-04 text-default
-      - title: 'BEHAVIOR'
+      - title: 'BEHAVIOR-100'
         url: https://github.com/StanfordVL/behavior
         icon: ni-bullet-list-67 text-success
       - title: 'iGibson'
@@ -61,17 +62,20 @@ menu_settings:
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
         icon: ni-chart-bar-32 text-info
-    - title: 'Documentation'
-      submenu_items:
-      - title: 'BEHAVIOR'
+      - title: 'BEHAVIOR-100 Doc'
         url: https://stanfordvl.github.io/behavior/intro.html
         icon: ni-bullet-list-67 text-success
-      - title: 'iGibson'
+      - title: 'iGibson Doc'
         url: http://svl.stanford.edu/igibson/docs/
         icon: ni-books text-primary
-      - title: 'BDDL'
-        url: https://github.com/StanfordVL/bddl/blob/master/README.md
-        icon: ni-chart-bar-32 text-info
+    # - title: 'Shared'
+    #     submenu_items:
+    #     - title: 'BDDL'
+    #     url: https://github.com/StanfordVL/bddl/blob/master/README.md
+    #     icon: ni-chart-bar-32 text-info
+    #     - title: 'Create your own activity'
+    #     url: /activity-creation
+    #     icon: ni-atom text-primary
     - title: 'Workshops'
       submenu_items:
       - title: ICCV21
@@ -80,7 +84,8 @@ menu_settings:
       - title: ECCV22
         url: /eccv22
         icon: ni-spaceship text-primary
-
+    - title: Publications
+      url: /publications
 footer_settings:
   footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and collaborators.
 
