@@ -23,4 +23,6 @@ BEHAVIOR tests the ability of agents to perceive the environment, plan, and exec
 
 {% include components/features/feature-1-B.html %}
 
+{% include components/features/feature-1-C.html %}
+
 
