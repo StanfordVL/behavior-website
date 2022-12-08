@@ -2,7 +2,7 @@
 title: 'BEHAVIOR'
 subtitle: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments'
 # description: None
-featured_image: /assets/img/behavior/sim2real.png
+featured_image: /assets/img/behavior/hai.png
 # featured_video: /assets/img/behavior/hundred-tile-recording.m4v
 ---
 
