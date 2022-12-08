@@ -37,10 +37,13 @@ menu_settings:
       submenu_items:
       - title: 'Overview'
         url: /behavior-1k
+        icon: ni-bullet-list-67 text-success
+
     - title: 'BEHAVIOR-100'
       submenu_items:
       - title: 'Overview'
         url: /behavior-100
+        icon: ni-bullet-list-67 text-success
       - title: 'Benchmark Setup'
         url: /benchmark-guide
         icon: ni-settings-gear-65 text-default
