@@ -50,37 +50,33 @@ menu_settings:
       - title: 'List of Activities'
         url: /behavior-gallery/activity.html
         icon: ni-bullet-list-67 text-success
-      - title: 'Dataset of VR Demos'
-        url: /vr-demos
-        icon: ni-glasses-2 text-info
       - title: 'Installation Instructions'
         url: https://stanfordvl.github.io/behavior/installation.html
         icon: ni-single-copy-04 text-default
-      - title: 'BEHAVIOR-100'
-        url: https://github.com/StanfordVL/behavior
-        icon: ni-bullet-list-67 text-success
-      - title: 'iGibson'
-        url: https://github.com/StanfordVL/iGibson
-        icon: ni-books text-primary
-      - title: 'BDDL'
-        url: https://github.com/StanfordVL/bddl
-        icon: ni-chart-bar-32 text-info
-      - title: 'BEHAVIOR-100 Doc'
-        url: https://stanfordvl.github.io/behavior/intro.html
-        icon: ni-bullet-list-67 text-success
-      - title: 'iGibson Doc'
-        url: http://svl.stanford.edu/igibson/docs/
-        icon: ni-books text-primary
-
-    # - title: 'Misc'
-    #   submenu_items:
-    #   - title: 'Create your own activity'
-    #   url: /activity-creation
-    #   icon: ni-bullet-list-67 text-success
-
-    - title: Publications
+      - title: 'Dataset of VR Demos'
+        url: /vr-demos
+        icon: ni-glasses-2 text-info
+      # - title: 'BEHAVIOR-100'
+      #   url: https://github.com/StanfordVL/behavior
+      #   icon: ni-bullet-list-67 text-success
+      # - title: 'iGibson'
+      #   url: https://github.com/StanfordVL/iGibson
+      #   icon: ni-books text-primary
+      # - title: 'BDDL'
+      #   url: https://github.com/StanfordVL/bddl
+      #   icon: ni-chart-bar-32 text-info
+      # - title: 'BEHAVIOR-100 Doc'
+      #   url: https://stanfordvl.github.io/behavior/intro.html
+      #   icon: ni-bullet-list-67 text-success
+      # - title: 'iGibson Doc'
+      #   url: http://svl.stanford.edu/igibson/docs/
+      #   icon: ni-books text-primary
+    # - title: 'Shared'
+    #     - title: 'Create your own activity'
+    #     url: /activity-creation
+    #     icon: ni-atom text-primary
+    - title: 'Publications'
       url: /publications
-
     - title: 'Workshops'
       submenu_items:
       - title: ICCV21
