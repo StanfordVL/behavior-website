@@ -33,11 +33,11 @@ menu_settings:
   menu_items:
     - title: 'Home'
       url: /
-    - title: 'B1K'
+    - title: 'BEHAVIOR-1K'
       submenu_items:
       - title: 'Overview'
         url: /behavior-1k
-    - title: 'B100'
+    - title: 'BEHAVIOR-100'
       submenu_items:
       - title: 'Overview'
         url: /behavior-100
@@ -50,6 +50,7 @@ menu_settings:
       - title: 'Installation Instructions'
         url: https://stanfordvl.github.io/behavior/installation.html
         icon: ni-single-copy-04 text-default
+<<<<<<< HEAD
       - title: 'Dataset of VR Demos'
         url: /vr-demos
         icon: ni-glasses-2 text-info
@@ -76,6 +77,33 @@ menu_settings:
     #     - title: 'Create your own activity'
     #     url: /activity-creation
     #     icon: ni-atom text-primary
+=======
+      - title: 'BEHAVIOR-100'
+        url: https://github.com/StanfordVL/behavior
+        icon: ni-bullet-list-67 text-success
+      - title: 'iGibson'
+        url: https://github.com/StanfordVL/iGibson
+        icon: ni-books text-primary
+      - title: 'BDDL'
+        url: https://github.com/StanfordVL/bddl
+        icon: ni-chart-bar-32 text-info
+      - title: 'BEHAVIOR-100 Doc'
+        url: https://stanfordvl.github.io/behavior/intro.html
+        icon: ni-bullet-list-67 text-success
+      - title: 'iGibson Doc'
+        url: http://svl.stanford.edu/igibson/docs/
+        icon: ni-books text-primary
+
+    - title: 'Utilities'
+      submenu_items:
+      - title: 'Create your own activity'
+      url: /activity-creation
+      icon: ni-atom text-primary
+
+    - title: Publications
+      url: /publications
+
+>>>>>>> origin/b1k-reorg
     - title: 'Workshops'
       submenu_items:
       - title: ICCV21
@@ -84,8 +112,6 @@ menu_settings:
       - title: ECCV22
         url: /eccv22
         icon: ni-spaceship text-primary
-    - title: Publications
-      url: /publications
 footer_settings:
   footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and collaborators.
 
