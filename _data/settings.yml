@@ -72,11 +72,11 @@ menu_settings:
         url: http://svl.stanford.edu/igibson/docs/
         icon: ni-books text-primary
 
-    - title: 'Utilities'
-      submenu_items:
-      - title: 'Create your own activity'
-      url: /activity-creation
-      icon: ni-atom text-primary
+    # - title: 'Misc'
+    #   submenu_items:
+    #   - title: 'Create your own activity'
+    #   url: /activity-creation
+    #   icon: ni-bullet-list-67 text-success
 
     - title: Publications
       url: /publications

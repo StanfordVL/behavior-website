@@ -7,7 +7,7 @@ featured_image: /assets/img/behavior/sim2real.png
 ---
 
 
-#### What is BEHAVIOR-1K?
+### What is BEHAVIOR-1K?
 
 BEHAVIOR-1K is a comprehensive simulation benchmark for human-centered robotics. Compared to its predecessor, BEHAVIOR-100, BEHAVIOR-1K is more grounded on actual human needs. It is more diverse in the type of scenes, objects, and activities. Powered by Nvidia's Omniverse, BEHAVIOR-1K also achieves a new level of realism in rendering and physics simulation.  
 
