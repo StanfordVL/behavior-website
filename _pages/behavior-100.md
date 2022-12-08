@@ -24,15 +24,16 @@ BEHAVIOR tests the ability of agents to perceive the environment, plan, and exec
 #### Getting started
 
 Do you want to benchmark your solution? Follow the instructions [here](https://stanfordvl.github.io/behavior/installation.html). You will download and install the required infrastructure: [a new version of iGibson](http://svl.stanford.edu/igibson/docs/installation.html), our simulation environment for interactive tasks extended now to new object states for BEHAVIOR, the BEHAVIOR Dataset of Objects and the iGibson2.0 Dataset of Scenes (combined in our [benchmarking bundle](https://storage.googleapis.com/gibson_scenes/behavior_data_bundle.zip)), with object and house models to use the benchmark, and our [starter code](https://github.com/StanfordVL/behavior/), with examplest to train againts in the tasks. 
+
+[BEHAVIOR-100 benchmark code](https://github.com/StanfordVL/behavior) and [documentation](https://stanfordvl.github.io/behavior/intro.html).
 <!-- If you want to use human demonstrations to start developing your solutions, you can also download the [BEHAVIOR Dataset of Human Demonstrations](https://behavior.stanford.edu/human_demonstrations/human_demonstrations.html) in virtual reality.
  -->
 
-#### Resources
-[BEHAVIOR-100 benchmark code](https://github.com/StanfordVL/behavior) and [documentation](https://stanfordvl.github.io/behavior/intro.html).
+<!-- #### Resources -->
 
-[iGibson simulator code](https://github.com/StanfordVL/iGibson) and [documentation](http://svl.stanford.edu/igibson/docs/).
+<!-- [iGibson simulator code](https://github.com/StanfordVL/iGibson) and [documentation](http://svl.stanford.edu/igibson/docs/).
 
-[BDDL specification language code and documentation](https://github.com/StanfordVL/bddl).
+[BDDL specification language code and documentation](https://github.com/StanfordVL/bddl). -->
 
 
 {% include components/features/join-us.html %}
