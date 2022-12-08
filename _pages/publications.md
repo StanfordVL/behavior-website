@@ -1,10 +1,11 @@
 ---
 title: Publications
-subtitle: 
-featured_image: /assets/img/behavior/eccv22-2.png
+# subtitle: 
+featured_image: /assets/img/sections/books.avif
 ---
 
-#### References
+### References
+- BEHAVIOR-1K: A Benchmark for Embodied AI with 1,000 Everyday Activities and Realistic Simulation. Chengshu Li\*, Ruohan Zhang\*, Josiah Wong\*, Cem Gokmen\*, Sanjana Srivastava\*, Roberto Martín-Martín\*, Chen Wang\*, Gabrael Levine\*, Michael Lingelbach, Jiankai Sun, Mona Anvari, Minjune Hwang, Manasi Sharma, Arman Aydin, Dhruva Bansal, Samuel Hunter, Kyu-Young Kim, Alan Lou, Caleb R Matthews, Ivan Villa-Renteria, Jerry Huayang Tang, Claire Tang, Fei Xia, Silvio Savarese, Hyowon Gweon, Karen Liu, Jiajun Wu, Li Fei-Fei, Conference on Robot Learning (CoRL) 2022.
 
 - [BEHAVIOR: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments](https://arxiv.org/abs/2108.03332). Sanjana Srivastava\*, Chengshu Li\*, Michael Lingelbach\*, Roberto Martín-Martín\*, Fei Xia, Kent Vainio, Zheng Lian, Cem Gokmen, Shyamal Buch, C. Karen Liu, Silvio Savarese, Hyowon Gweon, Jiajun Wu, Li Fei-Fei, Conference on Robot Learning (CoRL) 2021.
 
