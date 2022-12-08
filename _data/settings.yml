@@ -44,27 +44,27 @@ menu_settings:
       - title: 'Overview'
         url: /behavior-100
         icon: ni-bullet-list-67 text-success
-      - title: 'Benchmark Setup'
-        url: /benchmark-guide
-        icon: ni-settings-gear-65 text-default
+      # - title: 'Benchmark Setup'
+      #   url: /benchmark-guide
+      #   icon: ni-settings-gear-65 text-default
       - title: 'List of Activities'
         url: /behavior-gallery/activity.html
         icon: ni-bullet-list-67 text-success
-      - title: 'Installation Instructions'
-        url: https://stanfordvl.github.io/behavior/installation.html
-        icon: ni-single-copy-04 text-default
-      - title: 'Dataset of VR Demos'
-        url: /vr-demos
-        icon: ni-glasses-2 text-info
+      # - title: 'Installation Instructions'
+      #   url: https://stanfordvl.github.io/behavior/installation.html
+      #   icon: ni-single-copy-04 text-default
       # - title: 'BEHAVIOR-100'
       #   url: https://github.com/StanfordVL/behavior
       #   icon: ni-bullet-list-67 text-success
-      # - title: 'iGibson'
-      #   url: https://github.com/StanfordVL/iGibson
-      #   icon: ni-books text-primary
-      # - title: 'BDDL'
-      #   url: https://github.com/StanfordVL/bddl
-      #   icon: ni-chart-bar-32 text-info
+      - title: 'BDDL'
+        url: https://github.com/StanfordVL/bddl
+        icon: ni-chart-bar-32 text-info
+      - title: 'iGibson'
+        url: https://github.com/StanfordVL/iGibson
+        icon: ni-books text-primary
+      - title: 'Dataset of VR Demos'
+        url: /vr-demos
+        icon: ni-glasses-2 text-info
       # - title: 'BEHAVIOR-100 Doc'
       #   url: https://stanfordvl.github.io/behavior/intro.html
       #   icon: ni-bullet-list-67 text-success
