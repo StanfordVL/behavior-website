@@ -9,13 +9,20 @@ featured_image: /assets/img/behavior/b1k-scenes.png
 
 #### What is BEHAVIOR?
 
-BEHAVIOR is a simulation benchmark to evaluate Embodied AI solutions.
-
-Embodied artificial intelligence (EAI) is advancing. But where are we now? We propose to test EAI agents with the physical challenges humans solve in their everyday life: household activities such as picking up toys, setting the table, or cleaning floors. BEHAVIOR is a benchmark in simulation where EAI agents need to plan and execute navigation and manipulation strategies based on sensor information to fulfill 100 household activities.
-
-BEHAVIOR tests the ability of agents to perceive the environment, plan, and execute complex long-horizon activities that involve multiple objects, rooms, and state changes, all with the reproducibility, safety and observability offered by a realistic physics simulation. To compare the performance of EAI agents to that of humans, we have collected human demonstrations in the same tasks and environments using virtual reality. The demonstrations serve as reference to compare EAI solutions, but they also be used to develop them.
-<!-- 
-[Technical details about the benchmark](/_pages/benchmark_guide.md) -->
+BEHAVIOR-1K is a comprehensive simulation benchmark for human-centered robotics. BEHAVIOR-1K includes two components, guided
+and motivated by the results of an extensive survey on ‘what do you want robots to
+do for you?’. The first is the definition of 1,000 everyday activities, grounded in 50
+scenes (houses, gardens, restaurants, offices, etc.) with more than 5,000 objects
+annotated with rich physical and semantic properties. The second is OMNIGIBSON,
+a novel simulation environment that supports these activities via realistic physics
+simulation and rendering of rigid bodies, deformable bodies, and liquids. Our
+experiments indicate that the activities in BEHAVIOR-1K are long-horizon and
+dependent on complex manipulation skills, both of which remain a challenge for
+even state-of-the-art robot learning solutions. To calibrate the simulation-to-reality
+gap of BEHAVIOR-1K, we provide an initial study on transferring solutions learned
+with a mobile manipulator in a simulated apartment to its real-world counterpart.
+We hope that BEHAVIOR-1K’s human-grounded nature, diversity, and realism
+make it valuable for embodied AI and robot learning research. 
 
 {% include components/features/feature-3-B.html %}
 

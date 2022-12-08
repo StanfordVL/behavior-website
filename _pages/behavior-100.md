@@ -26,7 +26,6 @@ Do you want to benchmark your solution? Follow the instructions [here](https://s
  -->
 {% include components/features/join-us.html %}
 
-{% include components/features/feature-1-B.html %}
 
 #### References
 
