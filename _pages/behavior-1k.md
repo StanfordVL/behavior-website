@@ -20,7 +20,7 @@ simulation and rendering of rigid bodies, deformable bodies, and liquids. We hop
 make it valuable for embodied AI and robot learning research. 
 
 
-{% include components/features/b1k-features.html %}
+{% include components/features/b1k-feat2.html %}
 
 #### Components
 
