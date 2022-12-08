@@ -33,11 +33,18 @@ menu_settings:
   menu_items:
     - title: 'Home'
       url: /
+
     - title: 'BEHAVIOR-1K'
       submenu_items:
       - title: 'Overview'
         url: /behavior-1k
         icon: ni-bullet-list-67 text-success
+      - title: 'Main Codebase'
+        url: https://github.com/StanfordVL/
+        icon: ni-single-copy-04 text-success
+      - title: 'BDDL'
+        url: https://github.com/StanfordVL/
+        icon: ni-chart-bar-32 text-info
 
     - title: 'BEHAVIOR-100'
       submenu_items:
@@ -53,9 +60,9 @@ menu_settings:
       # - title: 'Installation Instructions'
       #   url: https://stanfordvl.github.io/behavior/installation.html
       #   icon: ni-single-copy-04 text-default
-      # - title: 'BEHAVIOR-100'
-      #   url: https://github.com/StanfordVL/behavior
-      #   icon: ni-bullet-list-67 text-success
+      - title: 'Main Codebase'
+        url: https://github.com/StanfordVL/behavior
+        icon: ni-single-copy-04 text-success
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
         icon: ni-chart-bar-32 text-info
@@ -75,8 +82,7 @@ menu_settings:
     #     - title: 'Create your own activity'
     #     url: /activity-creation
     #     icon: ni-atom text-primary
-    - title: 'Publications'
-      url: /publications
+    
     - title: 'Workshops'
       submenu_items:
       - title: ICCV21
@@ -85,6 +91,10 @@ menu_settings:
       - title: ECCV22
         url: /eccv22
         icon: ni-spaceship text-primary
+
+    - title: 'Publications'
+      url: /publications
+
 footer_settings:
   footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and collaborators.
 

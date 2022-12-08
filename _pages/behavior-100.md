@@ -1,48 +1,33 @@
 ---
-title: BEHAVIOR
-subtitle: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments
+title: BEHAVIOR-100
+subtitle: Benchmark for 100 Everyday Household Activities in Virtual, Interactive, and Ecological Environments
 description: None
 featured_image: /assets/img/behavior/hundred-tile-recording.jpg
 featured_video: /assets/img/behavior/hundred-tile-recording.m4v
 ---
 
 
-#### What is BEHAVIOR?
+#### What is BEHAVIOR-100?
 
-BEHAVIOR is a simulation benchmark to evaluate Embodied AI solutions.
+BEHAVIOR-100 is the first generation of BEHAVIOR, a benchmark for embodied AI with 100 activities in simulation, spanning a range of everyday household chores such as cleaning, maintenance, and food preparation. These activities are designed to be realistic, diverse and complex, aiming to reproduce the challenges that agents must face in the real world. 
 
-Embodied artificial intelligence (EAI) is advancing. But where are we now? We propose to test EAI agents with the physical challenges humans solve in their everyday life: household activities such as picking up toys, setting the table, or cleaning floors. BEHAVIOR is a benchmark in simulation where EAI agents need to plan and execute navigation and manipulation strategies based on sensor information to fulfill 100 household activities.
+#### Building blocks of BEHAVIOR-100
+Building BEHAVIOR-100 poses three fundamental difficulties for each activity: definition, instantiation in a simulator, and evaluation. BEHAVIOR addresses these with three building blocks. First, we propose a predicate logic-based description language (BDDL) for expressing an activity’s initial and goal conditions, enabling generation of diverse instances for any activity. Second, we identify the simulator-agnostic features required by an underlying environment to support BEHAVIOR-100, and demonstrate in one such simulator, i.e., iGibson 2.0. Third, we introduce a set of metrics to measure task progress and efficiency, absolute and relative to human demonstrators. We include 500 human demonstrations in virtual reality (VR) to serve as the human ground truth. 
 
-BEHAVIOR tests the ability of agents to perceive the environment, plan, and execute complex long-horizon activities that involve multiple objects, rooms, and state changes, all with the reproducibility, safety and observability offered by a realistic physics simulation. To compare the performance of EAI agents to that of humans, we have collected human demonstrations in the same tasks and environments using virtual reality. The demonstrations serve as reference to compare EAI solutions, but they also be used to develop them.
-<!-- 
-[Technical details about the benchmark](/_pages/benchmark_guide.md) -->
+Do you want to benchmark your solution? Follow the instructions [here](https://stanfordvl.github.io/behavior/installation.html) to get started. The main components are:
 
-{% include components/features/feature-3-B.html %}
+###### * BEHAVIOR-100 benchmark [codebase](https://github.com/StanfordVL/behavior) and [documentation](https://stanfordvl.github.io/behavior/intro.html).
+###### * iGibson simulator [codebase](https://github.com/StanfordVL/iGibson) and [documentation](http://svl.stanford.edu/igibson/docs/).
+###### * Combined BEHAVIOR-100 iGibson2.0 [scene and object assets](https://storage.googleapis.com/gibson_scenes/behavior_data_bundle.zip).
+###### * BDDL specification language [codebase and documentation](https://github.com/StanfordVL/bddl).
+###### * BEHAVIOR-100 VR human demonstration [dataset](https://behavior.stanford.edu/vr-demos).
 
-{% include components/features/feature-3-C.html %}
+<!-- You will download and install the required infrastructure: [a new version of iGibson](http://svl.stanford.edu/igibson/docs/installation.html), our simulation environment for interactive tasks extended now to new object states for BEHAVIOR, the BEHAVIOR Dataset of Objects and the iGibson2.0 Dataset of Scenes (combined in our [benchmarking bundle](https://storage.googleapis.com/gibson_scenes/behavior_data_bundle.zip)), with object and house models to use the benchmark, and our [starter code](https://github.com/StanfordVL/behavior/), with examplest to train againts in the tasks.  -->
 
-#### Getting started
+{% include components/features/b100-feat.html %}
 
-Do you want to benchmark your solution? Follow the instructions [here](https://stanfordvl.github.io/behavior/installation.html). You will download and install the required infrastructure: [a new version of iGibson](http://svl.stanford.edu/igibson/docs/installation.html), our simulation environment for interactive tasks extended now to new object states for BEHAVIOR, the BEHAVIOR Dataset of Objects and the iGibson2.0 Dataset of Scenes (combined in our [benchmarking bundle](https://storage.googleapis.com/gibson_scenes/behavior_data_bundle.zip)), with object and house models to use the benchmark, and our [starter code](https://github.com/StanfordVL/behavior/), with examplest to train againts in the tasks. 
-
-[BEHAVIOR-100 benchmark code](https://github.com/StanfordVL/behavior) and [documentation](https://stanfordvl.github.io/behavior/intro.html).
-<!-- If you want to use human demonstrations to start developing your solutions, you can also download the [BEHAVIOR Dataset of Human Demonstrations](https://behavior.stanford.edu/human_demonstrations/human_demonstrations.html) in virtual reality.
- -->
-
-<!-- #### Resources -->
-
-<!-- [iGibson simulator code](https://github.com/StanfordVL/iGibson) and [documentation](http://svl.stanford.edu/igibson/docs/).
-
-[BDDL specification language code and documentation](https://github.com/StanfordVL/bddl). -->
+<!-- {% include components/features/feature-3-C.html %} -->
 
 
-{% include components/features/join-us.html %}
 
 
-#### References
-
-- [BEHAVIOR: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments](https://arxiv.org/abs/2108.03332). Sanjana Srivastava\*, Chengshu Li\*, Michael Lingelbach\*, Roberto Martín-Martín\*, Fei Xia, Kent Vainio, Zheng Lian, Cem Gokmen, Shyamal Buch, C. Karen Liu, Silvio Savarese, Hyowon Gweon, Jiajun Wu, Li Fei-Fei, Conference on Robot Learning (CoRL) 2021.
-
-- [iGibson 2.0: Object-Centric Simulation for Robot Learning of Everyday Household Tasks](https://arxiv.org/abs/2108.03272). Chengshu Li\*, Fei Xia\*, Roberto Martín-Martín\*, Michael Lingelbach, Sanjana Srivastava, Bokui Shen, Kent Vainio, Cem Gokmen, Gokul Dharan, Tanish Jain, Andrey Kurenkov, C. Karen Liu, Hyowon Gweon, Jiajun Wu, Li Fei-Fei, Silvio Savarese, Conference on Robot Learning (CoRL) 2021.
-
-- [iGibson 1.0: A Simulation Environment for Interactive Tasks in Large Realistic Scenes](https://arxiv.org/abs/2012.02924). Bokui Shen\*, Fei Xia\*, Chengshu Li*, Roberto Martín-Martín\*, Linxi Fan, Guanzhi Wang, Shyamal Buch, Claudia D'Arpino, Sanjana Srivastava, Lyne P Tchapmi, Micael E Tchapmi, Kent Vainio, Li Fei-Fei, Silvio Savarese, Conference on Intelligent Robots and Systems (IROS) 2021.
