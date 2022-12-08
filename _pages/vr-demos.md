@@ -1,9 +1,12 @@
 ---
-title: BEHAVIOR Dataset of Demos
+title: BEHAVIOR-100 VR Human Demonstration Dataset
 subtitle: "500 successful human demonstrations in virtual reality"
 # description: "TODO(sanjanasrivastava): Add desc"
 featured_image: /assets/img/behavior/building.jpg
 ---
+
+BEHAVIOR-100 includes a dataset of 500 VR demonstrations. Each BEHAVIOR-100 activity is demonstrated five times: three times in the same scene and instantiation, showing variation from execution; once in the same scene with a different instantiation; and once in a different scene. Demonstrators in VR have embodiment identical to one of BEHAVIOR-100's embodiments
+
 
 ### Virtual reality demonstration dataset (VR_demos)
 
