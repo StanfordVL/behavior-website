@@ -6,12 +6,13 @@ featured_image: /assets/img/behavior/sim2real.png
 # featured_video: /assets/img/behavior/hundred-tile-recording.m4v
 ---
 
-
 #### What is BEHAVIOR-1K?
 
 BEHAVIOR-1K is a comprehensive simulation benchmark for human-centered robotics. Compared to its predecessor, BEHAVIOR-100, this new benchmark is more grounded on actual human needs: the 1,000 activities come from the results of an extensive survey on "what do you want robots to
 do for you?". It is more diverse in the type of scenes, objects, and activities. Powered by Nvidia's Omniverse, BEHAVIOR-1K also achieves a new level of realism in rendering and physics simulation. We hope that BEHAVIOR-1K’s human-grounded nature, diversity, and realism
 make it valuable for embodied AI and robot learning research. 
+
+
 
 #### Building blocks of BEHAVIOR-1K
 BEHAVIOR-1K includes two components. The first is the definition of 1,000 everyday activities, grounded in 50
@@ -24,6 +25,8 @@ You can follow [installation guide]() to start using BEHAVIOR-1K for your resear
 ###### * BEHAVIOR-1K benchmark [codebase]() and [documentation]().
 ###### * BEHAVIOR-1K [scene and object assets]().
 ###### * BEHAVIOR-1K [Activity definitions in Behavior Domain Definition Language (BDDL)]().
+
+{% include components/pull-video.html %}
 
 
 {% include components/features/b1k-feat.html %}
