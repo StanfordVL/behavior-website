@@ -19,6 +19,8 @@ BEHAVIOR tests the ability of agents to perceive the environment, plan, and exec
 
 {% include components/features/feature-3-B.html %}
 
+{% include components/features/feature-3-C.html %}
+
 #### Getting started
 
 Do you want to benchmark your solution? Follow the instructions [here](https://stanfordvl.github.io/behavior/installation.html). You will download and install the required infrastructure: [a new version of iGibson](http://svl.stanford.edu/igibson/docs/installation.html), our simulation environment for interactive tasks extended now to new object states for BEHAVIOR, the BEHAVIOR Dataset of Objects and the iGibson2.0 Dataset of Scenes (combined in our [benchmarking bundle](https://storage.googleapis.com/gibson_scenes/behavior_data_bundle.zip)), with object and house models to use the benchmark, and our [starter code](https://github.com/StanfordVL/behavior/), with examplest to train againts in the tasks. 
