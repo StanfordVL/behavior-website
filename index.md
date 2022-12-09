@@ -8,6 +8,8 @@ featured_image: /assets/img/behavior/b1k-feats/tasks2.png
 
 <!-- #### What is BEHAVIOR? -->
 
+
+
 ##### BEHAVIOR is a human-centered simulation benchmark to evaluate embodied AI solutions
 
 Embodied artificial intelligence (EAI) is advancing. But where are we now? We propose to test EAI agents with the physical challenges humans need to solve in their everyday life: household activities such as doing laundry, picking up toys, setting the table, or cleaning floors. BEHAVIOR is a benchmark in simulation where EAI agents need to plan and execute navigation and manipulation strategies based on sensor information to fulfill up to 1,000 household activities. BEHAVIOR tests the ability of agents to perceive the environment, plan, and execute complex long-horizon activities that involve multiple objects, rooms, and state changes, all with the reproducibility, safety, and observability offered by a realistic physics simulation. 
@@ -25,4 +27,5 @@ The broader goal of BEHAVIOR is to fuel the development of general, effective EA
 {% include components/features/alumni.html %}
 
 <!-- {% include components/features/join-us.html %} -->
+
 
