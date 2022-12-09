@@ -11,6 +11,9 @@ featured_video: /assets/img/behavior/hundred-tile-recording.m4v
 
 BEHAVIOR-100 is the first generation of BEHAVIOR, a benchmark for embodied AI with 100 activities in simulation, spanning a range of everyday household chores such as cleaning, maintenance, and food preparation. These activities are designed to be realistic, diverse and complex, aiming to reproduce the challenges that agents must face in the real world. 
 
+###### Reference
+- [BEHAVIOR: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments](https://arxiv.org/abs/2108.03332). Sanjana Srivastava\*, Chengshu Li\*, Michael Lingelbach\*, Roberto Martín-Martín\*, Fei Xia, Kent Vainio, Zheng Lian, Cem Gokmen, Shyamal Buch, C. Karen Liu, Silvio Savarese, Hyowon Gweon, Jiajun Wu, Li Fei-Fei, Conference on Robot Learning (CoRL) 2021.
+
 #### Building blocks of BEHAVIOR-100
 Building BEHAVIOR-100 poses three fundamental difficulties for each activity: definition, instantiation in a simulator, and evaluation. BEHAVIOR addresses these with three building blocks. First, we propose a predicate logic-based description language (BDDL) for expressing an activity’s initial and goal conditions, enabling generation of diverse instances for any activity. Second, we identify the simulator-agnostic features required by an underlying environment to support BEHAVIOR-100, and demonstrate in one such simulator, i.e., iGibson 2.0. Third, we introduce a set of metrics to measure task progress and efficiency, absolute and relative to human demonstrators. We include 500 human demonstrations in virtual reality (VR) to serve as the human ground truth. 
 

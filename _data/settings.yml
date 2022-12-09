@@ -6,7 +6,7 @@ header_settings:
   logo_image: /assets/img/behavior/b02.png
   mobile_logo_image: /assets/img/behavior/b02.png
   # Choose a color for your header [blue, dark, light].
-  theme: dark
+  theme: light
   # If the page has a featured image, it turns transparent if allow_transparent is set to "yes".
   allow_transparent: "yes"
 
@@ -92,8 +92,8 @@ menu_settings:
         url: /eccv22
         icon: ni-spaceship text-primary
 
-    - title: 'Publications'
-      url: /publications
+    - title: 'Research'
+      url: /research
 
 footer_settings:
   footer_tagline: BEHAVIOR has been developed by the Stanford Vision and Learning Lab and collaborators.
@@ -119,9 +119,9 @@ social_settings:
   linkedin_url: ''
 
 # authors:
-#   tom:
-#     name: Tom
-#     picture: /assets/img/faces/team-1.jpg
+#   svl:
+#     name: SVL
+#     picture: /assets/img/svl_logo2.png
 #   jane:
 #     name: Jane
 #     picture: /assets/img/faces/team-4.jpg
