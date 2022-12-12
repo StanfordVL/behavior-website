@@ -20,6 +20,8 @@ The broader goal of BEHAVIOR is to fuel the development of general, effective EA
 <!-- 
 [Technical details about the benchmark](/_pages/benchmark_guide.md) -->
 
+{% include components/features/pull-video.html %}
+
 {% include components/features/main-benchmarks.html %}
 
 {% include components/features/members.html %}
