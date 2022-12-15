@@ -40,11 +40,14 @@ menu_settings:
       - title: 'Overview'
         url: /behavior-1k
         icon: ni-bullet-list-67 text-success
-      - title: 'Main Codebase'
-        url: https://github.com/StanfordVL/
+      - title: 'Getting Started'
+        url: /omnigibson/getting_started/installation.html
+        icon: ni-single-copy-04 text-success
+      - title: 'OmniGibson'
+        url: https://github.com/StanfordVL/OmniGibson
         icon: ni-single-copy-04 text-success
       - title: 'BDDL'
-        url: https://github.com/StanfordVL/
+        url: https://github.com/StanfordVL/bddl
         icon: ni-chart-bar-32 text-info
 
     - title: 'BEHAVIOR-100'
