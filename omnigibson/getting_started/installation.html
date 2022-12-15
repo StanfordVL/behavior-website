@@ -48,6 +48,18 @@
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-6L1G6GMR63"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-6L1G6GMR63",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-6L1G6GMR63",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
 
     
     
@@ -5743,28 +5755,22 @@
 <div class="annotate highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo ./run_docker.sh &lt;DATA_PATH&gt; <span class="c1"># (1)!</span>
 </code></pre></div>
 <ol>
-<li>
-<p class="annotate"><code>&lt;DATA_PATH&gt;</code> specifies where data will be stored on your machine. (1) This needs to be called each time the docker container is run!</p>
-<ol>
-<li>If no <code>&lt;DATA_PATH&gt;</code> is specified, it defaults to <code>~/omnigibson-data</code> </li>
-</ol>
-</li>
+<li><code>&lt;DATA_PATH&gt;</code> specifies where data will be stored on your machine (if no <code>&lt;DATA_PATH&gt;</code> is specified, it defaults to <code>./omnigibson_data</code>). This needs to be called each time the docker container is run!</li>
 </ol>
 </div>
 <div class="tabbed-block">
 <div class="annotate highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo ./run_docker_gui.sh &lt;DATA_PATH&gt; <span class="c1"># (1)!</span>
 </code></pre></div>
 <ol>
-<li>
-<p class="annotate"><code>&lt;DATA_PATH&gt;</code> specifies where data will be stored on your machine. (1) This needs to be called each time the docker container is run!</p>
-<ol>
-<li>If no <code>&lt;DATA_PATH&gt;</code> is specified, it defaults to <code>~/omnigibson-data</code> </li>
-</ol>
-</li>
+<li><code>&lt;DATA_PATH&gt;</code> specifies where data will be stored on your machine (if no <code>&lt;DATA_PATH&gt;</code> is specified, it defaults to <code>./omnigibson_data</code>). This needs to be called each time the docker container is run!</li>
 </ol>
 </div>
 </div>
 </div>
+<details class="warning annotate">
+<summary>Are you using NFS or AFS?</summary>
+<p>Docker containers are unable to access NFS or AFS drives, so if <code>run_docker.sh</code> or <code>run_docker_gui.sh</code> are located on an NFS / AFS partition, please set <code>&lt;DATA_PATH&gt;</code> to an alternative data directory located on a non-NFS / AFS partition.</p>
+</details>
 <details class="example annotate">
 <summary>Advanced: Installing from Source</summary>
 <p>This method is recommended for deeper users looking to develop upon <strong><code>OmniGibson</code></strong> or use it extensively for research. </p>
@@ -5834,6 +5840,8 @@
   
 
 
+
+  
 
 
 
