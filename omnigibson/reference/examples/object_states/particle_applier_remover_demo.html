@@ -5644,11 +5644,7 @@ and allowed to interact with the table, applying / removing particles from the t
 
       <details class="quote">
         <summary>Source code in <code>examples/object_states/particle_applier_remover_demo.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-22"> 22</a></span>
-<span class="normal"><a href="#__codelineno-0-23"> 23</a></span>
-<span class="normal"><a href="#__codelineno-0-24"> 24</a></span>
-<span class="normal"><a href="#__codelineno-0-25"> 25</a></span>
-<span class="normal"><a href="#__codelineno-0-26"> 26</a></span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-26"> 26</a></span>
 <span class="normal"><a href="#__codelineno-0-27"> 27</a></span>
 <span class="normal"><a href="#__codelineno-0-28"> 28</a></span>
 <span class="normal"><a href="#__codelineno-0-29"> 29</a></span>
@@ -5844,20 +5840,16 @@ and allowed to interact with the table, applying / removing particles from the t
 <span class="normal"><a href="#__codelineno-0-219">219</a></span>
 <span class="normal"><a href="#__codelineno-0-220">220</a></span>
 <span class="normal"><a href="#__codelineno-0-221">221</a></span>
-<span class="normal"><a href="#__codelineno-0-222">222</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">short_exec</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>    <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">    Demo of ParticleApplier and ParticleRemover object states, which enable objects to either apply arbitrary</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">    particles and remove arbitrary particles from the simulator, respectively.</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">    Loads an empty scene with a table, and starts clean to allow particles to be applied or pre-covers the table</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">    with particles to be removed. The ParticleApplier / ParticleRemover state is applied to an imported cloth object</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">    and allowed to interact with the table, applying / removing particles from the table.</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Description:&quot;</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>    <span class="c1"># Make sure object states and omni particlesare enabled</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a>    <span class="k">assert</span> <span class="n">gm</span><span class="o">.</span><span class="n">ENABLE_OBJECT_STATES</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Object states must be enabled in macros.py in order to use this demo!&quot;</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a>    <span class="k">assert</span> <span class="n">gm</span><span class="o">.</span><span class="n">USE_GPU_DYNAMICS</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;GPU dynamics must be enabled in macros.py in order to use this demo!&quot;</span>
+<span class="normal"><a href="#__codelineno-0-222">222</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">short_exec</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">    Demo of ParticleApplier and ParticleRemover object states, which enable objects to either apply arbitrary</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">    particles and remove arbitrary particles from the simulator, respectively.</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="sd">    Loads an empty scene with a table, and starts clean to allow particles to be applied or pre-covers the table</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="sd">    with particles to be removed. The ParticleApplier / ParticleRemover state is applied to an imported cloth object</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="sd">    and allowed to interact with the table, applying / removing particles from the table.</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a>    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Description:&quot;</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 <a id="__codelineno-0-36" name="__codelineno-0-36"></a>
 <a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="c1"># Choose what configuration to load</span>
 <a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="n">modifier_type</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span>

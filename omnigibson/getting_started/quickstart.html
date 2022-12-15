@@ -5700,7 +5700,7 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span>
 </code></pre></div>
 <ol>
-<li>Our configuration gets parsed automatically and generates the appropriate class instance based on <code>"type"</code> (the string form of the class name). In this case, we're generating the most basic scene, which only consists of a floor plane. Check out <a href="../reference/scenes/scene_base.html">all of our available <code>Scene</code> classes</a>!</li>
+<li>Our configuration gets parsed automatically and generates the appropriate class instance based on <code>type</code> (the string form of the class name). In this case, we're generating the most basic scene, which only consists of a floor plane. Check out <a href="../reference/scenes/scene_base.html">all of our available <code>Scene</code> classes</a>!</li>
 <li>In addition to specifying <code>type</code>, the remaining keyword-arguments get passed directly into the class constructor. So for the base <a href="../reference/scenes/scene_base.html"><code>Scene</code></a> class, you could optionally specify <code>"use_floor_plane"</code> and <code>"floor_plane_visible"</code>, whereas for the more powerful <a href="../reference/scenes/interactive_traversable_scene.html"><code>InteractiveTraversableScene</code></a> class (which loads a curated, preconfigured scene) you can additionally specify options for filtering objects, such as <code>"load_object_categories"</code> and <code>"load_room_types"</code>. You can see all available keyword-arguments by viewing the individual <code>Scene</code> class you'd like to load!</li>
 </ol>
 <h2 id="defining-objects">🎾 <strong>Defining objects</strong></h2>

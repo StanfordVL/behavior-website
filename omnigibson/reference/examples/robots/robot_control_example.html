@@ -5665,12 +5665,7 @@ component.</p>
 
       <details class="quote">
         <summary>Source code in <code>examples/robots/robot_control_example.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-32">32</a></span>
 <span class="normal"><a href="#__codelineno-0-33">33</a></span>
 <span class="normal"><a href="#__codelineno-0-34">34</a></span>
 <span class="normal"><a href="#__codelineno-0-35">35</a></span>
@@ -5692,34 +5687,39 @@ component.</p>
 <span class="normal"><a href="#__codelineno-0-51">51</a></span>
 <span class="normal"><a href="#__codelineno-0-52">52</a></span>
 <span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="k">def</span> <span class="nf">choose_controllers</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a>    <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">    For a given robot, iterates over all components of the robot, and returns the requested controller type for each</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="sd">    component.</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="sd">    :param robot: BaseRobot, robot class from which to infer relevant valid controller options</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="sd">    :param random_selection: bool, if the selection is random (for automatic demo execution). Default False</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">    :return OrderedDict: Mapping from individual robot component (e.g.: base, arm, etc.) to selected controller names</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="c1"># Create new dict to store responses from user</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="n">controller_choices</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="k">def</span> <span class="nf">choose_controllers</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a>    <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="sd">    For a given robot, iterates over all components of the robot, and returns the requested controller type for each</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">    component.</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="sd">    :param robot: BaseRobot, robot class from which to infer relevant valid controller options</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="sd">    :param random_selection: bool, if the selection is random (for automatic demo execution). Default False</span>
 <a id="__codelineno-0-39" name="__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a>    <span class="c1"># Grab the default controller config so we have the registry of all possible controller options</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>    <span class="n">default_config</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">_default_controller_config</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>    <span class="c1"># Iterate over all components in robot</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a>    <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">controller_options</span> <span class="ow">in</span> <span class="n">default_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a>        <span class="c1"># Select controller</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a>        <span class="n">options</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">controller_options</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a>        <span class="n">choice</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a>            <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> controller&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">),</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a>        <span class="p">)</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a>        <span class="c1"># Add to user responses</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a>        <span class="n">controller_choices</span><span class="p">[</span><span class="n">component</span><span class="p">]</span> <span class="o">=</span> <span class="n">choice</span>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a>    <span class="k">return</span> <span class="n">controller_choices</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="sd">    :return OrderedDict: Mapping from individual robot component (e.g.: base, arm, etc.) to selected controller names</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="c1"># Create new dict to store responses from user</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a>    <span class="n">controller_choices</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="c1"># Grab the default controller config so we have the registry of all possible controller options</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="n">default_config</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">_default_controller_config</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a>
+<a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="c1"># Iterate over all components in robot</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49"></a>    <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">controller_options</span> <span class="ow">in</span> <span class="n">default_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50"></a>        <span class="c1"># Select controller</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51"></a>        <span class="n">options</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">controller_options</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52"></a>        <span class="n">choice</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53"></a>            <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> controller&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">),</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="p">)</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55"></a>
+<a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="c1"># Add to user responses</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="n">controller_choices</span><span class="p">[</span><span class="n">component</span><span class="p">]</span> <span class="o">=</span> <span class="n">choice</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58"></a>
+<a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="k">return</span> <span class="n">controller_choices</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -5743,12 +5743,7 @@ Queries the user to select a robot, the controllers, a scene and a type of input
 
       <details class="quote">
         <summary>Source code in <code>examples/robots/robot_control_example.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-57"> 57</a></span>
-<span class="normal"><a href="#__codelineno-0-58"> 58</a></span>
-<span class="normal"><a href="#__codelineno-0-59"> 59</a></span>
-<span class="normal"><a href="#__codelineno-0-60"> 60</a></span>
-<span class="normal"><a href="#__codelineno-0-61"> 61</a></span>
-<span class="normal"><a href="#__codelineno-0-62"> 62</a></span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-62"> 62</a></span>
 <span class="normal"><a href="#__codelineno-0-63"> 63</a></span>
 <span class="normal"><a href="#__codelineno-0-64"> 64</a></span>
 <span class="normal"><a href="#__codelineno-0-65"> 65</a></span>
@@ -5823,87 +5818,92 @@ Queries the user to select a robot, the controllers, a scene and a type of input
 <span class="normal"><a href="#__codelineno-0-134">134</a></span>
 <span class="normal"><a href="#__codelineno-0-135">135</a></span>
 <span class="normal"><a href="#__codelineno-0-136">136</a></span>
-<span class="normal"><a href="#__codelineno-0-137">137</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">short_exec</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a>    <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="sd">    Robot control demo with selection</span>
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="sd">    Queries the user to select a robot, the controllers, a scene and a type of input (random actions or teleop)</span>
-<a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Description:&quot;</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-<a id="__codelineno-0-63" name="__codelineno-0-63"></a>
-<a id="__codelineno-0-64" name="__codelineno-0-64"></a>    <span class="c1"># Choose scene to load</span>
-<a id="__codelineno-0-65" name="__codelineno-0-65"></a>    <span class="n">scene_model</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">SCENES</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scene&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
-<a id="__codelineno-0-66" name="__codelineno-0-66"></a>
-<a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="c1"># Choose robot to create</span>
-<a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="n">robot_name</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span>
-<a id="__codelineno-0-69" name="__codelineno-0-69"></a>        <span class="n">options</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">REGISTERED_ROBOTS</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;robot&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span>
-<a id="__codelineno-0-70" name="__codelineno-0-70"></a>    <span class="p">)</span>
+<span class="normal"><a href="#__codelineno-0-137">137</a></span>
+<span class="normal"><a href="#__codelineno-0-138">138</a></span>
+<span class="normal"><a href="#__codelineno-0-139">139</a></span>
+<span class="normal"><a href="#__codelineno-0-140">140</a></span>
+<span class="normal"><a href="#__codelineno-0-141">141</a></span>
+<span class="normal"><a href="#__codelineno-0-142">142</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">short_exec</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63"></a>    <span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="sd">    Robot control demo with selection</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="sd">    Queries the user to select a robot, the controllers, a scene and a type of input (random actions or teleop)</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Description:&quot;</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="c1"># Choose scene to load</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70"></a>    <span class="n">scene_model</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">SCENES</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scene&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
 <a id="__codelineno-0-71" name="__codelineno-0-71"></a>
-<a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="c1"># Create the config for generating the environment we want</span>
-<a id="__codelineno-0-73" name="__codelineno-0-73"></a>    <span class="n">scene_cfg</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-<a id="__codelineno-0-74" name="__codelineno-0-74"></a>    <span class="k">if</span> <span class="n">scene_model</span> <span class="o">==</span> <span class="s2">&quot;empty&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-75" name="__codelineno-0-75"></a>        <span class="n">scene_cfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Scene&quot;</span>
-<a id="__codelineno-0-76" name="__codelineno-0-76"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-77" name="__codelineno-0-77"></a>        <span class="n">scene_cfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;InteractiveTraversableScene&quot;</span>
-<a id="__codelineno-0-78" name="__codelineno-0-78"></a>        <span class="n">scene_cfg</span><span class="p">[</span><span class="s2">&quot;scene_model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scene_model</span>
-<a id="__codelineno-0-79" name="__codelineno-0-79"></a>
-<a id="__codelineno-0-80" name="__codelineno-0-80"></a>    <span class="c1"># Add the robot we want to load</span>
-<a id="__codelineno-0-81" name="__codelineno-0-81"></a>    <span class="n">robot0_cfg</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-<a id="__codelineno-0-82" name="__codelineno-0-82"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">robot_name</span>
-<a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;obs_modalities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;depth&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_instance&quot;</span><span class="p">,</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;scan&quot;</span><span class="p">,</span> <span class="s2">&quot;occupancy_grid&quot;</span><span class="p">]</span>
-<a id="__codelineno-0-84" name="__codelineno-0-84"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;action_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span>
-<a id="__codelineno-0-85" name="__codelineno-0-85"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;action_normalize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<a id="__codelineno-0-86" name="__codelineno-0-86"></a>
-<a id="__codelineno-0-87" name="__codelineno-0-87"></a>    <span class="c1"># Compile config</span>
-<a id="__codelineno-0-88" name="__codelineno-0-88"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">scene_cfg</span><span class="p">,</span> <span class="n">robots</span><span class="o">=</span><span class="p">[</span><span class="n">robot0_cfg</span><span class="p">])</span>
-<a id="__codelineno-0-89" name="__codelineno-0-89"></a>
-<a id="__codelineno-0-90" name="__codelineno-0-90"></a>    <span class="c1"># Create the environment</span>
-<a id="__codelineno-0-91" name="__codelineno-0-91"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">action_timestep</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">60.</span><span class="p">,</span> <span class="n">physics_timestep</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">60.</span><span class="p">)</span>
-<a id="__codelineno-0-92" name="__codelineno-0-92"></a>
-<a id="__codelineno-0-93" name="__codelineno-0-93"></a>    <span class="c1"># Choose robot controller to use</span>
-<a id="__codelineno-0-94" name="__codelineno-0-94"></a>    <span class="n">robot</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">robots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<a id="__codelineno-0-95" name="__codelineno-0-95"></a>    <span class="n">controller_choices</span> <span class="o">=</span> <span class="n">choose_controllers</span><span class="p">(</span><span class="n">robot</span><span class="o">=</span><span class="n">robot</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
-<a id="__codelineno-0-96" name="__codelineno-0-96"></a>
-<a id="__codelineno-0-97" name="__codelineno-0-97"></a>    <span class="c1"># Choose control mode</span>
-<a id="__codelineno-0-98" name="__codelineno-0-98"></a>    <span class="k">if</span> <span class="n">random_selection</span><span class="p">:</span>
-<a id="__codelineno-0-99" name="__codelineno-0-99"></a>        <span class="n">control_mode</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span>
-<a id="__codelineno-0-100" name="__codelineno-0-100"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-101" name="__codelineno-0-101"></a>        <span class="n">control_mode</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">CONTROL_MODES</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;control mode&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-102" name="__codelineno-0-102"></a>
-<a id="__codelineno-0-103" name="__codelineno-0-103"></a>    <span class="c1"># Update the control mode of the robot</span>
-<a id="__codelineno-0-104" name="__codelineno-0-104"></a>    <span class="n">controller_config</span> <span class="o">=</span> <span class="p">{</span><span class="n">component</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">}</span> <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">controller_choices</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-<a id="__codelineno-0-105" name="__codelineno-0-105"></a>    <span class="n">robot</span><span class="o">.</span><span class="n">reload_controllers</span><span class="p">(</span><span class="n">controller_config</span><span class="o">=</span><span class="n">controller_config</span><span class="p">)</span>
-<a id="__codelineno-0-106" name="__codelineno-0-106"></a>
-<a id="__codelineno-0-107" name="__codelineno-0-107"></a>    <span class="c1"># Update the simulator&#39;s viewer camera&#39;s pose so it points towards the robot</span>
-<a id="__codelineno-0-108" name="__codelineno-0-108"></a>    <span class="n">og</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">viewer_camera</span><span class="o">.</span><span class="n">set_position_orientation</span><span class="p">(</span>
-<a id="__codelineno-0-109" name="__codelineno-0-109"></a>        <span class="n">position</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.46949</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.97358</span><span class="p">,</span> <span class="mf">2.21529</span><span class="p">]),</span>
-<a id="__codelineno-0-110" name="__codelineno-0-110"></a>        <span class="n">orientation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.56829048</span><span class="p">,</span> <span class="mf">0.09569975</span><span class="p">,</span> <span class="mf">0.13571846</span><span class="p">,</span> <span class="mf">0.80589577</span><span class="p">]),</span>
-<a id="__codelineno-0-111" name="__codelineno-0-111"></a>    <span class="p">)</span>
-<a id="__codelineno-0-112" name="__codelineno-0-112"></a>
-<a id="__codelineno-0-113" name="__codelineno-0-113"></a>    <span class="c1"># Reset environment</span>
-<a id="__codelineno-0-114" name="__codelineno-0-114"></a>    <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<a id="__codelineno-0-115" name="__codelineno-0-115"></a>
-<a id="__codelineno-0-116" name="__codelineno-0-116"></a>    <span class="c1"># Create teleop controller</span>
-<a id="__codelineno-0-117" name="__codelineno-0-117"></a>    <span class="n">action_generator</span> <span class="o">=</span> <span class="n">KeyboardRobotController</span><span class="p">(</span><span class="n">robot</span><span class="o">=</span><span class="n">robot</span><span class="p">)</span>
-<a id="__codelineno-0-118" name="__codelineno-0-118"></a>
-<a id="__codelineno-0-119" name="__codelineno-0-119"></a>    <span class="c1"># Print out relevant keyboard info if using keyboard teleop</span>
-<a id="__codelineno-0-120" name="__codelineno-0-120"></a>    <span class="k">if</span> <span class="n">control_mode</span> <span class="o">==</span> <span class="s2">&quot;teleop&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-121" name="__codelineno-0-121"></a>        <span class="n">action_generator</span><span class="o">.</span><span class="n">print_keyboard_teleop_info</span><span class="p">()</span>
-<a id="__codelineno-0-122" name="__codelineno-0-122"></a>
-<a id="__codelineno-0-123" name="__codelineno-0-123"></a>    <span class="c1"># Other helpful user info</span>
-<a id="__codelineno-0-124" name="__codelineno-0-124"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running demo.&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-125" name="__codelineno-0-125"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Press ESC to quit&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-126" name="__codelineno-0-126"></a>
-<a id="__codelineno-0-127" name="__codelineno-0-127"></a>    <span class="c1"># Loop control until user quits</span>
-<a id="__codelineno-0-128" name="__codelineno-0-128"></a>    <span class="n">max_steps</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">short_exec</span> <span class="k">else</span> <span class="mi">100</span>
-<a id="__codelineno-0-129" name="__codelineno-0-129"></a>    <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
-<a id="__codelineno-0-130" name="__codelineno-0-130"></a>    <span class="k">while</span> <span class="n">step</span> <span class="o">!=</span> <span class="n">max_steps</span><span class="p">:</span>
-<a id="__codelineno-0-131" name="__codelineno-0-131"></a>        <span class="n">action</span> <span class="o">=</span> <span class="n">action_generator</span><span class="o">.</span><span class="n">get_random_action</span><span class="p">()</span> <span class="k">if</span> <span class="n">control_mode</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span> <span class="k">else</span> <span class="n">action_generator</span><span class="o">.</span><span class="n">get_teleop_action</span><span class="p">()</span>
-<a id="__codelineno-0-132" name="__codelineno-0-132"></a>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-<a id="__codelineno-0-133" name="__codelineno-0-133"></a>            <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">)</span>
-<a id="__codelineno-0-134" name="__codelineno-0-134"></a>            <span class="n">step</span> <span class="o">+=</span> <span class="mi">1</span>
-<a id="__codelineno-0-135" name="__codelineno-0-135"></a>
-<a id="__codelineno-0-136" name="__codelineno-0-136"></a>    <span class="c1"># Always shut down the environment cleanly at the end</span>
-<a id="__codelineno-0-137" name="__codelineno-0-137"></a>    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="c1"># Choose robot to create</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a>    <span class="n">robot_name</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a>        <span class="n">options</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">REGISTERED_ROBOTS</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;robot&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="p">)</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a>    <span class="c1"># Create the config for generating the environment we want</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a>    <span class="n">scene_cfg</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a>    <span class="k">if</span> <span class="n">scene_model</span> <span class="o">==</span> <span class="s2">&quot;empty&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a>        <span class="n">scene_cfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Scene&quot;</span>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a>        <span class="n">scene_cfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;InteractiveTraversableScene&quot;</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83"></a>        <span class="n">scene_cfg</span><span class="p">[</span><span class="s2">&quot;scene_model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scene_model</span>
+<a id="__codelineno-0-84" name="__codelineno-0-84"></a>
+<a id="__codelineno-0-85" name="__codelineno-0-85"></a>    <span class="c1"># Add the robot we want to load</span>
+<a id="__codelineno-0-86" name="__codelineno-0-86"></a>    <span class="n">robot0_cfg</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+<a id="__codelineno-0-87" name="__codelineno-0-87"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">robot_name</span>
+<a id="__codelineno-0-88" name="__codelineno-0-88"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;obs_modalities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;depth&quot;</span><span class="p">,</span> <span class="s2">&quot;seg_instance&quot;</span><span class="p">,</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;scan&quot;</span><span class="p">,</span> <span class="s2">&quot;occupancy_grid&quot;</span><span class="p">]</span>
+<a id="__codelineno-0-89" name="__codelineno-0-89"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;action_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;continuous&quot;</span>
+<a id="__codelineno-0-90" name="__codelineno-0-90"></a>    <span class="n">robot0_cfg</span><span class="p">[</span><span class="s2">&quot;action_normalize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-0-91" name="__codelineno-0-91"></a>
+<a id="__codelineno-0-92" name="__codelineno-0-92"></a>    <span class="c1"># Compile config</span>
+<a id="__codelineno-0-93" name="__codelineno-0-93"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">scene_cfg</span><span class="p">,</span> <span class="n">robots</span><span class="o">=</span><span class="p">[</span><span class="n">robot0_cfg</span><span class="p">])</span>
+<a id="__codelineno-0-94" name="__codelineno-0-94"></a>
+<a id="__codelineno-0-95" name="__codelineno-0-95"></a>    <span class="c1"># Create the environment</span>
+<a id="__codelineno-0-96" name="__codelineno-0-96"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">action_timestep</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">60.</span><span class="p">,</span> <span class="n">physics_timestep</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">60.</span><span class="p">)</span>
+<a id="__codelineno-0-97" name="__codelineno-0-97"></a>
+<a id="__codelineno-0-98" name="__codelineno-0-98"></a>    <span class="c1"># Choose robot controller to use</span>
+<a id="__codelineno-0-99" name="__codelineno-0-99"></a>    <span class="n">robot</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">robots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-100" name="__codelineno-0-100"></a>    <span class="n">controller_choices</span> <span class="o">=</span> <span class="n">choose_controllers</span><span class="p">(</span><span class="n">robot</span><span class="o">=</span><span class="n">robot</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
+<a id="__codelineno-0-101" name="__codelineno-0-101"></a>
+<a id="__codelineno-0-102" name="__codelineno-0-102"></a>    <span class="c1"># Choose control mode</span>
+<a id="__codelineno-0-103" name="__codelineno-0-103"></a>    <span class="k">if</span> <span class="n">random_selection</span><span class="p">:</span>
+<a id="__codelineno-0-104" name="__codelineno-0-104"></a>        <span class="n">control_mode</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span>
+<a id="__codelineno-0-105" name="__codelineno-0-105"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-106" name="__codelineno-0-106"></a>        <span class="n">control_mode</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">CONTROL_MODES</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;control mode&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-107" name="__codelineno-0-107"></a>
+<a id="__codelineno-0-108" name="__codelineno-0-108"></a>    <span class="c1"># Update the control mode of the robot</span>
+<a id="__codelineno-0-109" name="__codelineno-0-109"></a>    <span class="n">controller_config</span> <span class="o">=</span> <span class="p">{</span><span class="n">component</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">}</span> <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">controller_choices</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<a id="__codelineno-0-110" name="__codelineno-0-110"></a>    <span class="n">robot</span><span class="o">.</span><span class="n">reload_controllers</span><span class="p">(</span><span class="n">controller_config</span><span class="o">=</span><span class="n">controller_config</span><span class="p">)</span>
+<a id="__codelineno-0-111" name="__codelineno-0-111"></a>
+<a id="__codelineno-0-112" name="__codelineno-0-112"></a>    <span class="c1"># Update the simulator&#39;s viewer camera&#39;s pose so it points towards the robot</span>
+<a id="__codelineno-0-113" name="__codelineno-0-113"></a>    <span class="n">og</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">viewer_camera</span><span class="o">.</span><span class="n">set_position_orientation</span><span class="p">(</span>
+<a id="__codelineno-0-114" name="__codelineno-0-114"></a>        <span class="n">position</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.46949</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.97358</span><span class="p">,</span> <span class="mf">2.21529</span><span class="p">]),</span>
+<a id="__codelineno-0-115" name="__codelineno-0-115"></a>        <span class="n">orientation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.56829048</span><span class="p">,</span> <span class="mf">0.09569975</span><span class="p">,</span> <span class="mf">0.13571846</span><span class="p">,</span> <span class="mf">0.80589577</span><span class="p">]),</span>
+<a id="__codelineno-0-116" name="__codelineno-0-116"></a>    <span class="p">)</span>
+<a id="__codelineno-0-117" name="__codelineno-0-117"></a>
+<a id="__codelineno-0-118" name="__codelineno-0-118"></a>    <span class="c1"># Reset environment</span>
+<a id="__codelineno-0-119" name="__codelineno-0-119"></a>    <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<a id="__codelineno-0-120" name="__codelineno-0-120"></a>
+<a id="__codelineno-0-121" name="__codelineno-0-121"></a>    <span class="c1"># Create teleop controller</span>
+<a id="__codelineno-0-122" name="__codelineno-0-122"></a>    <span class="n">action_generator</span> <span class="o">=</span> <span class="n">KeyboardRobotController</span><span class="p">(</span><span class="n">robot</span><span class="o">=</span><span class="n">robot</span><span class="p">)</span>
+<a id="__codelineno-0-123" name="__codelineno-0-123"></a>
+<a id="__codelineno-0-124" name="__codelineno-0-124"></a>    <span class="c1"># Print out relevant keyboard info if using keyboard teleop</span>
+<a id="__codelineno-0-125" name="__codelineno-0-125"></a>    <span class="k">if</span> <span class="n">control_mode</span> <span class="o">==</span> <span class="s2">&quot;teleop&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-126" name="__codelineno-0-126"></a>        <span class="n">action_generator</span><span class="o">.</span><span class="n">print_keyboard_teleop_info</span><span class="p">()</span>
+<a id="__codelineno-0-127" name="__codelineno-0-127"></a>
+<a id="__codelineno-0-128" name="__codelineno-0-128"></a>    <span class="c1"># Other helpful user info</span>
+<a id="__codelineno-0-129" name="__codelineno-0-129"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running demo.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-130" name="__codelineno-0-130"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Press ESC to quit&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-131" name="__codelineno-0-131"></a>
+<a id="__codelineno-0-132" name="__codelineno-0-132"></a>    <span class="c1"># Loop control until user quits</span>
+<a id="__codelineno-0-133" name="__codelineno-0-133"></a>    <span class="n">max_steps</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">short_exec</span> <span class="k">else</span> <span class="mi">100</span>
+<a id="__codelineno-0-134" name="__codelineno-0-134"></a>    <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-0-135" name="__codelineno-0-135"></a>    <span class="k">while</span> <span class="n">step</span> <span class="o">!=</span> <span class="n">max_steps</span><span class="p">:</span>
+<a id="__codelineno-0-136" name="__codelineno-0-136"></a>        <span class="n">action</span> <span class="o">=</span> <span class="n">action_generator</span><span class="o">.</span><span class="n">get_random_action</span><span class="p">()</span> <span class="k">if</span> <span class="n">control_mode</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span> <span class="k">else</span> <span class="n">action_generator</span><span class="o">.</span><span class="n">get_teleop_action</span><span class="p">()</span>
+<a id="__codelineno-0-137" name="__codelineno-0-137"></a>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<a id="__codelineno-0-138" name="__codelineno-0-138"></a>            <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">)</span>
+<a id="__codelineno-0-139" name="__codelineno-0-139"></a>            <span class="n">step</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-0-140" name="__codelineno-0-140"></a>
+<a id="__codelineno-0-141" name="__codelineno-0-141"></a>    <span class="c1"># Always shut down the environment cleanly at the end</span>
+<a id="__codelineno-0-142" name="__codelineno-0-142"></a>    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
