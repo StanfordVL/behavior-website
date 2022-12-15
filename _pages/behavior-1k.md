@@ -13,7 +13,7 @@ BEHAVIOR-1K is a comprehensive simulation benchmark for human-centered robotics.
 do for you?". It is more diverse in the type of scenes, objects, and activities. Powered by [**NVIDIA's Omniverse**](https://www.nvidia.com/en-us/omniverse/), BEHAVIOR-1K also achieves a new level of realism in rendering and physics simulation. We hope that BEHAVIOR-1K’s human-grounded nature, diversity, and realism
 make it valuable for embodied AI and robot learning research. 
 
-**Exciting news:** The BEHAVIOR-1K beta release is now available! This release features a subset of activities and examples picked to showcase BEHAVIOR-1K activity diversity and OmniGibson capabilities. [Get started!](https://behavior.stanford.edu/omnigibson/getting_started/installation.html)
+<p class="alert alert-default">The BEHAVIOR-1K beta release is now available! This release features a subset of activities and examples picked to showcase BEHAVIOR-1K activity diversity and OmniGibson capabilities. <a href="https://behavior.stanford.edu/omnigibson/getting_started/installation.html" class="alert-link">Get started!</a></p>
 
 ###### Reference
 - [BEHAVIOR-1K: A Benchmark for Embodied AI with 1,000 Everyday Activities and Realistic Simulation](https://openreview.net/pdf?id=_8DoIe8G3t). Chengshu Li\*, Ruohan Zhang\*, Josiah Wong\*, Cem Gokmen\*, Sanjana Srivastava\*, Roberto Martín-Martín\*, Chen Wang\*, Gabrael Levine\*, Michael Lingelbach, Jiankai Sun, Mona Anvari, Minjune Hwang, Manasi Sharma, Arman Aydin, Dhruva Bansal, Samuel Hunter, Kyu-Young Kim, Alan Lou, Caleb R Matthews, Ivan Villa-Renteria, Jerry Huayang Tang, Claire Tang, Fei Xia, Silvio Savarese, Hyowon Gweon, Karen Liu, Jiajun Wu, Li Fei-Fei, Conference on Robot Learning (CoRL) 2022.
