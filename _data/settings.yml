@@ -35,6 +35,7 @@ menu_settings:
       url: /
 
     - title: 'BEHAVIOR-1K'
+      url: /behavior-1k
       submenu_items:
       - title: 'Overview'
         url: /behavior-1k
@@ -47,6 +48,7 @@ menu_settings:
         icon: ni-chart-bar-32 text-info
 
     - title: 'BEHAVIOR-100'
+      url: /behavior-100
       submenu_items:
       - title: 'Overview'
         url: /behavior-100
