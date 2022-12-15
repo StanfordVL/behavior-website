@@ -22,10 +22,10 @@ annotated with rich physical and semantic properties. The second is OmniGibson (
 a novel simulation environment that supports these activities via realistic physics
 simulation and rendering of rigid bodies, deformable bodies, and liquids. 
 
-You can follow [installation guide]() to start using BEHAVIOR-1K for your research. The main components are:
-###### * BEHAVIOR-1K benchmark [codebase]() and [documentation]().
-###### * BEHAVIOR-1K [scene and object assets]().
-###### * BEHAVIOR-1K [Activity definitions in Behavior Domain Definition Language (BDDL)]().
+You can follow [installation guide](https://behavior.stanford.edu/omnigibson/getting_started/installation.html) to start using BEHAVIOR-1K for your research. The main components are:
+###### * BEHAVIOR-1K benchmark [codebase](https://github.com/StanfordVL/OmniGibson) and [documentation](https://behavior.stanford.edu/omnigibson/).
+###### * BEHAVIOR-1K scene and object assets (docs TBD).
+###### * BEHAVIOR-1K [Activity definitions in Behavior Domain Definition Language (BDDL)](https://github.com/StanfordVL/bddl/tree/master/bddl/activity_definitions).
 
 {% include components/features/pull-video.html %}
 
