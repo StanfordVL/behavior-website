@@ -39,13 +39,13 @@ menu_settings:
       submenu_items:
       - title: 'Overview'
         url: /behavior-1k
-        icon: ni-bullet-list-67 text-success
+        icon: ni-bullet-list-67 text-default
       - title: 'Getting Started'
         url: /omnigibson/getting_started/installation.html
-        icon: ni-single-copy-04 text-success
+        icon: ni-spaceship text-success
       - title: 'OmniGibson'
         url: https://github.com/StanfordVL/OmniGibson
-        icon: ni-single-copy-04 text-success
+        icon: ni-single-copy-04 text-danger
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
         icon: ni-chart-bar-32 text-info
@@ -55,13 +55,13 @@ menu_settings:
       submenu_items:
       - title: 'Overview'
         url: /behavior-100
-        icon: ni-bullet-list-67 text-success
+        icon: ni-bullet-list-67 text-default
       # - title: 'Benchmark Setup'
       #   url: /benchmark-guide
       #   icon: ni-settings-gear-65 text-default
       - title: 'List of Activities'
         url: /behavior-gallery/activity.html
-        icon: ni-bullet-list-67 text-success
+        icon: ni-bullet-list-67 text-warning
       # - title: 'Installation Instructions'
       #   url: https://stanfordvl.github.io/behavior/installation.html
       #   icon: ni-single-copy-04 text-default
@@ -73,7 +73,7 @@ menu_settings:
         icon: ni-chart-bar-32 text-info
       - title: 'iGibson'
         url: https://github.com/StanfordVL/iGibson
-        icon: ni-books text-primary
+        icon: ni-books text-danger
       - title: 'Dataset of VR Demos'
         url: /vr-demos
         icon: ni-glasses-2 text-info
