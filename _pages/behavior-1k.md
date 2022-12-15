@@ -4,13 +4,16 @@ subtitle: A Benchmark for Embodied AI with 1,000 Everyday Activities and Realist
 description: None
 featured_image: /assets/img/behavior/b1k-feats/sim2real.png
 # featured_video: /assets/img/behavior/hundred-tile-recording.m4v
+show_release_alert: true
 ---
 
 #### What is BEHAVIOR-1K?
 
 BEHAVIOR-1K is a comprehensive simulation benchmark for human-centered robotics. Compared to its predecessor, BEHAVIOR-100, this new benchmark is more grounded on actual human needs: the 1,000 activities come from the results of an extensive survey on "what do you want robots to
-do for you?". It is more diverse in the type of scenes, objects, and activities. Powered by [**Nvidia's Omniverse**](https://www.nvidia.com/en-us/omniverse/), BEHAVIOR-1K also achieves a new level of realism in rendering and physics simulation. We hope that BEHAVIOR-1K’s human-grounded nature, diversity, and realism
+do for you?". It is more diverse in the type of scenes, objects, and activities. Powered by [**NVIDIA's Omniverse**](https://www.nvidia.com/en-us/omniverse/), BEHAVIOR-1K also achieves a new level of realism in rendering and physics simulation. We hope that BEHAVIOR-1K’s human-grounded nature, diversity, and realism
 make it valuable for embodied AI and robot learning research. 
+
+**Exciting news:** The BEHAVIOR-1K beta release is now available! This release features a subset of activities and examples picked to showcase BEHAVIOR-1K activity diversity and OmniGibson capabilities. [Get started!](https://behavior.stanford.edu/omnigibson/getting_started/installation.html)
 
 ###### Reference
 - [BEHAVIOR-1K: A Benchmark for Embodied AI with 1,000 Everyday Activities and Realistic Simulation](https://openreview.net/pdf?id=_8DoIe8G3t). Chengshu Li\*, Ruohan Zhang\*, Josiah Wong\*, Cem Gokmen\*, Sanjana Srivastava\*, Roberto Martín-Martín\*, Chen Wang\*, Gabrael Levine\*, Michael Lingelbach, Jiankai Sun, Mona Anvari, Minjune Hwang, Manasi Sharma, Arman Aydin, Dhruva Bansal, Samuel Hunter, Kyu-Young Kim, Alan Lou, Caleb R Matthews, Ivan Villa-Renteria, Jerry Huayang Tang, Claire Tang, Fei Xia, Silvio Savarese, Hyowon Gweon, Karen Liu, Jiajun Wu, Li Fei-Fei, Conference on Robot Learning (CoRL) 2022.

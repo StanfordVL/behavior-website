@@ -67,6 +67,24 @@
           <div class="col-lg-10 mx-auto text-center pt-4">
             <h2 class="display-2 text-white">{{ page.title }}</h2>
             <h2 class="lead text-white pl-5 pr-5 pb-3 text-center">{{page.subtitle}}</h2>
+            {% if page.show_release_alert %} 
+            <div class="container col-lg-10">
+              <div class="alert alert-default" role="alert">
+                <div class="row align-items-center">
+                  <div class="col-md" style="margin: 0.75rem;">
+                    <span style="font-size: 1rem;"><strong>Exciting news:</strong> BEHAVIOR-1K beta is now out!</span>
+                  </div>
+                  <div class="col-md-4">
+                    <button class="btn btn-icon btn-success" type="button"
+                      style="background-color: #35c4f3; border-color: #35c4f3;">
+                      <span class="btn-inner--text">Get Started</span><span class="btn-inner--icon"><i
+                          class="ni ni-spaceship"></i></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>

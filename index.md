@@ -4,6 +4,7 @@ subtitle: Benchmark for Everyday Household Activities in Virtual, Interactive, a
 # description: None
 featured_image: /assets/img/behavior/b1k-feats/tasks2.png
 # featured_video: /assets/img/behavior/hundred-tile-recording.m4v
+show_release_alert: true
 ---
 
 <!-- #### What is BEHAVIOR? -->
