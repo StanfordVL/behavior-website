@@ -7467,9 +7467,7 @@
 <span class="normal"><a href="#__codelineno-14-68">68</a></span>
 <span class="normal"><a href="#__codelineno-14-69">69</a></span>
 <span class="normal"><a href="#__codelineno-14-70">70</a></span>
-<span class="normal"><a href="#__codelineno-14-71">71</a></span>
-<span class="normal"><a href="#__codelineno-14-72">72</a></span>
-<span class="normal"><a href="#__codelineno-14-73">73</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="kn">import</span> <span class="nn">logging</span>
+<span class="normal"><a href="#__codelineno-14-71">71</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="kn">import</span> <span class="nn">logging</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="kn">import</span> <span class="nn">omnigibson</span> <span class="k">as</span> <span class="nn">og</span>
@@ -7490,7 +7488,7 @@
 <a id="__codelineno-14-19" name="__codelineno-14-19"></a><span class="sd">    and executing actions</span>
 <a id="__codelineno-14-20" name="__codelineno-14-20"></a><span class="sd">    &quot;&quot;&quot;</span>
 <a id="__codelineno-14-21" name="__codelineno-14-21"></a>    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Description:&quot;</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-<a id="__codelineno-14-22" name="__codelineno-14-22"></a>    <span class="n">scene_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Scene&quot;</span><span class="p">,</span> <span class="s2">&quot;InteractiveTraversableScene&quot;</span><span class="p">,</span> <span class="s2">&quot;StaticTraversableScene&quot;</span><span class="p">]</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22"></a>    <span class="n">scene_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Scene&quot;</span><span class="p">,</span> <span class="s2">&quot;InteractiveTraversableScene&quot;</span><span class="p">]</span>
 <a id="__codelineno-14-23" name="__codelineno-14-23"></a>    <span class="n">scene_type</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">scene_options</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scene type&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
 <a id="__codelineno-14-24" name="__codelineno-14-24"></a>
 <a id="__codelineno-14-25" name="__codelineno-14-25"></a>    <span class="c1"># -- Choose the object to load --</span>
@@ -7525,23 +7523,21 @@
 <a id="__codelineno-14-54" name="__codelineno-14-54"></a>    <span class="p">}</span>
 <a id="__codelineno-14-55" name="__codelineno-14-55"></a>    <span class="k">if</span> <span class="n">scene_type</span> <span class="o">==</span> <span class="s2">&quot;InteractiveTraversableScene&quot;</span><span class="p">:</span>
 <a id="__codelineno-14-56" name="__codelineno-14-56"></a>        <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;scene&quot;</span><span class="p">][</span><span class="s2">&quot;scene_model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Rs_int&quot;</span>
-<a id="__codelineno-14-57" name="__codelineno-14-57"></a>    <span class="k">elif</span> <span class="n">scene_type</span> <span class="o">==</span> <span class="s2">&quot;StaticTraversableScene&quot;</span><span class="p">:</span>
-<a id="__codelineno-14-58" name="__codelineno-14-58"></a>        <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;scene&quot;</span><span class="p">][</span><span class="s2">&quot;scene_model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Adrian&quot;</span>
-<a id="__codelineno-14-59" name="__codelineno-14-59"></a>
-<a id="__codelineno-14-60" name="__codelineno-14-60"></a>    <span class="c1"># Create the environment</span>
-<a id="__codelineno-14-61" name="__codelineno-14-61"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">action_timestep</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">60.</span><span class="p">,</span> <span class="n">physics_timestep</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">60.</span><span class="p">)</span>
-<a id="__codelineno-14-62" name="__codelineno-14-62"></a>
-<a id="__codelineno-14-63" name="__codelineno-14-63"></a>    <span class="c1"># Step through the environment</span>
-<a id="__codelineno-14-64" name="__codelineno-14-64"></a>    <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">100</span> <span class="k">if</span> <span class="n">short_exec</span> <span class="k">else</span> <span class="mi">10000</span>
-<a id="__codelineno-14-65" name="__codelineno-14-65"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
-<a id="__codelineno-14-66" name="__codelineno-14-66"></a>        <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]))</span>
-<a id="__codelineno-14-67" name="__codelineno-14-67"></a>
-<a id="__codelineno-14-68" name="__codelineno-14-68"></a>    <span class="c1"># Always close the environment at the end</span>
-<a id="__codelineno-14-69" name="__codelineno-14-69"></a>    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<a id="__codelineno-14-70" name="__codelineno-14-70"></a>
-<a id="__codelineno-14-71" name="__codelineno-14-71"></a>
-<a id="__codelineno-14-72" name="__codelineno-14-72"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-14-73" name="__codelineno-14-73"></a>    <span class="n">main</span><span class="p">()</span>
+<a id="__codelineno-14-57" name="__codelineno-14-57"></a>
+<a id="__codelineno-14-58" name="__codelineno-14-58"></a>    <span class="c1"># Create the environment</span>
+<a id="__codelineno-14-59" name="__codelineno-14-59"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">action_timestep</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">60.</span><span class="p">,</span> <span class="n">physics_timestep</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">60.</span><span class="p">)</span>
+<a id="__codelineno-14-60" name="__codelineno-14-60"></a>
+<a id="__codelineno-14-61" name="__codelineno-14-61"></a>    <span class="c1"># Step through the environment</span>
+<a id="__codelineno-14-62" name="__codelineno-14-62"></a>    <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">100</span> <span class="k">if</span> <span class="n">short_exec</span> <span class="k">else</span> <span class="mi">10000</span>
+<a id="__codelineno-14-63" name="__codelineno-14-63"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
+<a id="__codelineno-14-64" name="__codelineno-14-64"></a>        <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]))</span>
+<a id="__codelineno-14-65" name="__codelineno-14-65"></a>
+<a id="__codelineno-14-66" name="__codelineno-14-66"></a>    <span class="c1"># Always close the environment at the end</span>
+<a id="__codelineno-14-67" name="__codelineno-14-67"></a>    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<a id="__codelineno-14-68" name="__codelineno-14-68"></a>
+<a id="__codelineno-14-69" name="__codelineno-14-69"></a>
+<a id="__codelineno-14-70" name="__codelineno-14-70"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-14-71" name="__codelineno-14-71"></a>    <span class="n">main</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
 </details>
 <h3 id="object-visualizer-demo"><strong> Object Visualizer Demo</strong></h3>
