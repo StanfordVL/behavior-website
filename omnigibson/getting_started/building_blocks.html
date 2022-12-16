@@ -6535,14 +6535,7 @@
 <span class="normal"><a href="#__codelineno-4-58">58</a></span>
 <span class="normal"><a href="#__codelineno-4-59">59</a></span>
 <span class="normal"><a href="#__codelineno-4-60">60</a></span>
-<span class="normal"><a href="#__codelineno-4-61">61</a></span>
-<span class="normal"><a href="#__codelineno-4-62">62</a></span>
-<span class="normal"><a href="#__codelineno-4-63">63</a></span>
-<span class="normal"><a href="#__codelineno-4-64">64</a></span>
-<span class="normal"><a href="#__codelineno-4-65">65</a></span>
-<span class="normal"><a href="#__codelineno-4-66">66</a></span>
-<span class="normal"><a href="#__codelineno-4-67">67</a></span>
-<span class="normal"><a href="#__codelineno-4-68">68</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">import</span> <span class="nn">logging</span>
+<span class="normal"><a href="#__codelineno-4-61">61</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">import</span> <span class="nn">logging</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kn">import</span> <span class="nn">os</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="kn">import</span> <span class="nn">yaml</span>
@@ -6566,50 +6559,43 @@
 <a id="__codelineno-4-22" name="__codelineno-4-22"></a><span class="sd">    &quot;&quot;&quot;</span>
 <a id="__codelineno-4-23" name="__codelineno-4-23"></a>    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Description:&quot;</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 <a id="__codelineno-4-24" name="__codelineno-4-24"></a>
-<a id="__codelineno-4-25" name="__codelineno-4-25"></a>    <span class="c1"># Infer which config to load based on the scene selected</span>
-<a id="__codelineno-4-26" name="__codelineno-4-26"></a>    <span class="n">scene_options</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-4-27" name="__codelineno-4-27"></a>        <span class="s2">&quot;InteractiveTraversableScene&quot;</span><span class="p">:</span> <span class="s2">&quot;Rs_int scene with fully interactive objects&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-28" name="__codelineno-4-28"></a>        <span class="s2">&quot;StaticTraversableScene&quot;</span><span class="p">:</span> <span class="s2">&quot;Adrian scene mesh with no interactive objects&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-29" name="__codelineno-4-29"></a>    <span class="p">}</span>
-<a id="__codelineno-4-30" name="__codelineno-4-30"></a>    <span class="n">scene_type</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">scene_options</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scene type&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
-<a id="__codelineno-4-31" name="__codelineno-4-31"></a>    <span class="n">config_name</span> <span class="o">=</span> <span class="s2">&quot;turtlebot_nav&quot;</span> <span class="k">if</span> <span class="n">scene_type</span> <span class="o">==</span> <span class="s2">&quot;InteractiveTraversableScene&quot;</span> <span class="k">else</span> <span class="s2">&quot;turtlebot_static_nav&quot;</span>
-<a id="__codelineno-4-32" name="__codelineno-4-32"></a>    <span class="n">config_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">og</span><span class="o">.</span><span class="n">example_config_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config_name</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-33" name="__codelineno-4-33"></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">),</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">)</span>
-<a id="__codelineno-4-34" name="__codelineno-4-34"></a>
-<a id="__codelineno-4-35" name="__codelineno-4-35"></a>    <span class="c1"># If the scene type is interactive, also check if we want to quick load or full load the scene</span>
-<a id="__codelineno-4-36" name="__codelineno-4-36"></a>    <span class="k">if</span> <span class="n">scene_type</span> <span class="o">==</span> <span class="s2">&quot;InteractiveTraversableScene&quot;</span><span class="p">:</span>
-<a id="__codelineno-4-37" name="__codelineno-4-37"></a>        <span class="n">load_options</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-4-38" name="__codelineno-4-38"></a>            <span class="s2">&quot;Quick&quot;</span><span class="p">:</span> <span class="s2">&quot;Only load the building assets (i.e.: the floors, walls, ceilings)&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-39" name="__codelineno-4-39"></a>            <span class="s2">&quot;Full&quot;</span><span class="p">:</span> <span class="s2">&quot;Load all interactive objects in the scene&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-40" name="__codelineno-4-40"></a>        <span class="p">}</span>
-<a id="__codelineno-4-41" name="__codelineno-4-41"></a>        <span class="n">load_mode</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">load_options</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;load mode&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
-<a id="__codelineno-4-42" name="__codelineno-4-42"></a>        <span class="k">if</span> <span class="n">load_mode</span> <span class="o">==</span> <span class="s2">&quot;Quick&quot;</span><span class="p">:</span>
-<a id="__codelineno-4-43" name="__codelineno-4-43"></a>            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;scene&quot;</span><span class="p">][</span><span class="s2">&quot;load_object_categories&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;floors&quot;</span><span class="p">,</span> <span class="s2">&quot;walls&quot;</span><span class="p">,</span> <span class="s2">&quot;ceilings&quot;</span><span class="p">]</span>
-<a id="__codelineno-4-44" name="__codelineno-4-44"></a>
-<a id="__codelineno-4-45" name="__codelineno-4-45"></a>    <span class="c1"># Load the environment</span>
-<a id="__codelineno-4-46" name="__codelineno-4-46"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-<a id="__codelineno-4-47" name="__codelineno-4-47"></a>
-<a id="__codelineno-4-48" name="__codelineno-4-48"></a>    <span class="c1"># Allow user to move camera more easily</span>
-<a id="__codelineno-4-49" name="__codelineno-4-49"></a>    <span class="n">og</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">enable_viewer_camera_teleoperation</span><span class="p">()</span>
-<a id="__codelineno-4-50" name="__codelineno-4-50"></a>
-<a id="__codelineno-4-51" name="__codelineno-4-51"></a>    <span class="c1"># Run a simple loop and reset periodically</span>
-<a id="__codelineno-4-52" name="__codelineno-4-52"></a>    <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">10</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">short_exec</span> <span class="k">else</span> <span class="mi">1</span>
-<a id="__codelineno-4-53" name="__codelineno-4-53"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
-<a id="__codelineno-4-54" name="__codelineno-4-54"></a>        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Resetting environment&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-55" name="__codelineno-4-55"></a>        <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<a id="__codelineno-4-56" name="__codelineno-4-56"></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-<a id="__codelineno-4-57" name="__codelineno-4-57"></a>            <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-<a id="__codelineno-4-58" name="__codelineno-4-58"></a>            <span class="n">state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-<a id="__codelineno-4-59" name="__codelineno-4-59"></a>            <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
-<a id="__codelineno-4-60" name="__codelineno-4-60"></a>                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Episode finished after </span><span class="si">{}</span><span class="s2"> timesteps&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-<a id="__codelineno-4-61" name="__codelineno-4-61"></a>                <span class="k">break</span>
-<a id="__codelineno-4-62" name="__codelineno-4-62"></a>
-<a id="__codelineno-4-63" name="__codelineno-4-63"></a>    <span class="c1"># Always close the environment at the end</span>
-<a id="__codelineno-4-64" name="__codelineno-4-64"></a>    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<a id="__codelineno-4-65" name="__codelineno-4-65"></a>
-<a id="__codelineno-4-66" name="__codelineno-4-66"></a>
-<a id="__codelineno-4-67" name="__codelineno-4-67"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-4-68" name="__codelineno-4-68"></a>    <span class="n">main</span><span class="p">()</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25"></a>    <span class="c1"># Load the config</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26"></a>    <span class="n">config_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">og</span><span class="o">.</span><span class="n">example_config_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;turtlebot_nav.yaml&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27"></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">),</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">)</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28"></a>
+<a id="__codelineno-4-29" name="__codelineno-4-29"></a>    <span class="c1"># check if we want to quick load or full load the scene</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30"></a>    <span class="n">load_options</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31"></a>        <span class="s2">&quot;Quick&quot;</span><span class="p">:</span> <span class="s2">&quot;Only load the building assets (i.e.: the floors, walls, ceilings)&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32"></a>        <span class="s2">&quot;Full&quot;</span><span class="p">:</span> <span class="s2">&quot;Load all interactive objects in the scene&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33"></a>    <span class="p">}</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34"></a>    <span class="n">load_mode</span> <span class="o">=</span> <span class="n">choose_from_options</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">load_options</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;load mode&quot;</span><span class="p">,</span> <span class="n">random_selection</span><span class="o">=</span><span class="n">random_selection</span><span class="p">)</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35"></a>    <span class="k">if</span> <span class="n">load_mode</span> <span class="o">==</span> <span class="s2">&quot;Quick&quot;</span><span class="p">:</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36"></a>        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;scene&quot;</span><span class="p">][</span><span class="s2">&quot;load_object_categories&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;floors&quot;</span><span class="p">,</span> <span class="s2">&quot;walls&quot;</span><span class="p">,</span> <span class="s2">&quot;ceilings&quot;</span><span class="p">]</span>
+<a id="__codelineno-4-37" name="__codelineno-4-37"></a>
+<a id="__codelineno-4-38" name="__codelineno-4-38"></a>    <span class="c1"># Load the environment</span>
+<a id="__codelineno-4-39" name="__codelineno-4-39"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+<a id="__codelineno-4-40" name="__codelineno-4-40"></a>
+<a id="__codelineno-4-41" name="__codelineno-4-41"></a>    <span class="c1"># Allow user to move camera more easily</span>
+<a id="__codelineno-4-42" name="__codelineno-4-42"></a>    <span class="n">og</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">enable_viewer_camera_teleoperation</span><span class="p">()</span>
+<a id="__codelineno-4-43" name="__codelineno-4-43"></a>
+<a id="__codelineno-4-44" name="__codelineno-4-44"></a>    <span class="c1"># Run a simple loop and reset periodically</span>
+<a id="__codelineno-4-45" name="__codelineno-4-45"></a>    <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">10</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">short_exec</span> <span class="k">else</span> <span class="mi">1</span>
+<a id="__codelineno-4-46" name="__codelineno-4-46"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+<a id="__codelineno-4-47" name="__codelineno-4-47"></a>        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Resetting environment&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-48" name="__codelineno-4-48"></a>        <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<a id="__codelineno-4-49" name="__codelineno-4-49"></a>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+<a id="__codelineno-4-50" name="__codelineno-4-50"></a>            <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<a id="__codelineno-4-51" name="__codelineno-4-51"></a>            <span class="n">state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+<a id="__codelineno-4-52" name="__codelineno-4-52"></a>            <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+<a id="__codelineno-4-53" name="__codelineno-4-53"></a>                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Episode finished after </span><span class="si">{}</span><span class="s2"> timesteps&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<a id="__codelineno-4-54" name="__codelineno-4-54"></a>                <span class="k">break</span>
+<a id="__codelineno-4-55" name="__codelineno-4-55"></a>
+<a id="__codelineno-4-56" name="__codelineno-4-56"></a>    <span class="c1"># Always close the environment at the end</span>
+<a id="__codelineno-4-57" name="__codelineno-4-57"></a>    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<a id="__codelineno-4-58" name="__codelineno-4-58"></a>
+<a id="__codelineno-4-59" name="__codelineno-4-59"></a>
+<a id="__codelineno-4-60" name="__codelineno-4-60"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-4-61" name="__codelineno-4-61"></a>    <span class="n">main</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
 </details>
 <h3 id="config-selection-demo"><strong>Config Selection Demo</strong></h3>
