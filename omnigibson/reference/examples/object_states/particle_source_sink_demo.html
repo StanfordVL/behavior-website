@@ -9,23 +9,28 @@
       
       
       
+        <link rel="prev" href="particle_applier_remover_demo.html">
+      
+      
+        <link rel="next" href="sample_kinematics_demo.html">
+      
+      
         
       
       
-      <link rel="icon" href="../../assets/OmniGibson_logo.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.11+insiders-4.26.6">
+      <link rel="icon" href="../../../assets/OmniGibson_logo.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5+insiders-4.32.4">
     
     
       
-        <title>fluid_sink - OmniGibson Documentation</title>
+        <title>particle_source_sink_demo - OmniGibson Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.9b35cbb9.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.323870f8.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
-        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.6932e648.min.css">
       
       
 
@@ -41,11 +46,11 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -83,7 +88,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#object_states.fluid_sink" class="md-skip">
+        <a href="#examples.object_states.particle_source_sink_demo" class="md-skip">
           Skip to content
         </a>
       
@@ -97,9 +102,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../index.html" title="OmniGibson Documentation" class="md-header__button md-logo" aria-label="OmniGibson Documentation" data-md-component="logo">
+    <a href="../../../index.html" title="OmniGibson Documentation" class="md-header__button md-logo" aria-label="OmniGibson Documentation" data-md-component="logo">
       
-  <img src="../../assets/OmniGibson_logo.png" alt="logo">
+  <img src="../../../assets/OmniGibson_logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -115,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              fluid_sink
+              particle_source_sink_demo
             
           </span>
         </div>
@@ -125,8 +130,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
@@ -134,8 +137,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
           
@@ -177,7 +178,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -189,7 +190,7 @@
         <a href="https://github.com/StanfordVL/OmniGibson" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     StanfordVL/OmniGibson
@@ -206,19 +207,20 @@
       
         
           
-            <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-tabs__inner md-grid">
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
     <ul class="md-tabs__list">
       
         
-
-
-
-
+  
+  
   
     <li class="md-tabs__item">
-      <a href="../../index.html" class="md-tabs__link">
+      <a href="../../../index.html" class="md-tabs__link">
         
+  
+    
   
   Home
 
@@ -228,16 +230,13 @@
 
       
         
-
-
-
-
+  
+  
   
     
     
-    
       <li class="md-tabs__item">
-        <a href="../../getting_started/installation.html" class="md-tabs__link">
+        <a href="../../../getting_started/installation.html" class="md-tabs__link">
           
   
   Getting Started
@@ -249,21 +248,24 @@
 
       
         
-
   
-
-
-
-
   
     
+  
+  
     
     
       
   
+  
+    
+  
+  
     <li class="md-tabs__item">
-      <a href="../controllers/index.html" class="md-tabs__link md-tabs__link--active">
+      <a href="../../controllers/index.html" class="md-tabs__link md-tabs__link--active">
         
+  
+    
   
   controllers
 
@@ -297,9 +299,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../index.html" title="OmniGibson Documentation" class="md-nav__button md-logo" aria-label="OmniGibson Documentation" data-md-component="logo">
+    <a href="../../../index.html" title="OmniGibson Documentation" class="md-nav__button md-logo" aria-label="OmniGibson Documentation" data-md-component="logo">
       
-  <img src="../../assets/OmniGibson_logo.png" alt="logo">
+  <img src="../../../assets/OmniGibson_logo.png" alt="logo">
 
     </a>
     OmniGibson Documentation
@@ -309,7 +311,7 @@
       <a href="https://github.com/StanfordVL/OmniGibson" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     StanfordVL/OmniGibson
@@ -325,11 +327,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../../index.html" class="md-nav__link">
+      <a href="../../../index.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     Home
+  
+
     
   </span>
   
@@ -352,14 +358,19 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
         
         
-          <label class="md-nav__link" for="__nav_2">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   <span class="md-ellipsis">
+    
+  
     Getting Started
+  
+
     
   </span>
   
@@ -368,10 +379,14 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" aria-label="Getting Started" data-md-level="1">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            Getting Started
+            
+  
+    Getting Started
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -381,13 +396,17 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/installation.html" class="md-nav__link">
+      <a href="../../../getting_started/installation.html" class="md-nav__link">
         
   
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.78 15.3 6 6 2.11-2.16-6-6-2.11 2.16m3.72-5.2c-.39 0-.81-.05-1.14-.19L4.97 21.25l-2.11-2.11 7.41-7.4L8.5 9.96l-.72.7-1.45-1.41v2.86l-.7.7-3.52-3.56.7-.7h2.81l-1.4-1.41 3.56-3.56a2.976 2.976 0 0 1 4.22 0L9.89 5.74l1.41 1.4-.71.71 1.79 1.78 1.82-1.88c-.14-.33-.2-.75-.2-1.12a3.49 3.49 0 0 1 3.5-3.52c.59 0 1.11.14 1.58.42L16.41 6.2l1.5 1.5 2.67-2.67c.28.47.42.97.42 1.6 0 1.92-1.55 3.47-3.5 3.47Z"/></svg>
   
   <span class="md-ellipsis">
+    
+  
     Installation
+  
+
     
   </span>
   
@@ -405,13 +424,17 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/quickstart.html" class="md-nav__link">
+      <a href="../../../getting_started/quickstart.html" class="md-nav__link">
         
   
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.064 0a8.75 8.75 0 0 0-6.187 2.563l-.459.458c-.314.314-.616.641-.904.979H3.31a1.75 1.75 0 0 0-1.49.833L.11 7.607a.75.75 0 0 0 .418 1.11l3.102.954c.037.051.079.1.124.145l2.429 2.428c.046.046.094.088.145.125l.954 3.102a.75.75 0 0 0 1.11.418l2.774-1.707a1.75 1.75 0 0 0 .833-1.49V9.485c.338-.288.665-.59.979-.904l.458-.459A8.75 8.75 0 0 0 16 1.936V1.75A1.75 1.75 0 0 0 14.25 0h-.186zM10.5 10.625c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783 1.949-1.2a.25.25 0 0 0 .119-.213v-2.066zM3.678 8.116 5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0 0 0-.213.119l-1.2 1.95 1.782.547zm5.26-4.493A7.25 7.25 0 0 1 14.063 1.5h.186a.25.25 0 0 1 .25.25v.186a7.25 7.25 0 0 1-2.123 5.127l-.459.458a15.21 15.21 0 0 1-2.499 2.02l-2.317 1.5-2.143-2.143 1.5-2.317a15.25 15.25 0 0 1 2.02-2.5l.458-.458h.002zM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-8.44 9.56a1.5 1.5 0 1 0-2.12-2.12c-.734.73-1.047 2.332-1.15 3.003a.23.23 0 0 0 .265.265c.671-.103 2.273-.416 3.005-1.148z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M14.064 0h.186C15.216 0 16 .784 16 1.75v.186a8.752 8.752 0 0 1-2.564 6.186l-.458.459c-.314.314-.641.616-.979.904v3.207c0 .608-.315 1.172-.833 1.49l-2.774 1.707a.749.749 0 0 1-1.11-.418l-.954-3.102a1.214 1.214 0 0 1-.145-.125L3.754 9.816a1.218 1.218 0 0 1-.124-.145L.528 8.717a.749.749 0 0 1-.418-1.11l1.71-2.774A1.748 1.748 0 0 1 3.31 4h3.204c.288-.338.59-.665.904-.979l.459-.458A8.749 8.749 0 0 1 14.064 0ZM8.938 3.623h-.002l-.458.458c-.76.76-1.437 1.598-2.02 2.5l-1.5 2.317 2.143 2.143 2.317-1.5c.902-.583 1.74-1.26 2.499-2.02l.459-.458a7.25 7.25 0 0 0 2.123-5.127V1.75a.25.25 0 0 0-.25-.25h-.186a7.249 7.249 0 0 0-5.125 2.123ZM3.56 14.56c-.732.732-2.334 1.045-3.005 1.148a.234.234 0 0 1-.201-.064.234.234 0 0 1-.064-.201c.103-.671.416-2.273 1.15-3.003a1.502 1.502 0 1 1 2.12 2.12Zm6.94-3.935c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783 1.949-1.2a.25.25 0 0 0 .119-.213ZM3.678 8.116 5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0 0 0-.213.119l-1.2 1.95ZM12 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>
   
   <span class="md-ellipsis">
+    
+  
     Quickstart
+  
+
     
   </span>
   
@@ -429,13 +452,17 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/building_blocks.html" class="md-nav__link">
+      <a href="../../../getting_started/building_blocks.html" class="md-nav__link">
         
   
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.878.392a1.75 1.75 0 0 0-1.756 0l-5.25 3.045A1.75 1.75 0 0 0 1 4.951v6.098c0 .624.332 1.2.872 1.514l5.25 3.045a1.75 1.75 0 0 0 1.756 0l5.25-3.045c.54-.313.872-.89.872-1.514V4.951c0-.624-.332-1.2-.872-1.514L8.878.392zM7.875 1.69a.25.25 0 0 1 .25 0l4.63 2.685L8 7.133 3.245 4.375l4.63-2.685zM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432L2.5 5.677zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432v5.516z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"/></svg>
   
   <span class="md-ellipsis">
+    
+  
     Building Blocks
+  
+
     
   </span>
   
@@ -468,14 +495,19 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
         
         
-          <label class="md-nav__link" for="__nav_3">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
+    
+  
     Code Reference
+  
+
     
   </span>
   
@@ -484,10 +516,14 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" aria-label="Code Reference" data-md-level="1">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            Code Reference
+            
+  
+    Code Reference
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -503,17 +539,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../controllers/index.html" class="md-nav__link ">
+            <a href="../../controllers/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     controllers
+  
+
     
   </span>
   
@@ -527,10 +568,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="controllers" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_1">
             <span class="md-nav__icon md-icon"></span>
-            controllers
+            
+  
+    controllers
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -540,11 +585,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../controllers/controller_base.html" class="md-nav__link">
+      <a href="../../controllers/controller_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     controller_base
+  
+
     
   </span>
   
@@ -562,11 +611,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../controllers/dd_controller.html" class="md-nav__link">
+      <a href="../../controllers/dd_controller.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     dd_controller
+  
+
     
   </span>
   
@@ -584,11 +637,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../controllers/ik_controller.html" class="md-nav__link">
+      <a href="../../controllers/ik_controller.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     ik_controller
+  
+
     
   </span>
   
@@ -606,11 +663,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../controllers/joint_controller.html" class="md-nav__link">
+      <a href="../../controllers/joint_controller.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     joint_controller
+  
+
     
   </span>
   
@@ -628,11 +689,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../controllers/multi_finger_gripper_controller.html" class="md-nav__link">
+      <a href="../../controllers/multi_finger_gripper_controller.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     multi_finger_gripper_controller
+  
+
     
   </span>
   
@@ -650,11 +715,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../controllers/null_joint_controller.html" class="md-nav__link">
+      <a href="../../controllers/null_joint_controller.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     null_joint_controller
+  
+
     
   </span>
   
@@ -686,17 +755,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../envs/index.html" class="md-nav__link ">
+            <a href="../../envs/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     envs
+  
+
     
   </span>
   
@@ -710,10 +784,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="envs" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_2">
             <span class="md-nav__icon md-icon"></span>
-            envs
+            
+  
+    envs
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -723,1320 +801,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../envs/env_base.html" class="md-nav__link">
+      <a href="../../envs/env_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     env_base
-    
-  </span>
   
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    examples
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="examples" data-md-level="2">
-          <label class="md-nav__title" for="__nav_3_3">
-            <span class="md-nav__icon md-icon"></span>
-            examples
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/blender_demo_transition_machine.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    blender_demo_transition_machine
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_2" type="checkbox" id="__nav_3_3_2" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/environments/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    environments
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_2">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="environments" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_2">
-            <span class="md-nav__icon md-icon"></span>
-            environments
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/environments/behavior_env_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    behavior_env_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/environments/config_selector.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    config_selector
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/environments/navigation_env_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    navigation_env_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_3" type="checkbox" id="__nav_3_3_3" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/learning/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    learning
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_3">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="learning" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_3">
-            <span class="md-nav__icon md-icon"></span>
-            learning
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/learning/stable_baselines3_ppo_example.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    stable_baselines3_ppo_example
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_4" type="checkbox" id="__nav_3_3_4" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/object_states/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    object_states
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_4">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="object_states" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_4">
-            <span class="md-nav__icon md-icon"></span>
-            object_states
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/attachment_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    attachment_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/cleaning_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    cleaning_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/cleaning_demo_simple.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    cleaning_demo_simple
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/folded_unfolded_state_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    folded_unfolded_state_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/heat_source_or_sink_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    heat_source_or_sink_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/heated_state_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    heated_state_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/object_state_texture_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    object_state_texture_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/onfire_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    onfire_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/overlaid_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    overlaid_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/particle_applier_remover_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    particle_applier_remover_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/sample_kinematics_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    sample_kinematics_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/slicing_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    slicing_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/object_states/temperature_demo.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    temperature_demo
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_5" type="checkbox" id="__nav_3_3_5" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/objects/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    objects
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_5">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="objects" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_5">
-            <span class="md-nav__icon md-icon"></span>
-            objects
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/objects/draw_bounding_box.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    draw_bounding_box
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/objects/highlight_objects.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    highlight_objects
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/objects/load_object_selector.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    load_object_selector
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/objects/visualize_object.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    visualize_object
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_6" type="checkbox" id="__nav_3_3_6" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/renderer_settings/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    renderer_settings
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_6">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="renderer_settings" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_6">
-            <span class="md-nav__icon md-icon"></span>
-            renderer_settings
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/renderer_settings/renderer_settings_example.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    renderer_settings_example
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_7" type="checkbox" id="__nav_3_3_7" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/robots/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    robots
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_7">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="robots" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_7">
-            <span class="md-nav__icon md-icon"></span>
-            robots
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_7_1" type="checkbox" id="__nav_3_3_7_1" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/robots/advanced/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    advanced
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_7_1">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="advanced" data-md-level="4">
-          <label class="md-nav__title" for="__nav_3_3_7_1">
-            <span class="md-nav__icon md-icon"></span>
-            advanced
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/robots/advanced/ik_example.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    ik_example
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/robots/all_robots_visualizer.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    all_robots_visualizer
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/robots/grasping_mode_example.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    grasping_mode_example
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/robots/robot_control_example.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    robot_control_example
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_8" type="checkbox" id="__nav_3_3_8" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/scenes/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    scenes
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_8">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="scenes" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_8">
-            <span class="md-nav__icon md-icon"></span>
-            scenes
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/scenes/scene_selector.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    scene_selector
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/scenes/traversability_map_example.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    traversability_map_example
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_9" type="checkbox" id="__nav_3_3_9" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../examples/simulator/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    simulator
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_3_9">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="simulator" data-md-level="3">
-          <label class="md-nav__title" for="__nav_3_3_9">
-            <span class="md-nav__icon md-icon"></span>
-            simulator
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../examples/simulator/sim_save_load_example.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    sim_save_load_example
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../macros.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    macros
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_5" type="checkbox" id="__nav_3_5" >
-        
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../maps/index.html" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    maps
-    
-  </span>
-  
-  
-
-            </a>
-            
-              <label class="md-nav__link " for="__nav_3_5">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" aria-label="maps" data-md-level="2">
-          <label class="md-nav__title" for="__nav_3_5">
-            <span class="md-nav__icon md-icon"></span>
-            maps
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../maps/map_base.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    map_base
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../maps/segmentation_map.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    segmentation_map
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../maps/traversable_map.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    traversable_map
     
   </span>
   
@@ -2070,17 +843,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_6" type="checkbox" id="__nav_3_6" checked>
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="index.html" class="md-nav__link ">
+            <a href="../index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
-    object_states
+    
+  
+    examples
+  
+
     
   </span>
   
@@ -2088,16 +866,72 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_3_6">
+              <label class="md-nav__link " for="__nav_3_3">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" aria-label="object_states" data-md-level="2">
-          <label class="md-nav__title" for="__nav_3_6">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
             <span class="md-nav__icon md-icon"></span>
-            object_states
+            
+  
+    examples
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../environments/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    environments
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_1">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    environments
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2107,11 +941,15 @@
   
   
     <li class="md-nav__item">
-      <a href="aabb.html" class="md-nav__link">
+      <a href="../environments/behavior_env_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    aabb
+    
+  
+    behavior_env_demo
+  
+
     
   </span>
   
@@ -2129,11 +967,189 @@
   
   
     <li class="md-nav__item">
-      <a href="adjacency.html" class="md-nav__link">
+      <a href="../environments/navigation_env_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    adjacency
+    
+  
+    navigation_env_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../learning/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    learning
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_2">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../learning/navigation_policy_demo.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    navigation_policy_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    object_states
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_3">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    object_states
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="attachment_demo.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    attachment_demo
+  
+
     
   </span>
   
@@ -2151,11 +1167,15 @@
   
   
     <li class="md-nav__item">
-      <a href="attachment.html" class="md-nav__link">
+      <a href="dicing_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    attachment
+    
+  
+    dicing_demo
+  
+
     
   </span>
   
@@ -2173,11 +1193,15 @@
   
   
     <li class="md-nav__item">
-      <a href="burnt.html" class="md-nav__link">
+      <a href="folded_unfolded_state_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    burnt
+    
+  
+    folded_unfolded_state_demo
+  
+
     
   </span>
   
@@ -2195,11 +1219,15 @@
   
   
     <li class="md-nav__item">
-      <a href="contact_bodies.html" class="md-nav__link">
+      <a href="heat_source_or_sink_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    contact_bodies
+    
+  
+    heat_source_or_sink_demo
+  
+
     
   </span>
   
@@ -2217,11 +1245,15 @@
   
   
     <li class="md-nav__item">
-      <a href="contact_particles.html" class="md-nav__link">
+      <a href="heated_state_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    contact_particles
+    
+  
+    heated_state_demo
+  
+
     
   </span>
   
@@ -2239,11 +1271,15 @@
   
   
     <li class="md-nav__item">
-      <a href="contact_subscribed_state_mixin.html" class="md-nav__link">
+      <a href="object_state_texture_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    contact_subscribed_state_mixin
+    
+  
+    object_state_texture_demo
+  
+
     
   </span>
   
@@ -2261,11 +1297,15 @@
   
   
     <li class="md-nav__item">
-      <a href="cooked.html" class="md-nav__link">
+      <a href="onfire_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    cooked
+    
+  
+    onfire_demo
+  
+
     
   </span>
   
@@ -2283,11 +1323,15 @@
   
   
     <li class="md-nav__item">
-      <a href="covered.html" class="md-nav__link">
+      <a href="overlaid_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    covered
+    
+  
+    overlaid_demo
+  
+
     
   </span>
   
@@ -2305,33 +1349,15 @@
   
   
     <li class="md-nav__item">
-      <a href="factory.html" class="md-nav__link">
+      <a href="particle_applier_remover_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    factory
     
-  </span>
   
-  
-
-      </a>
-    </li>
+    particle_applier_remover_demo
   
 
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="filled.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    filled
     
   </span>
   
@@ -2352,7 +1378,7 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
       
@@ -2360,7 +1386,11 @@
           
   
   <span class="md-ellipsis">
-    fluid_sink
+    
+  
+    particle_source_sink_demo
+  
+
     
   </span>
   
@@ -2369,11 +1399,15 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="fluid_sink.html" class="md-nav__link md-nav__link--active">
+      <a href="particle_source_sink_demo.html" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    fluid_sink
+    
+  
+    particle_source_sink_demo
+  
+
     
   </span>
   
@@ -2395,35 +1429,24 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#object_states.fluid_sink" class="md-nav__link">
+  <a href="#examples.object_states.particle_source_sink_demo" class="md-nav__link">
     <span class="md-ellipsis">
-      object_states.fluid_sink
+      
+        examples.object_states.particle_source_sink_demo
+      
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#object_states.fluid_sink.FluidSink" class="md-nav__link">
+  <a href="#examples.object_states.particle_source_sink_demo.main" class="md-nav__link">
     <span class="md-ellipsis">
-      FluidSink
+      
+        main()
+      
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="FluidSink">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#object_states.fluid_sink.FluidSink.fluid_system" class="md-nav__link">
-    <span class="md-ellipsis">
-      fluid_system
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2442,11 +1465,15 @@
   
   
     <li class="md-nav__item">
-      <a href="fluid_source.html" class="md-nav__link">
+      <a href="sample_kinematics_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    fluid_source
+    
+  
+    sample_kinematics_demo
+  
+
     
   </span>
   
@@ -2464,11 +1491,15 @@
   
   
     <li class="md-nav__item">
-      <a href="folded.html" class="md-nav__link">
+      <a href="slicing_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    folded
+    
+  
+    slicing_demo
+  
+
     
   </span>
   
@@ -2486,605 +1517,15 @@
   
   
     <li class="md-nav__item">
-      <a href="frozen.html" class="md-nav__link">
+      <a href="temperature_demo.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    frozen
     
-  </span>
   
-  
-
-      </a>
-    </li>
+    temperature_demo
   
 
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="heat_source_or_sink.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    heat_source_or_sink
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="heated.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    heated
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="inside.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    inside
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="kinematics.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    kinematics
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="link_based_state_mixin.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    link_based_state_mixin
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="max_temperature.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    max_temperature
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="next_to.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    next_to
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="object_state_base.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    object_state_base
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="on_fire.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    on_fire
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="on_top.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    on_top
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="open.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    open
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="overlaid.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    overlaid
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="particle_modifier.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    particle_modifier
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="pose.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    pose
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="robot_related_states.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    robot_related_states
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="room_states.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    room_states
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="saturated.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    saturated
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="sliced.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    sliced
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="slicer.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    slicer
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="temperature.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    temperature
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="toggle.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    toggle
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="touching.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    touching
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="under.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    under
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="unfolded.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    unfolded
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="update_state_mixin.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    update_state_mixin
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="water_sink.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    water_sink
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="water_source.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    water_source
     
   </span>
   
@@ -3116,8 +1557,9 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_7" type="checkbox" id="__nav_3_7" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_4" >
         
           
           
@@ -3126,7 +1568,1981 @@
               
   
   <span class="md-ellipsis">
+    
+  
     objects
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_4">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    objects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../objects/draw_bounding_box.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    draw_bounding_box
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../objects/highlight_objects.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    highlight_objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../objects/load_object_selector.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    load_object_selector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../objects/visualize_object.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    visualize_object
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../renderer_settings/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    renderer_settings
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_5">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    renderer_settings
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../renderer_settings/renderer_settings_example.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    renderer_settings_example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../robots/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    robots
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_6">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    robots
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_6_1" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../robots/advanced/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    advanced
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_6_1">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_3_3_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robots/advanced/ik_example.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    ik_example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robots/all_robots_visualizer.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    all_robots_visualizer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robots/grasping_mode_example.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    grasping_mode_example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robots/robot_control_example.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    robot_control_example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_7" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../scenes/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    scenes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_7">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    scenes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scenes/scene_selector.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    scene_selector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scenes/scene_tour_demo.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    scene_tour_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scenes/traversability_map_example.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    traversability_map_example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_8" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../simulator/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    simulator
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_3_8">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    simulator
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulator/sim_save_load_example.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    sim_save_load_example
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../macros.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../maps/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    maps
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_5">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    maps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../maps/map_base.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    map_base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../maps/segmentation_map.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    segmentation_map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../maps/traversable_map.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    traversable_map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../object_states/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    object_states
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_3_6">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    object_states
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/aabb.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    aabb
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/adjacency.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    adjacency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/attached_to.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    attached_to
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/burnt.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    burnt
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/contact_bodies.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    contact_bodies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/contact_particles.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    contact_particles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/contact_subscribed_state_mixin.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    contact_subscribed_state_mixin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/cooked.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    cooked
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/covered.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    covered
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/factory.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    factory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/filled.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    filled
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/folded.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    folded
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/frozen.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    frozen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/heat_source_or_sink.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    heat_source_or_sink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/heated.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    heated
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/inside.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    inside
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/joint_break_subscribed_state_mixin.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    joint_break_subscribed_state_mixin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/kinematics.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    kinematics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/link_based_state_mixin.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    link_based_state_mixin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/max_temperature.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    max_temperature
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/next_to.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    next_to
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/object_state_base.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    object_state_base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/on_fire.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    on_fire
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/on_top.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    on_top
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/open.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    open
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/overlaid.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    overlaid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/particle_modifier.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    particle_modifier
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/particle_source_or_sink.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    particle_source_or_sink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/pose.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    pose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/saturated.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    saturated
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/sliced.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    sliced
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/slicer.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    slicer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/temperature.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    temperature
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/toggle.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    toggle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/touching.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    touching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/under.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    under
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/unfolded.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    unfolded
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/update_state_mixin.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    update_state_mixin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/water_sink.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    water_sink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../object_states/water_source.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    
+  
+    water_source
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../objects/index.html" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    
+  
+    objects
+  
+
     
   </span>
   
@@ -3140,10 +3556,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="objects" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_7">
             <span class="md-nav__icon md-icon"></span>
-            objects
+            
+  
+    objects
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -3153,11 +3573,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../objects/controllable_object.html" class="md-nav__link">
+      <a href="../../objects/controllable_object.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     controllable_object
+  
+
     
   </span>
   
@@ -3175,11 +3599,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../objects/dataset_object.html" class="md-nav__link">
+      <a href="../../objects/dataset_object.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     dataset_object
+  
+
     
   </span>
   
@@ -3197,11 +3625,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../objects/light_object.html" class="md-nav__link">
+      <a href="../../objects/light_object.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     light_object
+  
+
     
   </span>
   
@@ -3219,11 +3651,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../objects/object_base.html" class="md-nav__link">
+      <a href="../../objects/object_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     object_base
+  
+
     
   </span>
   
@@ -3241,11 +3677,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../objects/primitive_object.html" class="md-nav__link">
+      <a href="../../objects/primitive_object.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     primitive_object
+  
+
     
   </span>
   
@@ -3263,11 +3703,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../objects/stateful_object.html" class="md-nav__link">
+      <a href="../../objects/stateful_object.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     stateful_object
+  
+
     
   </span>
   
@@ -3285,11 +3729,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../objects/usd_object.html" class="md-nav__link">
+      <a href="../../objects/usd_object.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     usd_object
+  
+
     
   </span>
   
@@ -3321,17 +3769,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_8" type="checkbox" id="__nav_3_8" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../prims/index.html" class="md-nav__link ">
+            <a href="../../prims/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     prims
+  
+
     
   </span>
   
@@ -3345,10 +3798,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="prims" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
-            prims
+            
+  
+    prims
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -3358,11 +3815,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/cloth_prim.html" class="md-nav__link">
+      <a href="../../prims/cloth_prim.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     cloth_prim
+  
+
     
   </span>
   
@@ -3380,11 +3841,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/entity_prim.html" class="md-nav__link">
+      <a href="../../prims/entity_prim.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     entity_prim
+  
+
     
   </span>
   
@@ -3402,11 +3867,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/geom_prim.html" class="md-nav__link">
+      <a href="../../prims/geom_prim.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     geom_prim
+  
+
     
   </span>
   
@@ -3424,11 +3893,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/joint_prim.html" class="md-nav__link">
+      <a href="../../prims/joint_prim.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     joint_prim
+  
+
     
   </span>
   
@@ -3446,11 +3919,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/material_prim.html" class="md-nav__link">
+      <a href="../../prims/material_prim.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     material_prim
+  
+
     
   </span>
   
@@ -3468,11 +3945,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/prim_base.html" class="md-nav__link">
+      <a href="../../prims/prim_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     prim_base
+  
+
     
   </span>
   
@@ -3490,11 +3971,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/rigid_prim.html" class="md-nav__link">
+      <a href="../../prims/rigid_prim.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     rigid_prim
+  
+
     
   </span>
   
@@ -3512,11 +3997,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../prims/xform_prim.html" class="md-nav__link">
+      <a href="../../prims/xform_prim.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     xform_prim
+  
+
     
   </span>
   
@@ -3548,17 +4037,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_9" type="checkbox" id="__nav_3_9" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_9" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../renderer_settings/index.html" class="md-nav__link ">
+            <a href="../../renderer_settings/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     renderer_settings
+  
+
     
   </span>
   
@@ -3572,10 +4066,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="renderer_settings" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_9">
             <span class="md-nav__icon md-icon"></span>
-            renderer_settings
+            
+  
+    renderer_settings
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -3585,11 +4083,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../renderer_settings/common_settings.html" class="md-nav__link">
+      <a href="../../renderer_settings/common_settings.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     common_settings
+  
+
     
   </span>
   
@@ -3607,11 +4109,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../renderer_settings/path_tracing_settings.html" class="md-nav__link">
+      <a href="../../renderer_settings/path_tracing_settings.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     path_tracing_settings
+  
+
     
   </span>
   
@@ -3629,11 +4135,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../renderer_settings/post_processing_settings.html" class="md-nav__link">
+      <a href="../../renderer_settings/post_processing_settings.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     post_processing_settings
+  
+
     
   </span>
   
@@ -3651,11 +4161,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../renderer_settings/real_time_settings.html" class="md-nav__link">
+      <a href="../../renderer_settings/real_time_settings.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     real_time_settings
+  
+
     
   </span>
   
@@ -3673,11 +4187,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../renderer_settings/renderer_settings.html" class="md-nav__link">
+      <a href="../../renderer_settings/renderer_settings.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     renderer_settings
+  
+
     
   </span>
   
@@ -3695,11 +4213,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../renderer_settings/settings_base.html" class="md-nav__link">
+      <a href="../../renderer_settings/settings_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     settings_base
+  
+
     
   </span>
   
@@ -3731,17 +4253,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_10" type="checkbox" id="__nav_3_10" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../reward_functions/index.html" class="md-nav__link ">
+            <a href="../../reward_functions/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     reward_functions
+  
+
     
   </span>
   
@@ -3755,10 +4282,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="reward_functions" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_10">
             <span class="md-nav__icon md-icon"></span>
-            reward_functions
+            
+  
+    reward_functions
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -3768,11 +4299,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../reward_functions/collision_reward.html" class="md-nav__link">
+      <a href="../../reward_functions/collision_reward.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     collision_reward
+  
+
     
   </span>
   
@@ -3790,11 +4325,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../reward_functions/point_goal_reward.html" class="md-nav__link">
+      <a href="../../reward_functions/point_goal_reward.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     point_goal_reward
+  
+
     
   </span>
   
@@ -3812,11 +4351,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../reward_functions/potential_reward.html" class="md-nav__link">
+      <a href="../../reward_functions/potential_reward.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     potential_reward
+  
+
     
   </span>
   
@@ -3834,11 +4377,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../reward_functions/reaching_goal_reward.html" class="md-nav__link">
+      <a href="../../reward_functions/reaching_goal_reward.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     reaching_goal_reward
+  
+
     
   </span>
   
@@ -3856,11 +4403,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../reward_functions/reward_function_base.html" class="md-nav__link">
+      <a href="../../reward_functions/reward_function_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     reward_function_base
+  
+
     
   </span>
   
@@ -3892,17 +4443,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_11" type="checkbox" id="__nav_3_11" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_11" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../robots/index.html" class="md-nav__link ">
+            <a href="../../robots/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     robots
+  
+
     
   </span>
   
@@ -3916,10 +4472,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="robots" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_11_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_11">
             <span class="md-nav__icon md-icon"></span>
-            robots
+            
+  
+    robots
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -3929,11 +4489,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/active_camera_robot.html" class="md-nav__link">
+      <a href="../../robots/active_camera_robot.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     active_camera_robot
+  
+
     
   </span>
   
@@ -3951,11 +4515,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/fetch.html" class="md-nav__link">
+      <a href="../../robots/fetch.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     fetch
+  
+
     
   </span>
   
@@ -3973,11 +4541,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/freight.html" class="md-nav__link">
+      <a href="../../robots/freight.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     freight
+  
+
     
   </span>
   
@@ -3995,11 +4567,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/husky.html" class="md-nav__link">
+      <a href="../../robots/husky.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     husky
+  
+
     
   </span>
   
@@ -4017,11 +4593,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/locobot.html" class="md-nav__link">
+      <a href="../../robots/locobot.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     locobot
+  
+
     
   </span>
   
@@ -4039,11 +4619,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/locomotion_robot.html" class="md-nav__link">
+      <a href="../../robots/locomotion_robot.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     locomotion_robot
+  
+
     
   </span>
   
@@ -4061,11 +4645,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/manipulation_robot.html" class="md-nav__link">
+      <a href="../../robots/manipulation_robot.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     manipulation_robot
+  
+
     
   </span>
   
@@ -4083,11 +4671,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/robot_base.html" class="md-nav__link">
+      <a href="../../robots/robot_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     robot_base
+  
+
     
   </span>
   
@@ -4105,11 +4697,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/tiago.html" class="md-nav__link">
+      <a href="../../robots/tiago.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     tiago
+  
+
     
   </span>
   
@@ -4127,11 +4723,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/turtlebot.html" class="md-nav__link">
+      <a href="../../robots/turtlebot.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     turtlebot
+  
+
     
   </span>
   
@@ -4149,11 +4749,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../robots/two_wheel_robot.html" class="md-nav__link">
+      <a href="../../robots/two_wheel_robot.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     two_wheel_robot
+  
+
     
   </span>
   
@@ -4185,17 +4789,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_12" type="checkbox" id="__nav_3_12" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_12" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../scenes/index.html" class="md-nav__link ">
+            <a href="../../scenes/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     scenes
+  
+
     
   </span>
   
@@ -4209,10 +4818,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="scenes" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_12_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_12">
             <span class="md-nav__icon md-icon"></span>
-            scenes
+            
+  
+    scenes
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -4222,11 +4835,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../scenes/interactive_traversable_scene.html" class="md-nav__link">
+      <a href="../../scenes/interactive_traversable_scene.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     interactive_traversable_scene
+  
+
     
   </span>
   
@@ -4244,11 +4861,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../scenes/scene_base.html" class="md-nav__link">
+      <a href="../../scenes/scene_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     scene_base
+  
+
     
   </span>
   
@@ -4266,11 +4887,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../scenes/static_traversable_scene.html" class="md-nav__link">
+      <a href="../../scenes/static_traversable_scene.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     static_traversable_scene
+  
+
     
   </span>
   
@@ -4288,11 +4913,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../scenes/traversable_scene.html" class="md-nav__link">
+      <a href="../../scenes/traversable_scene.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     traversable_scene
+  
+
     
   </span>
   
@@ -4324,14 +4953,19 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_13" type="checkbox" id="__nav_3_13" >
         
         
-          <label class="md-nav__link" for="__nav_3_13">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13" >
+        
+          <label class="md-nav__link" for="__nav_3_13" id="__nav_3_13_label" tabindex="0">
             
   
   <span class="md-ellipsis">
+    
+  
     scripts
+  
+
     
   </span>
   
@@ -4340,10 +4974,14 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" aria-label="scripts" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_13">
             <span class="md-nav__icon md-icon"></span>
-            scripts
+            
+  
+    scripts
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -4353,11 +4991,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../scripts/setup.html" class="md-nav__link">
+      <a href="../../scripts/setup.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     setup
+  
+
     
   </span>
   
@@ -4389,17 +5031,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_14" type="checkbox" id="__nav_3_14" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../sensors/index.html" class="md-nav__link ">
+            <a href="../../sensors/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     sensors
+  
+
     
   </span>
   
@@ -4413,10 +5060,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="sensors" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_14">
             <span class="md-nav__icon md-icon"></span>
-            sensors
+            
+  
+    sensors
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -4426,11 +5077,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../sensors/dropout_sensor_noise.html" class="md-nav__link">
+      <a href="../../sensors/dropout_sensor_noise.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     dropout_sensor_noise
+  
+
     
   </span>
   
@@ -4448,11 +5103,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../sensors/scan_sensor.html" class="md-nav__link">
+      <a href="../../sensors/scan_sensor.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     scan_sensor
+  
+
     
   </span>
   
@@ -4470,11 +5129,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../sensors/sensor_base.html" class="md-nav__link">
+      <a href="../../sensors/sensor_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     sensor_base
+  
+
     
   </span>
   
@@ -4492,11 +5155,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../sensors/sensor_noise_base.html" class="md-nav__link">
+      <a href="../../sensors/sensor_noise_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     sensor_noise_base
+  
+
     
   </span>
   
@@ -4514,11 +5181,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../sensors/vision_sensor.html" class="md-nav__link">
+      <a href="../../sensors/vision_sensor.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     vision_sensor
+  
+
     
   </span>
   
@@ -4544,11 +5215,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../simulator.html" class="md-nav__link">
+      <a href="../../simulator.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     simulator
+  
+
     
   </span>
   
@@ -4572,17 +5247,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_16" type="checkbox" id="__nav_3_16" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_16" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../systems/index.html" class="md-nav__link ">
+            <a href="../../systems/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     systems
+  
+
     
   </span>
   
@@ -4596,10 +5276,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="systems" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_16_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_16">
             <span class="md-nav__icon md-icon"></span>
-            systems
+            
+  
+    systems
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -4609,11 +5293,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../systems/macro_particle_system.html" class="md-nav__link">
+      <a href="../../systems/macro_particle_system.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     macro_particle_system
+  
+
     
   </span>
   
@@ -4631,11 +5319,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../systems/micro_particle_system.html" class="md-nav__link">
+      <a href="../../systems/micro_particle_system.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     micro_particle_system
+  
+
     
   </span>
   
@@ -4653,33 +5345,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../systems/particle_system_base.html" class="md-nav__link">
+      <a href="../../systems/system_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    particle_system_base
     
-  </span>
   
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../systems/system_base.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
     system_base
+  
+
     
   </span>
   
@@ -4711,17 +5385,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_17" type="checkbox" id="__nav_3_17" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_17" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../tasks/index.html" class="md-nav__link ">
+            <a href="../../tasks/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     tasks
+  
+
     
   </span>
   
@@ -4735,10 +5414,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="tasks" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_17_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_17">
             <span class="md-nav__icon md-icon"></span>
-            tasks
+            
+  
+    tasks
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -4748,11 +5431,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/bddl_backend.html" class="md-nav__link">
+      <a href="../../tasks/bddl_backend.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     bddl_backend
+  
+
     
   </span>
   
@@ -4770,11 +5457,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/behavior_task.html" class="md-nav__link">
+      <a href="../../tasks/behavior_task.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     behavior_task
+  
+
     
   </span>
   
@@ -4792,11 +5483,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/dummy_task.html" class="md-nav__link">
+      <a href="../../tasks/dummy_task.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     dummy_task
+  
+
     
   </span>
   
@@ -4814,55 +5509,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/furniture_closing_task.html" class="md-nav__link">
+      <a href="../../tasks/point_navigation_task.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    furniture_closing_task
     
-  </span>
   
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tasks/point_navigation_obstacle_task.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    point_navigation_obstacle_task
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tasks/point_navigation_task.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
     point_navigation_task
+  
+
     
   </span>
   
@@ -4880,11 +5535,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/point_reaching_task.html" class="md-nav__link">
+      <a href="../../tasks/point_reaching_task.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     point_reaching_task
+  
+
     
   </span>
   
@@ -4902,11 +5561,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/task_base.html" class="md-nav__link">
+      <a href="../../tasks/task_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     task_base
+  
+
     
   </span>
   
@@ -4938,17 +5601,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_18" type="checkbox" id="__nav_3_18" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_18" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../termination_conditions/index.html" class="md-nav__link ">
+            <a href="../../termination_conditions/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     termination_conditions
+  
+
     
   </span>
   
@@ -4962,10 +5630,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="termination_conditions" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_18_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_18">
             <span class="md-nav__icon md-icon"></span>
-            termination_conditions
+            
+  
+    termination_conditions
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -4975,11 +5647,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../termination_conditions/falling.html" class="md-nav__link">
+      <a href="../../termination_conditions/falling.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     falling
+  
+
     
   </span>
   
@@ -4997,11 +5673,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../termination_conditions/max_collision.html" class="md-nav__link">
+      <a href="../../termination_conditions/max_collision.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     max_collision
+  
+
     
   </span>
   
@@ -5019,11 +5699,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../termination_conditions/point_goal.html" class="md-nav__link">
+      <a href="../../termination_conditions/point_goal.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     point_goal
+  
+
     
   </span>
   
@@ -5041,11 +5725,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../termination_conditions/predicate_goal.html" class="md-nav__link">
+      <a href="../../termination_conditions/predicate_goal.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     predicate_goal
+  
+
     
   </span>
   
@@ -5063,11 +5751,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../termination_conditions/reaching_goal.html" class="md-nav__link">
+      <a href="../../termination_conditions/reaching_goal.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     reaching_goal
+  
+
     
   </span>
   
@@ -5085,11 +5777,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../termination_conditions/termination_condition_base.html" class="md-nav__link">
+      <a href="../../termination_conditions/termination_condition_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     termination_condition_base
+  
+
     
   </span>
   
@@ -5107,11 +5803,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../termination_conditions/timeout.html" class="md-nav__link">
+      <a href="../../termination_conditions/timeout.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     timeout
+  
+
     
   </span>
   
@@ -5137,11 +5837,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../transition_rules.html" class="md-nav__link">
+      <a href="../../transition_rules.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     transition_rules
+  
+
     
   </span>
   
@@ -5165,17 +5869,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_20" type="checkbox" id="__nav_3_20" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_20" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../utils/index.html" class="md-nav__link ">
+            <a href="../../utils/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     utils
+  
+
     
   </span>
   
@@ -5189,10 +5898,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="utils" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_20_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_20">
             <span class="md-nav__icon md-icon"></span>
-            utils
+            
+  
+    utils
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -5202,11 +5915,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/asset_utils.html" class="md-nav__link">
+      <a href="../../utils/asset_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     asset_utils
+  
+
     
   </span>
   
@@ -5224,11 +5941,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/config_utils.html" class="md-nav__link">
+      <a href="../../utils/config_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     config_utils
+  
+
     
   </span>
   
@@ -5246,11 +5967,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/constants.html" class="md-nav__link">
+      <a href="../../utils/constants.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     constants
+  
+
     
   </span>
   
@@ -5268,11 +5993,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/control_utils.html" class="md-nav__link">
+      <a href="../../utils/control_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     control_utils
+  
+
     
   </span>
   
@@ -5290,11 +6019,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/deprecated_utils.html" class="md-nav__link">
+      <a href="../../utils/deprecated_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     deprecated_utils
+  
+
     
   </span>
   
@@ -5312,11 +6045,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/geometry_utils.html" class="md-nav__link">
+      <a href="../../utils/geometry_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     geometry_utils
+  
+
     
   </span>
   
@@ -5334,11 +6071,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/git_utils.html" class="md-nav__link">
+      <a href="../../utils/git_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     git_utils
+  
+
     
   </span>
   
@@ -5356,11 +6097,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/gym_utils.html" class="md-nav__link">
+      <a href="../../utils/gym_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     gym_utils
+  
+
     
   </span>
   
@@ -5378,11 +6123,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/object_state_utils.html" class="md-nav__link">
+      <a href="../../utils/object_state_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     object_state_utils
+  
+
     
   </span>
   
@@ -5400,11 +6149,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/physx_utils.html" class="md-nav__link">
+      <a href="../../utils/physx_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     physx_utils
+  
+
     
   </span>
   
@@ -5422,11 +6175,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/processing_utils.html" class="md-nav__link">
+      <a href="../../utils/processing_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     processing_utils
+  
+
     
   </span>
   
@@ -5444,11 +6201,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/python_utils.html" class="md-nav__link">
+      <a href="../../utils/python_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     python_utils
+  
+
     
   </span>
   
@@ -5466,11 +6227,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/registry_utils.html" class="md-nav__link">
+      <a href="../../utils/registry_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     registry_utils
+  
+
     
   </span>
   
@@ -5488,11 +6253,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/render_utils.html" class="md-nav__link">
+      <a href="../../utils/render_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     render_utils
+  
+
     
   </span>
   
@@ -5510,11 +6279,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/sampling_utils.html" class="md-nav__link">
+      <a href="../../utils/sampling_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     sampling_utils
+  
+
     
   </span>
   
@@ -5532,11 +6305,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/sim_utils.html" class="md-nav__link">
+      <a href="../../utils/sim_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     sim_utils
+  
+
     
   </span>
   
@@ -5554,11 +6331,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/transform_utils.html" class="md-nav__link">
+      <a href="../../utils/transform_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     transform_utils
+  
+
     
   </span>
   
@@ -5576,11 +6357,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/ui_utils.html" class="md-nav__link">
+      <a href="../../utils/ui_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     ui_utils
+  
+
     
   </span>
   
@@ -5598,11 +6383,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/usd_utils.html" class="md-nav__link">
+      <a href="../../utils/usd_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     usd_utils
+  
+
     
   </span>
   
@@ -5620,11 +6409,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/vision_utils.html" class="md-nav__link">
+      <a href="../../utils/vision_utils.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     vision_utils
+  
+
     
   </span>
   
@@ -5656,17 +6449,22 @@
       
         
         
-          <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_21" type="checkbox" id="__nav_3_21" >
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_21" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../wrappers/index.html" class="md-nav__link ">
+            <a href="../../wrappers/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
+    
+  
     wrappers
+  
+
     
   </span>
   
@@ -5680,10 +6478,14 @@
             
           </div>
         
-        <nav class="md-nav" aria-label="wrappers" data-md-level="2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_21_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_21">
             <span class="md-nav__icon md-icon"></span>
-            wrappers
+            
+  
+    wrappers
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -5693,11 +6495,15 @@
   
   
     <li class="md-nav__item">
-      <a href="../wrappers/wrapper_base.html" class="md-nav__link">
+      <a href="../../wrappers/wrapper_base.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
+    
+  
     wrapper_base
+  
+
     
   </span>
   
@@ -5749,35 +6555,24 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#object_states.fluid_sink" class="md-nav__link">
+  <a href="#examples.object_states.particle_source_sink_demo" class="md-nav__link">
     <span class="md-ellipsis">
-      object_states.fluid_sink
+      
+        examples.object_states.particle_source_sink_demo
+      
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#object_states.fluid_sink.FluidSink" class="md-nav__link">
+  <a href="#examples.object_states.particle_source_sink_demo.main" class="md-nav__link">
     <span class="md-ellipsis">
-      FluidSink
+      
+        main()
+      
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="FluidSink">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#object_states.fluid_sink.FluidSink.fluid_system" class="md-nav__link">
-    <span class="md-ellipsis">
-      fluid_system
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -5791,22 +6586,21 @@
           
           
             <div class="md-content" data-md-component="content">
+              
               <article class="md-content__inner md-typeset">
                 
                   
 
-  <a href="https://github.com/StanfordVL/OmniGibson/edit/omnigibson/object_states/fluid_sink.py" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
 
 
-  <h1>fluid_sink</h1>
+  <h1>particle_source_sink_demo</h1>
 
 <div class="doc doc-object doc-module">
 
 
-<a id="object_states.fluid_sink"></a>
+<a id="examples.object_states.particle_source_sink_demo"></a>
   <div class="doc doc-contents first">
 
   
@@ -5820,190 +6614,237 @@
 
 
 
-<div class="doc doc-object doc-class">
+
+<div class="doc doc-object doc-function">
 
 
 
-<h2 id="object_states.fluid_sink.FluidSink" class="doc doc-heading">
-        <code>FluidSink</code>
-
+<h2 class="doc doc-heading" id="examples.object_states.particle_source_sink_demo.main">
+<code class="highlight language-python"><span class="n">main</span><span class="p">(</span><span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">short_exec</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 </h2>
 
 
   <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><span title="omnigibson.object_states.object_state_base.AbsoluteObjectState">AbsoluteObjectState</span></code>, <code><span title="omnigibson.object_states.link_based_state_mixin.LinkBasedStateMixin">LinkBasedStateMixin</span></code>, <code><span title="omnigibson.object_states.update_state_mixin.UpdateStateMixin">UpdateStateMixin</span></code></p>
+  
+      <p>Demo of ParticleSource and ParticleSink object states, which enable objects to either spawn arbitrary
+particles and remove arbitrary particles from the simulator, respectively.</p>
+<p>Loads an empty scene with a sink, which is enabled with both the ParticleSource and ParticleSink states.
+The sink's particle source is located at the faucet spout and spawns a continuous stream of water particles,
+which is then destroyed ("sunk") by the sink's particle sink located at the drain.</p>
+<p>NOTE: The key difference between ParticleApplier/Removers and ParticleSource/Sinks is that Applier/Removers
+requires contact (if using ParticleProjectionMethod.ADJACENCY) or overlap
+(if using ParticleProjectionMethod.PROJECTION) in order to spawn / remove particles, and generally only spawn
+particles at the contact points. ParticleSource/Sinks are special cases of ParticleApplier/Removers that
+always use ParticleProjectionMethod.PROJECTION and always spawn / remove particles within their projection volume,
+irregardless of overlap with other objects!</p>
 
-
-
-        <details class="quote">
-          <summary>Source code in <code>object_states/fluid_sink.py</code></summary>
-          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span>
-<span class="normal"><a href="#__codelineno-0-26">26</a></span>
-<span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
-<span class="normal"><a href="#__codelineno-0-44">44</a></span>
-<span class="normal"><a href="#__codelineno-0-45">45</a></span>
-<span class="normal"><a href="#__codelineno-0-46">46</a></span>
-<span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span>
-<span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span>
-<span class="normal"><a href="#__codelineno-0-56">56</a></span>
-<span class="normal"><a href="#__codelineno-0-57">57</a></span>
-<span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span>
-<span class="normal"><a href="#__codelineno-0-60">60</a></span>
-<span class="normal"><a href="#__codelineno-0-61">61</a></span>
-<span class="normal"><a href="#__codelineno-0-62">62</a></span>
-<span class="normal"><a href="#__codelineno-0-63">63</a></span>
-<span class="normal"><a href="#__codelineno-0-64">64</a></span>
-<span class="normal"><a href="#__codelineno-0-65">65</a></span>
-<span class="normal"><a href="#__codelineno-0-66">66</a></span>
-<span class="normal"><a href="#__codelineno-0-67">67</a></span>
-<span class="normal"><a href="#__codelineno-0-68">68</a></span>
-<span class="normal"><a href="#__codelineno-0-69">69</a></span>
-<span class="normal"><a href="#__codelineno-0-70">70</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="k">class</span> <span class="nc">FluidSink</span><span class="p">(</span><span class="n">AbsoluteObjectState</span><span class="p">,</span> <span class="n">LinkBasedStateMixin</span><span class="p">,</span> <span class="n">UpdateStateMixin</span><span class="p">):</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">MAX_SINK_DISTANCE</span><span class="p">):</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+      <details class="quote">
+        <summary>Source code in <code>examples\object_states\particle_source_sink_demo.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-13"> 13</a></span>
+<span class="normal"><a href="#__codelineno-0-14"> 14</a></span>
+<span class="normal"><a href="#__codelineno-0-15"> 15</a></span>
+<span class="normal"><a href="#__codelineno-0-16"> 16</a></span>
+<span class="normal"><a href="#__codelineno-0-17"> 17</a></span>
+<span class="normal"><a href="#__codelineno-0-18"> 18</a></span>
+<span class="normal"><a href="#__codelineno-0-19"> 19</a></span>
+<span class="normal"><a href="#__codelineno-0-20"> 20</a></span>
+<span class="normal"><a href="#__codelineno-0-21"> 21</a></span>
+<span class="normal"><a href="#__codelineno-0-22"> 22</a></span>
+<span class="normal"><a href="#__codelineno-0-23"> 23</a></span>
+<span class="normal"><a href="#__codelineno-0-24"> 24</a></span>
+<span class="normal"><a href="#__codelineno-0-25"> 25</a></span>
+<span class="normal"><a href="#__codelineno-0-26"> 26</a></span>
+<span class="normal"><a href="#__codelineno-0-27"> 27</a></span>
+<span class="normal"><a href="#__codelineno-0-28"> 28</a></span>
+<span class="normal"><a href="#__codelineno-0-29"> 29</a></span>
+<span class="normal"><a href="#__codelineno-0-30"> 30</a></span>
+<span class="normal"><a href="#__codelineno-0-31"> 31</a></span>
+<span class="normal"><a href="#__codelineno-0-32"> 32</a></span>
+<span class="normal"><a href="#__codelineno-0-33"> 33</a></span>
+<span class="normal"><a href="#__codelineno-0-34"> 34</a></span>
+<span class="normal"><a href="#__codelineno-0-35"> 35</a></span>
+<span class="normal"><a href="#__codelineno-0-36"> 36</a></span>
+<span class="normal"><a href="#__codelineno-0-37"> 37</a></span>
+<span class="normal"><a href="#__codelineno-0-38"> 38</a></span>
+<span class="normal"><a href="#__codelineno-0-39"> 39</a></span>
+<span class="normal"><a href="#__codelineno-0-40"> 40</a></span>
+<span class="normal"><a href="#__codelineno-0-41"> 41</a></span>
+<span class="normal"><a href="#__codelineno-0-42"> 42</a></span>
+<span class="normal"><a href="#__codelineno-0-43"> 43</a></span>
+<span class="normal"><a href="#__codelineno-0-44"> 44</a></span>
+<span class="normal"><a href="#__codelineno-0-45"> 45</a></span>
+<span class="normal"><a href="#__codelineno-0-46"> 46</a></span>
+<span class="normal"><a href="#__codelineno-0-47"> 47</a></span>
+<span class="normal"><a href="#__codelineno-0-48"> 48</a></span>
+<span class="normal"><a href="#__codelineno-0-49"> 49</a></span>
+<span class="normal"><a href="#__codelineno-0-50"> 50</a></span>
+<span class="normal"><a href="#__codelineno-0-51"> 51</a></span>
+<span class="normal"><a href="#__codelineno-0-52"> 52</a></span>
+<span class="normal"><a href="#__codelineno-0-53"> 53</a></span>
+<span class="normal"><a href="#__codelineno-0-54"> 54</a></span>
+<span class="normal"><a href="#__codelineno-0-55"> 55</a></span>
+<span class="normal"><a href="#__codelineno-0-56"> 56</a></span>
+<span class="normal"><a href="#__codelineno-0-57"> 57</a></span>
+<span class="normal"><a href="#__codelineno-0-58"> 58</a></span>
+<span class="normal"><a href="#__codelineno-0-59"> 59</a></span>
+<span class="normal"><a href="#__codelineno-0-60"> 60</a></span>
+<span class="normal"><a href="#__codelineno-0-61"> 61</a></span>
+<span class="normal"><a href="#__codelineno-0-62"> 62</a></span>
+<span class="normal"><a href="#__codelineno-0-63"> 63</a></span>
+<span class="normal"><a href="#__codelineno-0-64"> 64</a></span>
+<span class="normal"><a href="#__codelineno-0-65"> 65</a></span>
+<span class="normal"><a href="#__codelineno-0-66"> 66</a></span>
+<span class="normal"><a href="#__codelineno-0-67"> 67</a></span>
+<span class="normal"><a href="#__codelineno-0-68"> 68</a></span>
+<span class="normal"><a href="#__codelineno-0-69"> 69</a></span>
+<span class="normal"><a href="#__codelineno-0-70"> 70</a></span>
+<span class="normal"><a href="#__codelineno-0-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-0-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-0-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-0-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-0-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-0-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-0-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-0-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-0-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-0-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-0-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-0-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-0-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-0-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-0-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-0-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-0-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-0-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-0-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-0-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-0-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-0-100">100</a></span>
+<span class="normal"><a href="#__codelineno-0-101">101</a></span>
+<span class="normal"><a href="#__codelineno-0-102">102</a></span>
+<span class="normal"><a href="#__codelineno-0-103">103</a></span>
+<span class="normal"><a href="#__codelineno-0-104">104</a></span>
+<span class="normal"><a href="#__codelineno-0-105">105</a></span>
+<span class="normal"><a href="#__codelineno-0-106">106</a></span>
+<span class="normal"><a href="#__codelineno-0-107">107</a></span>
+<span class="normal"><a href="#__codelineno-0-108">108</a></span>
+<span class="normal"><a href="#__codelineno-0-109">109</a></span>
+<span class="normal"><a href="#__codelineno-0-110">110</a></span>
+<span class="normal"><a href="#__codelineno-0-111">111</a></span>
+<span class="normal"><a href="#__codelineno-0-112">112</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">random_selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">short_exec</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="sd">    Demo of ParticleSource and ParticleSink object states, which enable objects to either spawn arbitrary</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="sd">    particles and remove arbitrary particles from the simulator, respectively.</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="sd">    Loads an empty scene with a sink, which is enabled with both the ParticleSource and ParticleSink states.</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="sd">    The sink&#39;s particle source is located at the faucet spout and spawns a continuous stream of water particles,</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="sd">    which is then destroyed (&quot;sunk&quot;) by the sink&#39;s particle sink located at the drain.</span>
 <a id="__codelineno-0-21" name="__codelineno-0-21"></a>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a>        <span class="c1"># Store internal values</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">max_sink_distance</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">MAX_SINK_DISTANCE</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>    <span class="nd">@property</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="k">def</span> <span class="nf">fluid_system</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a>        <span class="sd">&quot;&quot;&quot;</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">            FluidSystem: Fluid system to use to generate / handle fluid particles</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>    <span class="nd">@staticmethod</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a>    <span class="k">def</span> <span class="nf">get_state_link_name</span><span class="p">():</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a>        <span class="c1"># Should be implemented by subclass</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="sd">    NOTE: The key difference between ParticleApplier/Removers and ParticleSource/Sinks is that Applier/Removers</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="sd">    requires contact (if using ParticleProjectionMethod.ADJACENCY) or overlap</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">    (if using ParticleProjectionMethod.PROJECTION) in order to spawn / remove particles, and generally only spawn</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">    particles at the contact points. ParticleSource/Sinks are special cases of ParticleApplier/Removers that</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="sd">    always use ParticleProjectionMethod.PROJECTION and always spawn / remove particles within their projection volume,</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">    irregardless of overlap with other objects!</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a>    <span class="n">og</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Demo </span><span class="si">{</span><span class="vm">__file__</span><span class="si">}</span><span class="se">\n</span><span class="s2">    &quot;</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    Description:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a>    <span class="c1"># Create the scene config to load -- empty scene</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a>        <span class="s2">&quot;scene&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a>            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Scene&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a>        <span class="p">}</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a>    <span class="p">}</span>
 <a id="__codelineno-0-37" name="__codelineno-0-37"></a>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_initialize</span><span class="p">()</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_link_mixin</span><span class="p">()</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>        <span class="n">fluid_sink_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_link_position</span><span class="p">()</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a>        <span class="k">if</span> <span class="n">fluid_sink_position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a>            <span class="c1"># Terminate early, this is a &quot;dead&quot; fluid sink</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a>            <span class="k">return</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a>        <span class="c1"># We iterate over all active fluid groups in this sink&#39;s corresponding fluid system,</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a>        <span class="c1"># and check to see if each owned particle matches distance criteria in order to &quot;sink&quot; (delete) it</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a>        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fluid_system</span><span class="o">.</span><span class="n">particle_instancers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a>            <span class="c1"># Grab particle positions, shape (N, 3)</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a>            <span class="n">particle_pos</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">particle_positions</span>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a>            <span class="c1"># Get distances</span>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a>            <span class="n">idxs_to_remove</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">particle_pos</span> <span class="o">-</span> <span class="n">fluid_sink_position</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a>                                           <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_sink_distance</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a>            <span class="n">inst</span><span class="o">.</span><span class="n">remove_particles</span><span class="p">(</span><span class="n">idxs</span><span class="o">=</span><span class="n">idxs_to_remove</span><span class="p">)</span>
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a>    <span class="k">def</span> <span class="nf">_set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;set_value not supported for FluidSink.&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a>
-<a id="__codelineno-0-61" name="__codelineno-0-61"></a>    <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-0-62" name="__codelineno-0-62"></a>        <span class="k">pass</span>
-<a id="__codelineno-0-63" name="__codelineno-0-63"></a>
-<a id="__codelineno-0-64" name="__codelineno-0-64"></a>    <span class="nd">@staticmethod</span>
-<a id="__codelineno-0-65" name="__codelineno-0-65"></a>    <span class="k">def</span> <span class="nf">get_optional_dependencies</span><span class="p">():</span>
-<a id="__codelineno-0-66" name="__codelineno-0-66"></a>        <span class="k">return</span> <span class="p">[]</span>
-<a id="__codelineno-0-67" name="__codelineno-0-67"></a>
-<a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="nd">@staticmethod</span>
-<a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="k">def</span> <span class="nf">get_dependencies</span><span class="p">():</span>
-<a id="__codelineno-0-70" name="__codelineno-0-70"></a>        <span class="k">return</span> <span class="p">[]</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="k">def</span> <span class="nf">check_toggledon</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39"></a>        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">object_states</span><span class="o">.</span><span class="n">ToggledOn</span><span class="p">]</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a>    <span class="c1"># Define objects to load into the environment</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="n">sink_cfg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a>        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;DatasetObject&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;sink&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a>        <span class="n">category</span><span class="o">=</span><span class="s2">&quot;sink&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a>        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;yfaufu&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a>        <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48"></a>        <span class="n">abilities</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49"></a>            <span class="s2">&quot;toggleable&quot;</span><span class="p">:</span> <span class="p">{},</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50"></a>            <span class="s2">&quot;particleSource&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51"></a>                <span class="s2">&quot;conditions&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52"></a>                    <span class="s2">&quot;water&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">check_toggledon</span><span class="p">],</span>   <span class="c1"># Must be toggled on for water source to be active</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53"></a>                <span class="p">},</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54"></a>                <span class="s2">&quot;source_radius&quot;</span><span class="p">:</span> <span class="mf">0.0125</span><span class="p">,</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55"></a>                <span class="s2">&quot;source_height&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56"></a>                <span class="s2">&quot;initial_speed&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>               <span class="c1"># Water merely falls out of the spout</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57"></a>            <span class="p">},</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58"></a>            <span class="s2">&quot;particleSink&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59"></a>                <span class="s2">&quot;conditions&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60"></a>                    <span class="s2">&quot;water&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># No conditions, always sinking nearby particles</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61"></a>                <span class="p">},</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62"></a>                <span class="s2">&quot;sink_radius&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63"></a>                <span class="s2">&quot;sink_height&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64"></a>            <span class="p">},</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a>        <span class="p">},</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a>        <span class="n">position</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">],</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="p">)</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;objects&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">sink_cfg</span><span class="p">]</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70"></a>
+<a id="__codelineno-0-71" name="__codelineno-0-71"></a>    <span class="c1"># Create the environment!</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="n">env</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">action_timestep</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">60.</span><span class="p">,</span> <span class="n">physics_timestep</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">60.</span><span class="p">)</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a>    <span class="c1"># Set camera to ideal angle for viewing objects</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="n">og</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">viewer_camera</span><span class="o">.</span><span class="n">set_position_orientation</span><span class="p">(</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a>        <span class="n">position</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.71452157</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.88294428</span><span class="p">,</span>  <span class="mf">1.85640559</span><span class="p">]),</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a>        <span class="n">orientation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.44909348</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00142818</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00284131</span><span class="p">,</span>  <span class="mf">0.89347912</span><span class="p">]),</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a>    <span class="p">)</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a>    <span class="c1"># Take a few steps to let the objects settle, and then turn on the sink</span>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a>    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a>        <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]))</span>              <span class="c1"># Empty action since no robots are in the scene</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83"></a>
+<a id="__codelineno-0-84" name="__codelineno-0-84"></a>    <span class="n">sink</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">object_registry</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;sink&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85"></a>    <span class="k">assert</span> <span class="n">sink</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">object_states</span><span class="o">.</span><span class="n">ToggledOn</span><span class="p">]</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-0-86" name="__codelineno-0-86"></a>
+<a id="__codelineno-0-87" name="__codelineno-0-87"></a>    <span class="c1"># Take a step, and save the state</span>
+<a id="__codelineno-0-88" name="__codelineno-0-88"></a>    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]))</span>
+<a id="__codelineno-0-89" name="__codelineno-0-89"></a>    <span class="n">initial_state</span> <span class="o">=</span> <span class="n">og</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">dump_state</span><span class="p">()</span>
+<a id="__codelineno-0-90" name="__codelineno-0-90"></a>
+<a id="__codelineno-0-91" name="__codelineno-0-91"></a>    <span class="c1"># Main simulation loop.</span>
+<a id="__codelineno-0-92" name="__codelineno-0-92"></a>    <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">1000</span>
+<a id="__codelineno-0-93" name="__codelineno-0-93"></a>    <span class="n">max_iterations</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">short_exec</span> <span class="k">else</span> <span class="mi">1</span>
+<a id="__codelineno-0-94" name="__codelineno-0-94"></a>    <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-0-95" name="__codelineno-0-95"></a>
+<a id="__codelineno-0-96" name="__codelineno-0-96"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="k">while</span> <span class="n">iteration</span> <span class="o">!=</span> <span class="n">max_iterations</span><span class="p">:</span>
+<a id="__codelineno-0-98" name="__codelineno-0-98"></a>            <span class="c1"># Keep stepping until table or bowl are clean, or we reach 1000 steps</span>
+<a id="__codelineno-0-99" name="__codelineno-0-99"></a>            <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-0-100" name="__codelineno-0-100"></a>            <span class="k">while</span> <span class="n">steps</span> <span class="o">!=</span> <span class="n">max_steps</span><span class="p">:</span>
+<a id="__codelineno-0-101" name="__codelineno-0-101"></a>                <span class="n">steps</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-0-102" name="__codelineno-0-102"></a>                <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]))</span>
+<a id="__codelineno-0-103" name="__codelineno-0-103"></a>            <span class="n">og</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Max steps reached; resetting.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-104" name="__codelineno-0-104"></a>
+<a id="__codelineno-0-105" name="__codelineno-0-105"></a>            <span class="c1"># Reset to the initial state</span>
+<a id="__codelineno-0-106" name="__codelineno-0-106"></a>            <span class="n">og</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">load_state</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
+<a id="__codelineno-0-107" name="__codelineno-0-107"></a>
+<a id="__codelineno-0-108" name="__codelineno-0-108"></a>            <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-0-109" name="__codelineno-0-109"></a>
+<a id="__codelineno-0-110" name="__codelineno-0-110"></a>    <span class="k">finally</span><span class="p">:</span>
+<a id="__codelineno-0-111" name="__codelineno-0-111"></a>        <span class="c1"># Always shut down environment at the end</span>
+<a id="__codelineno-0-112" name="__codelineno-0-112"></a>        <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
-        </details>
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="object_states.fluid_sink.FluidSink.fluid_system" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fluid_system</span></code>
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-  
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-<th>Name</th>        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-<td><code>FluidSystem</code></td>          <td>
-          </td>
-          <td><p>Fluid system to use to generate / handle fluid particles</p></td>
-        </tr>
-    </tbody>
-  </table>
+      </details>
   </div>
 
 </div>
-
-
-
-
-
-  </div>
-
-  </div>
-
-</div>
-
 
 
 
@@ -6032,42 +6873,6 @@
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="filled.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: filled" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              filled
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="fluid_source.html" class="md-footer__link md-footer__link--next" aria-label="Next: fluid_source" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              fluid_source
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -6089,12 +6894,11 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.tabs"], "search": "../../assets/javascripts/workers/search.939a4419.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.tabs"], "search": "../../../assets/javascripts/workers/search.6c7302c4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.af94fead.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a3190745.min.js"></script>
       
-    
     
   </body>
 </html>
