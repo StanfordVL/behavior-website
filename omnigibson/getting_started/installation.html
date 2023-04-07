@@ -6580,12 +6580,14 @@
 <h2 id="setup">💻 <strong>Setup</strong></h2>
 <p>There are two ways to setup <strong><code>OmniGibson</code></strong>:</p>
 <ul>
-<li><strong>Install with Docker (Linux Only)</strong>: You can quickly get <strong><code>OmniGibson</code></strong> immediately up and running from our pre-built 🐳 docker image.</li>
-<li><strong>Install from source</strong>: This method is recommended for deeper users looking to develop upon <strong><code>OmniGibson</code></strong> or use it extensively for research. </li>
+<li><strong>🐳 Install with Docker (Linux only)</strong>: You can quickly get <strong><code>OmniGibson</code></strong> immediately up and running from our pre-built docker image.</li>
+<li><strong>🧪 Install from source (Linux / Windows)</strong>: This method is recommended for deeper users looking to develop upon <strong><code>OmniGibson</code></strong> or use it extensively for research. </li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Docker (Linux only)</label><label for="__tabbed_1_2">Source</label></div>
+<div class="admonition tip">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">🐳 Install with Docker (Linux only)</label><label for="__tabbed_1_2">🧪 Install from source (Linux / Windows)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
+<p>Install <strong><code>OmniGibson</code></strong> with Docker is supported for <strong>🐧 Linux</strong> only.</p>
 <details class="info">
 <summary>Need to install docker or NVIDIA docker?</summary>
 <div class="annotate highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install docker</span>
@@ -6603,8 +6605,10 @@
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker<span class="w"> </span><span class="c1"># restart docker engine</span>
 </code></pre></div>
 </details>
+<ol>
+<li>
 <p>Install our docker launching scripts:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-LJO<span class="w"> </span>https://raw.githubusercontent.com/StanfordVL/OmniGibson/main/docker/run_docker.sh
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-LJO<span class="w"> </span>https://raw.githubusercontent.com/StanfordVL/OmniGibson/main/docker/run_docker.sh
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chmod<span class="w"> </span>a+x<span class="w"> </span>run_docker.sh
 </code></pre></div></p>
 <details class="question annotate">
@@ -6614,6 +6618,8 @@
 <ol>
 <li>📊 <strong>Worried about dataset size?</strong> We will ask whether you want to install our small demo dataset or full dataset of assets!</li>
 </ol>
+</li>
+<li>
 <p>Then, simply launch the shell script:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Headless</label><label for="__tabbed_2_2">GUI</label></div>
 <div class="tabbed-content">
@@ -6637,10 +6643,13 @@
 <summary>Are you using NFS or AFS?</summary>
 <p>Docker containers are unable to access NFS or AFS drives, so if <code>run_docker.sh</code> are located on an NFS / AFS partition, please set <code>&lt;DATA_PATH&gt;</code> to an alternative data directory located on a non-NFS / AFS partition.</p>
 </details>
+</li>
+</ol>
 </div>
 <div class="tabbed-block">
-<p>Install <strong><code>OmniGibson</code></strong> from source is supported for both Linux and Windows.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Linux (bash)</label><label for="__tabbed_3_2">Windows (cmd)</label></div>
+<p>Install <strong><code>OmniGibson</code></strong> from source is supported for both <strong>🐧 Linux (bash)</strong> and <strong>📁 Windows (cmd)</strong>.</p>
+<div class="admonition example">
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">🐧 Linux (bash)</label><label for="__tabbed_3_2">📁 Windows (cmd)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="annotate" markdown>
@@ -6748,6 +6757,8 @@
 <p>If you installed Isaac Sim to the default location, this is <code>C:\Users\&lt;USER_NAME&gt;\AppData\Local\ov\pkg\isaac_sim-2022.2.0</code></p>
 </li>
 </ol>
+</div>
+</div>
 </div>
 </div>
 </div>
