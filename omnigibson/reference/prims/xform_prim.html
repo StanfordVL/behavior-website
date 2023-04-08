@@ -7652,7 +7652,7 @@ loading this prim at runtime. For this xform prim, the below values can be speci
 <a id="__codelineno-0-235" name="__codelineno-0-235"></a><span class="sd">        Returns:</span>
 <a id="__codelineno-0-236" name="__codelineno-0-236"></a><span class="sd">            3-array: (roll, pitch, yaw) global euler orientation of this prim</span>
 <a id="__codelineno-0-237" name="__codelineno-0-237"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-238" name="__codelineno-0-238"></a>        <span class="k">return</span> <span class="n">mat2euler</span><span class="p">(</span><span class="n">quat2mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_orientation</span><span class="p">()))</span>
+<a id="__codelineno-0-238" name="__codelineno-0-238"></a>        <span class="k">return</span> <span class="n">quat2euler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_orientation</span><span class="p">())</span>
 <a id="__codelineno-0-239" name="__codelineno-0-239"></a>
 <a id="__codelineno-0-240" name="__codelineno-0-240"></a>    <span class="k">def</span> <span class="nf">get_local_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <a id="__codelineno-0-241" name="__codelineno-0-241"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -8387,7 +8387,7 @@ loading this prim at runtime. For this xform prim, the below values can be speci
 <a id="__codelineno-0-235" name="__codelineno-0-235"></a><span class="sd">    Returns:</span>
 <a id="__codelineno-0-236" name="__codelineno-0-236"></a><span class="sd">        3-array: (roll, pitch, yaw) global euler orientation of this prim</span>
 <a id="__codelineno-0-237" name="__codelineno-0-237"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-238" name="__codelineno-0-238"></a>    <span class="k">return</span> <span class="n">mat2euler</span><span class="p">(</span><span class="n">quat2mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_orientation</span><span class="p">()))</span>
+<a id="__codelineno-0-238" name="__codelineno-0-238"></a>    <span class="k">return</span> <span class="n">quat2euler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_orientation</span><span class="p">())</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>

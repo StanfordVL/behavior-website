@@ -24,7 +24,7 @@ builtins.ISAAC_LAUNCHED_FROM_JUPYTER = (
 import nest_asyncio
 nest_asyncio.apply()
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 log.setLevel(logging.DEBUG if gm.DEBUG else logging.INFO)
 
@@ -82,6 +82,13 @@ def create_app():
     enable_extension("omni.flowusd")
     enable_extension("omni.particle.system.bundle")
     enable_extension("omni.kit.window.viewport")    # This is needed for windows
+
+    # Globally suppress certain logging modules (unless we're in debug mode) since they produce spurious warnings
+    if not gm.DEBUG:
+        import omni.log
+        log = omni.log.get_log()
+        for channel in ["omni.hydra.scene_delegate.plugin", "omni.kit.manipulator.prim.model"]:
+            log.set_channel_enabled(channel, False, omni.log.SettingBehavior.OVERRIDE)
 
     # Possibly hide windows if in debug mode
     if gm.GUI_VIEWPORT_ONLY:
