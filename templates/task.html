@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ task_data.name }} Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{ task_data.name }} Details</h1>
+      <h2>Matched Scenes:</h2>
+      <ul>
+        {% for scene in task_data.matched_scenes %}
+        <li>{{ scene }}</li>
+        {% endfor %}
+      </ul>
+      <h2>Why Each Scene Could or Could Not Be Matched:</h2>
+      <ul>
+        {% for scene, reason in task_data.matched_reasons.items() %}
+        <li>{{ scene }}: {{ reason }}</li>
+        {% endfor %}
+      </ul>
+      <h2>Objects Found:</h2>
+      <ul>
+        {% for obj in task_data.objects_found %}
+        <li>{{ obj }}</li>
+        {% endfor %}
+      </ul>
+      <h2>Objects Not Found:</h2>
+      <ul>
+        {% for obj in task_data.objects_not_found %}
+        <li>{{ obj }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>

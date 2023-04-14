@@ -1,0 +1,31 @@
+<!-- Jinja2 template for the task list page -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Task List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Task List</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Task Name</th>
+            <th>Matched Scenes</th>
+            <th>Objects Found</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks_data %}
+          <tr>
+            <td><a href="{{ url_for('task', task_id=task.id) }}">{{ task.name }}</a></td>
+            <td>{{ task.matched_scenes }}</td>
+            <td>{{ task.objects_found }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

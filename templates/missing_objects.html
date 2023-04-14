@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Required Objects</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Required Objects</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Object</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj, tasks in all_objects.items() %}
+          <tr>
+            <td>{{ obj }}</td>
+            <td>{{ tasks }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
