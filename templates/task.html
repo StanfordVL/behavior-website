@@ -1,35 +1,72 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ task_data.name }} Details</title>
+    <title>{{ task_name }} Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
   <body>
     <div class="container">
-      <h1>{{ task_data.name }} Details</h1>
-      <h2>Matched Scenes:</h2>
+      <h1>{{ task_name }} Details</h1>
+      <h2>Invalid Definitions:</h2>
+      {% if task_data[0]|length > 0 %}
       <ul>
-        {% for scene in task_data.matched_scenes %}
-        <li>{{ scene }}</li>
+        {% for entry in task_data[0] %}
+        <li>Invalid synset {{ entry }}</li>
         {% endfor %}
       </ul>
-      <h2>Why Each Scene Could or Could Not Be Matched:</h2>
+      {% else %}
+      <p>None</p>
+      {% endif %}
+      <h2>Scene Matching</h2>
       <ul>
-        {% for scene, reason in task_data.matched_reasons.items() %}
-        <li>{{ scene }}: {{ reason }}</li>
-        {% endfor %}
+        <li>Matched:
+          {% if task_data[1]["matched"]|length > 0 %}
+          <ul>
+            {% for scene in task_data[1]["matched"] %}
+            <li>{{ scene }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>None</p>
+          {% endif %}
+        </li>
+        <li>Unmatched:
+          {% if task_data[1]["unmatched"]|length > 0 %}
+          <ul>
+            {% for scene, reason in task_data[1]["unmatched"].items() %}
+            <li>{{ scene }}: {{ reason }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>None</p>
+          {% endif %}
+        </li>
       </ul>
-      <h2>Objects Found:</h2>
+      
+      <h2>Objects Matching</h2>
       <ul>
-        {% for obj in task_data.objects_found %}
-        <li>{{ obj }}</li>
-        {% endfor %}
-      </ul>
-      <h2>Objects Not Found:</h2>
-      <ul>
-        {% for obj in task_data.objects_not_found %}
-        <li>{{ obj }}</li>
-        {% endfor %}
+        <l1>Matched:
+          {% if task_data[2]|length > 0 %}
+          <ul>
+            {% for obj in task_data[2] %}
+            <li>{{ obj }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>None</p>
+          {% endif %}
+        </l1>
+        <l1>Unmatched:
+          {% if task_data[3]|length > 0 %}
+          <ul>
+            {% for obj in task_data[3] %}
+            <li>{{ obj }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>None</p>
+          {% endif %}
+        </l1>
       </ul>
     </div>
   </body>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>B1K Integration</title>
+    <style>
+      table {
+        border: 3px solid #dee2e6;
+      }
+      th, td {
+        border: 2px solid #dee2e6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>B1K Integration</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Task Name</th>
+            <th>Definition Valid</th>
+            <th>Scene Match</th>
+            <th>Object Match</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task_name, status in tasks_status.items() %}
+          <tr>
+            <td><a href="{{ url_for('task', task_name=task_name) }}">{{ task_name }}</a></td>
+            {% if status[0]|length == 0 %}
+            <td class="bg-success"></td>
+            {% else %}
+            <td class="bg-danger"></td>
+            {% endif %}
+            {% if status[1]["matched"]|length > 0 %}
+            <td class="bg-success"></td>
+            {% else %}
+            <td class="bg-danger"></td>
+            {% endif %}
+            {% if status[3]|length == 0 %}
+            <td class="bg-success"></td>
+            {% else %}
+            <td class="bg-danger"></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+

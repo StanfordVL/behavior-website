@@ -10,14 +10,21 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Object</th>
+            <th>Required Synset</th>
+            <th>Requiring Tasks</th>
+            <th>Matched Objects</th>
           </tr>
         </thead>
         <tbody>
-          {% for obj, tasks in all_objects.items() %}
+          {% for synset, task in synset_to_task.items() %}
           <tr>
-            <td>{{ obj }}</td>
-            <td>{{ tasks }}</td>
+            <td>{{ synset }}</td>
+            <td>{{ task|format_iterable }}</td>
+            {% if synset_to_objects[synset]|length > 0 %}
+            <td>{{ synset_to_objects[synset]|format_iterable }}</td>
+            {% else %}
+            <td>None</td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>
