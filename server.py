@@ -47,12 +47,12 @@ def tasks(task_name):
 
 @app.route('/objects.html')
 def objects():
-    return render_template('objects.html', synset_to_task=collections.OrderedDict(sorted(synset_to_task.items())), synset_to_objects=synset_to_objects)
+    return render_template('objects.html', synset_to_task=synset_to_task, synset_to_objects=synset_to_objects)
 
 
 @app.template_filter('format_iterable')
-def format_list(lst):
-    return ', '.join(str(x) for x in lst)
+def format_list(iter):
+    return ', '.join(str(x) for x in iter)
 
 
 if __name__ == '__main__':

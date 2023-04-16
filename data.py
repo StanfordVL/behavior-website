@@ -20,7 +20,7 @@ def get_all_tasks():
     task_to_fn = {}  # task to filename mapping
     b1k_tasks = glob.glob(rf"D:\ObjectPropertyAnnotation\init_goal_cond_annotations\problem_files_verified_b1k\*")
     b100_tasks = glob.glob(rf"D:\bddl\bddl\activity_definitions\*")
-    for x in b1k_tasks + b100_tasks:
+    for x in sorted(b1k_tasks + b100_tasks):
         p = pathlib.Path(x)
         if not p.is_dir():
             continue
@@ -55,7 +55,7 @@ def get_all_objects_and_categories(scenes):
     cat_to_object = defaultdict(list)
     object_lists = glob.glob(rf"D:\ig_pipeline\cad\objects\*\artifacts\object_list.json")
     scene_object_lists = [rf"D:\ig_pipeline\cad\scenes\{scene}\artifacts\object_list.json" for scene in scenes]
-    for olf in object_lists + scene_object_lists:
+    for olf in sorted(object_lists + scene_object_lists):
         dirname = pathlib.Path(olf).parts[-4] + "/" + pathlib.Path(olf).parts[-3]
         with open(olf, "r") as f:
             ol = json.load(f)
@@ -118,14 +118,14 @@ def get_task_synset_mapping(G, task_to_fn):
         task_to_synset[task_name] = set(conds.parsed_objects.keys()) - {"agent.n.01"}
         raw_requirements = [cond[1:] for cond in conds.parsed_initial_conditions if cond[0] == "inroom"]
         assert all(len(req) == 2 for req in raw_requirements), task_name + ":" + str(raw_requirements)
-        task_requirements[task_name] = [(req.rsplit("_", 1)[0], rm) for req, rm in raw_requirements]
-        task_to_scene_synset[task_name] = {obj for obj, _ in task_requirements[task_name]}
-        task_to_non_scene_synset[task_name] = task_to_synset[task_name] - task_to_scene_synset[task_name]
-        task_to_legal_synsets[task_name] = task_to_synset[task_name] & legit_synsets
-        task_to_illegal_synsets[task_name] = task_to_synset[task_name] - task_to_legal_synsets[task_name]
+        task_requirements[task_name] = sorted([(req.rsplit("_", 1)[0], rm) for req, rm in raw_requirements])
+        task_to_scene_synset[task_name] = sorted([obj for obj, _ in task_requirements[task_name]])
+        task_to_non_scene_synset[task_name] = sorted(task_to_synset[task_name] - set(task_to_scene_synset[task_name]))
+        task_to_legal_synsets[task_name] = sorted(task_to_synset[task_name] & legit_synsets)
+        task_to_illegal_synsets[task_name] = sorted(task_to_synset[task_name] - set(task_to_legal_synsets[task_name]))
     
     task_required_synsets = {x for s in task_to_synset.values() for x in s}
-    synset_to_task = {s: [t for t, ss in task_to_synset.items() if s in ss] for s in task_required_synsets}
+    synset_to_task = {s: sorted([t for t, ss in task_to_synset.items() if s in ss]) for s in sorted(task_required_synsets)}
     return task_to_synset, synset_to_task, task_to_scene_synset, task_to_non_scene_synset, task_to_legal_synsets, task_to_illegal_synsets, task_requirements
 
 
@@ -174,9 +174,11 @@ def get_available_synsets(G, synset_to_cat, task_to_legal_synsets, cat_to_object
                 s_cats = synset_to_cat[cs]
                 s_objs = {obj for cat in s_cats for obj in cat_to_object[cat]}
                 synset_to_objects[s].update(s_objs)
+        if s in synset_to_objects:
+            synset_to_objects[s] = sorted(synset_to_objects[s])
 
-    task_to_not_found_synset = {task_name: task_to_legal_synsets[task_name] - set(synset_to_objects.keys()) for task_name in task_to_legal_synsets}
-    task_to_found_synset = {task_name: task_to_legal_synsets[task_name] - task_to_not_found_synset[task_name] for task_name in task_to_legal_synsets}
+    task_to_not_found_synset = {task_name: sorted(set(task_to_legal_synsets[task_name]) - set(synset_to_objects.keys())) for task_name in task_to_legal_synsets}
+    task_to_found_synset = {task_name: sorted(set(task_to_legal_synsets[task_name]) - set(task_to_not_found_synset[task_name])) for task_name in task_to_legal_synsets}
     return synset_to_objects, task_to_found_synset, task_to_not_found_synset
 
 
