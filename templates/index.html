@@ -1,57 +1,70 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
     <title>B1K Integration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-      table {
-        border: 3px solid #dee2e6;
+      .card:hover {
+        cursor: pointer;
+        text-decoration: none;
+        color: #8C1515;
+        border-color: #8C1515;
       }
-      th, td {
-        border: 2px solid #dee2e6;
+      .card {
+        border-radius: 1vh;
+        border-width: 0.3vh;
+        border-color: black;
+        color: #000;
+      }
+      .card-title {
+        font-size: 1.5vw;
+        padding: 0.5vw;
+      }
+      .card-text {
+        font-size: 3vw;
+        padding: 2vw;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>B1K Integration</h1>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Task Name</th>
-            <th>Definition Valid</th>
-            <th>Scene Match</th>
-            <th>Object Match</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for task_name, status in tasks_status.items() %}
-          <tr>
-            <td><a href="{{ url_for('task', task_name=task_name) }}">{{ task_name }}</a></td>
-            {% if status[0]|length == 0 %}
-            <td class="bg-success"></td>
-            {% else %}
-            <td class="bg-danger"></td>
-            {% endif %}
-            {% if status[1]["matched"]|length > 0 %}
-            <td class="bg-success"></td>
-            {% else %}
-            <td class="bg-danger"></td>
-            {% endif %}
-            {% if status[3]|length == 0 %}
-            <td class="bg-success"></td>
-            {% else %}
-            <td class="bg-danger"></td>
-            {% endif %}
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="container mt-5">
+      <h1 class="text-center">B1K Integration</h1>
+      <div class="row mt-5">
+        <div class="col-md-6">
+          <a href="{{ url_for('tasks_list') }}" class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Tasks</h5>
+              <p class="card-text">{{ "{} / {}".format(metadata[0][0], metadata[0][1]) }}</p>
+            </div>
+        </a>
+        </div>
+        <div class="col-md-6">
+          <a href="{{ url_for('objects') }}" div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Synsets</h5>
+              <p class="card-text">{{ "{} / {}".format(metadata[1][0], metadata[1][1]) }}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-6">
+          <a href="{{ url_for('index') }}" class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Objects</h5>
+              <p class="card-text">{{ metadata[2] }}</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-6">
+          <a href="{{ url_for('index') }}" class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">Scenes</h5>
+              <p class="card-text">{{ metadata[3] }}</p>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
-
+  </body>
+</html>
