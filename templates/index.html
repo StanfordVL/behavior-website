@@ -52,7 +52,7 @@
           <a href="{{ '/b1k-integration' + url_for('index') }}" class="card text-center">
             <div class="card-body">
               <h5 class="card-title">Objects</h5>
-              <p class="card-text">{{ metadata[2] }}</p>
+              <p class="card-text">{{ "{} / {}".format(metadata[2][0], metadata[2][1]) }}</p>
             </div>
           </a>
         </div>
@@ -60,7 +60,7 @@
           <a href="{{ '/b1k-integration' + url_for('index') }}" class="card text-center">
             <div class="card-body">
               <h5 class="card-title">Scenes</h5>
-              <p class="card-text">{{ metadata[3] }}</p>
+              <p class="card-text">{{ "{} / {}".format(metadata[3][0], metadata[3][1]) }}</p>
             </div>
           </a>
         </div>

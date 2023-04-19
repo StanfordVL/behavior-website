@@ -1,0 +1,4 @@
+flask-frozen
+networkx
+bddl
+nltk

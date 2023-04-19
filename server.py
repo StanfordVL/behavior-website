@@ -4,8 +4,8 @@ from flask_frozen import Freezer
 
 
 G = get_all_synsets()
-scene_to_objects = get_all_scenes()
-object_to_fn, cat_to_object, provided_categories = get_all_objects_and_categories(scene_to_objects)
+scene_to_objects, available_scenes = get_scenes()
+object_to_fn, cat_to_object, provided_categories, available_objects = get_objects_and_categories(scene_to_objects)
 cat_to_synset, synset_to_cat = get_category_synset_mapping(provided_categories)
 tasks_to_fn = get_all_tasks()
 task_to_synset, synset_to_task, task_to_scene_synset, task_to_non_scene_synset, task_to_legal_synsets, task_to_illegal_synsets, task_requirements = get_task_synset_mapping(G, tasks_to_fn)
@@ -15,13 +15,12 @@ tasks_status = {
     task_name: [task_to_illegal_synsets[task_name], task_to_scene[task_name], task_to_found_synset[task_name], task_to_not_found_synset[task_name]] for task_name in tasks_to_fn
 }
 
-total_task = len(tasks_to_fn)
+# metadata
 success_task = len([x for x in tasks_status if len(tasks_status[x][0]) == 0 and len(tasks_status[x][1]) > 0 and len(tasks_status[x][3]) == 0])
-total_scene = len(scene_to_objects)
-total_object = len(object_to_fn)
-total_synset = len(synset_to_cat)
 success_synset = len([x for x in synset_to_cat if len(synset_to_objects[x]) == 1])
-metadata = [[success_task, total_task], [success_synset, total_synset], total_object, total_scene]
+metadata = [[success_task, len(tasks_to_fn)], [success_synset, len(synset_to_cat)], [len(available_objects), len(object_to_fn)], [len(available_scenes), len(scene_to_objects)]]
+
+
 # ==================================================================================================
 
 app = Flask(__name__)

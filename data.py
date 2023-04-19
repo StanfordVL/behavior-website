@@ -1,7 +1,9 @@
+import os
 import csv
 import glob 
 import json
 import pathlib
+import yaml
 import networkx as nx
 
 from bddl.activity import Conditions
@@ -18,8 +20,8 @@ def get_all_tasks():
         task_to_fn: dict mapping task name to the file directory that contains the task definition
     """
     task_to_fn = {}  # task to filename mapping
-    b1k_tasks = glob.glob(rf"D:\ObjectPropertyAnnotation\init_goal_cond_annotations\problem_files_verified_b1k\*")
-    b100_tasks = glob.glob(rf"D:\bddl\bddl\activity_definitions\*")
+    b1k_tasks = glob.glob(rf"{os.path.pardir}/ObjectPropertyAnnotation/init_goal_cond_annotations/problem_files_verified_b1k/*")
+    b100_tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
     for x in sorted(b1k_tasks + b100_tasks):
         p = pathlib.Path(x)
         if not p.is_dir():
@@ -31,30 +33,35 @@ def get_all_tasks():
     return task_to_fn
 
 
-def get_all_scenes():
+def get_scenes():
     """
-    Get a list of all defined scenes (and it's containing scene-objects)
+    Get a list of defined and available scenes (and it's containing scene-objects)
     returns:
         scene_to_objects: dict mapping scene name to the object list that contains the scene definition
+        available_scenes: list of available scenes
     """
     scene_to_objects = {}
-    with open(rf"D:\combined_room_object_list.json", "r") as f:
+    with open(rf"{os.path.pardir}/combined_room_object_list.json", "r") as f:
         scene_to_objects = json.load(f)["scenes"]
-    return scene_to_objects
+    with open("params.yaml", "r") as f:
+        available_scenes = yaml.safe_load(f)["final_scenes"]
+    available_scenes = [x.split('/')[-1] for x in available_scenes] # remove 'scene/' prefix
+    return scene_to_objects, available_scenes
 
 
-def get_all_objects_and_categories(scenes):
+def get_objects_and_categories(scenes):
     """
-    Get all objects and categories and their correspondence
+    Get objects and categories and their correspondence
     returns:
         object_to_fn: dict mapping object to the object_list that provides it
         cat_to_object: dict mapping category to list of available objects in that category
         provided_categories: set of categories that are provided by the dataset
+        available_objects: list of available objects
     """
     object_to_fn = {}
     cat_to_object = defaultdict(list)
-    object_lists = glob.glob(rf"D:\ig_pipeline\cad\objects\*\artifacts\object_list.json")
-    scene_object_lists = [rf"D:\ig_pipeline\cad\scenes\{scene}\artifacts\object_list.json" for scene in scenes]
+    object_lists = glob.glob(f"{os.path.pardir}/ig_pipeline/cad/objects/*/artifacts/object_list.json")
+    scene_object_lists = [f"{os.path.pardir}/ig_pipeline/cad/scenes/{scene}/artifacts/object_list.json" for scene in scenes]
     for olf in sorted(object_lists + scene_object_lists):
         dirname = pathlib.Path(olf).parts[-4] + "/" + pathlib.Path(olf).parts[-3]
         with open(olf, "r") as f:
@@ -63,7 +70,9 @@ def get_all_objects_and_categories(scenes):
             object_to_fn[obj] = dirname
             cat_to_object[obj.split("-")[0]].append(obj)
     provided_categories = {x.split("-")[0] for x in object_to_fn.keys()}
-    return object_to_fn, cat_to_object, provided_categories
+    with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
+        available_objects = sorted(json.load(f)["providers"].keys())
+    return object_to_fn, cat_to_object, provided_categories, available_objects
 
 
 def get_all_synsets():
@@ -80,7 +89,7 @@ def get_all_synsets():
             G.add_edge(parent.name(), child.name())
             
     # Add the illegit-synset (custom) graph
-    with open(rf"D:\ig_pipeline\metadata\custom_synsets.csv") as f:
+    with open(f"{os.path.pardir}/ig_pipeline/metadata/custom_synsets.csv") as f:
         reader = csv.DictReader(f)
         for row in reader:
             child = row["custom_synset"].strip()
@@ -140,7 +149,7 @@ def get_category_synset_mapping(provided_categories):
     # Get the category - synset mapping
     cat_to_synset = {}
     synset_to_cat = defaultdict(list)
-    with open(rf"D:\ig_pipeline\metadata\category_mapping.csv", newline='') as csvfile:
+    with open(f"{os.path.pardir}/ig_pipeline/metadata/category_mapping.csv", newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             category = row["category"].strip()

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>B1K scene list</title>
+    <style>
+      h1 {
+        text-align: center;
+        padding: 5vh;
+      }
+      table {
+        border: 0.3vh solid #dee2e6;
+      }
+      td, th {
+        border: 0.3vh solid #dee2e6;
+      }
+      .clickable-row:hover {
+        cursor: pointer;
+        border-left: 0.5vh solid darkorange;
+        color: darkorange;
+      }
+    </style>
+    <!-- Clickable row -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+          row.addEventListener("click", () => {
+            window.location.href = row.dataset.href;
+          });
+        });
+      });
+      </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>B1K task list</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Scene Name</th>
+            <th>Definition Valid</th>
+            <th>VR QA</th>
+            <th>Object Match</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task_name, status in tasks_status.items() %}
+          <tr class="clickable-row" data-href="{{ '/b1k-integration' + url_for('tasks', task_name=task_name) }}">
+            <td>{{ task_name }}</a></td>
+            {% if status[0]|length == 0 %}
+            <td class="bg-success"></td>
+            {% else %}
+            <td class="bg-danger"></td>
+            {% endif %}
+            {% if status[1]["matched"]|length > 0 %}
+            <td class="bg-success"></td>
+            {% else %}
+            <td class="bg-danger"></td>
+            {% endif %}
+            {% if status[3]|length == 0 %}
+            <td class="bg-success"></td>
+            {% else %}
+            <td class="bg-danger"></td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+

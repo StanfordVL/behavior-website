@@ -1,0 +1,77 @@
+name: Update Integration
+
+on:
+  schedule: # runs at 6am every day
+    - cron: "0 6 * * *" 
+  push: # runs on push to main
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  fetch:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: [self-hosted, linux, gpu]
+    steps:
+      # Fetch relavant data
+      - name: Fetch object category mapping
+        id: 'fetch_oc_mapping'
+        uses: jroehl/gsheet.action@v1.0.0
+        with:
+          spreadsheetId: 10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4
+          commands: |
+            [
+              { "command": "getData", "args": { "worksheetTitle": "Object Category Mapping" } 
+            ]
+        env:
+          GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
+          GSHEET_PRIVATE_KEY: ${{ secrets.GSHEET_PRIVATE_KEY }}
+      - name: dump results
+        env:
+          RESULTS: ${{ steps.fetch_oc_mapping.outputs.results }}
+        run: echo "$RESULTS" > category_mapping.csv
+      - name: Clone B100 BDDL Repo
+        uses: actions/checkout@v3
+        with:
+          name: StanfordVL/bddl
+          path: ./b100-bddl 
+      - name: Clone B1K BDDL Repo
+        uses: actions/checkout@v3
+        with:
+          name: sanjanasrivastava/ObjectPropertyAnnotation
+          path: ./ObjectPropertyAnnotation
+      - name: Clone ig pipeline Repo
+        uses: actions/checkout@v3
+        with:
+          name: StanfordVL/ig_pipeline
+          path: ./ig_pipeline
+
+      # Build static content
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: actions/setup-python@v4
+        run: pip install -r requirements.txt
+      - name: Build integration
+        run: python server.py
+      
+      # Deploy to github pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './build'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+
