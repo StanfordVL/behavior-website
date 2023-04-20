@@ -16,11 +16,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  fetch:
+  update:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: [self-hosted, linux, gpu]
+    runs-on: ubuntu-latest
     steps:
       # Fetch relavant data
       - name: Fetch object category mapping
@@ -30,36 +30,53 @@ jobs:
           spreadsheetId: 10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4
           commands: |
             [
-              { "command": "getData", "args": { "worksheetTitle": "Object Category Mapping" } 
+              { "command": "getData", "args": { "worksheetTitle": "Object Category Mapping" }}
             ]
         env:
           GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
-          GSHEET_PRIVATE_KEY: ${{ secrets.GSHEET_PRIVATE_KEY }}
+          GSHEET_PRIVATE_KEY: ${{ secrets.GCP_CREDENTIALS }}
       - name: dump results
         env:
           RESULTS: ${{ steps.fetch_oc_mapping.outputs.results }}
-        run: echo "$RESULTS" > category_mapping.csv
+        # ref: https://stackoverflow.com/questions/32960857/how-to-convert-arbitrary-simple-json-to-csv-using-jq
+        run: echo "$RESULTS" | jq -r '(map(keys) | add | unique) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' > category_mapping.csv
       - name: Clone B100 BDDL Repo
         uses: actions/checkout@v3
         with:
-          name: StanfordVL/bddl
-          path: ./b100-bddl 
+          repository: StanfordVL/bddl
+          path: ./bddl 
       - name: Clone B1K BDDL Repo
         uses: actions/checkout@v3
         with:
-          name: sanjanasrivastava/ObjectPropertyAnnotation
+          repository: sanjanasrivastava/ObjectPropertyAnnotation
           path: ./ObjectPropertyAnnotation
+          token: ${{ secrets.REPO_TOKEN }}
+
+      # pull ig pipeline data
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+          architecture: x64
       - name: Clone ig pipeline Repo
         uses: actions/checkout@v3
         with:
-          name: StanfordVL/ig_pipeline
+          repository: StanfordVL/ig_pipeline
           path: ./ig_pipeline
+          token: ${{ secrets.REPO_TOKEN }}
+      - name: Install dvc
+        run: pip install dvc[gs]
+      - name: Authenticate on Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+      - name: Pull dvc data
+        run: dvc pull [combined_room_object_list, object_inventory]
 
       # Build static content
-      - name: Checkout
+      - name: Checkout integration repo
         uses: actions/checkout@v3
       - name: Install dependencies
-        uses: actions/setup-python@v4
         run: pip install -r requirements.txt
       - name: Build integration
         run: python server.py

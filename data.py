@@ -41,7 +41,7 @@ def get_scenes():
         available_scenes: list of available scenes
     """
     scene_to_objects = {}
-    with open(rf"{os.path.pardir}/combined_room_object_list.json", "r") as f:
+    with open(rf"{os.path.pardir}/ig_pipeline/metadata/combined_room_object_list.json", "r") as f:
         scene_to_objects = json.load(f)["scenes"]
     with open("params.yaml", "r") as f:
         available_scenes = yaml.safe_load(f)["final_scenes"]
@@ -53,26 +53,21 @@ def get_objects_and_categories(scenes):
     """
     Get objects and categories and their correspondence
     returns:
-        object_to_fn: dict mapping object to the object_list that provides it
+        all_objects: list of all objects (planned) in the dataset
         cat_to_object: dict mapping category to list of available objects in that category
         provided_categories: set of categories that are provided by the dataset
-        available_objects: list of available objects
+        available_objects: list of available objects in the dataset
     """
-    object_to_fn = {}
     cat_to_object = defaultdict(list)
-    object_lists = glob.glob(f"{os.path.pardir}/ig_pipeline/cad/objects/*/artifacts/object_list.json")
-    scene_object_lists = [f"{os.path.pardir}/ig_pipeline/cad/scenes/{scene}/artifacts/object_list.json" for scene in scenes]
-    for olf in sorted(object_lists + scene_object_lists):
-        dirname = pathlib.Path(olf).parts[-4] + "/" + pathlib.Path(olf).parts[-3]
-        with open(olf, "r") as f:
-            ol = json.load(f)
-        for obj in ol["provided_objects"]:
-            object_to_fn[obj] = dirname
-            cat_to_object[obj.split("-")[0]].append(obj)
-    provided_categories = {x.split("-")[0] for x in object_to_fn.keys()}
     with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
-        available_objects = sorted(json.load(f)["providers"].keys())
-    return object_to_fn, cat_to_object, provided_categories, available_objects
+        obj_json = json.load(f)
+    available_objects = sorted(obj_json["providers"].keys())
+    all_objects = sorted(obj_json["all"].keys())
+    for obj in all_objects:
+        cat_to_object[obj.split("-")[0]].append(obj)
+    provided_categories = {x.split("-")[0] for x in all_objects}
+
+    return all_objects, cat_to_object, provided_categories, available_objects
 
 
 def get_all_synsets():
@@ -89,7 +84,7 @@ def get_all_synsets():
             G.add_edge(parent.name(), child.name())
             
     # Add the illegit-synset (custom) graph
-    with open(f"{os.path.pardir}/ig_pipeline/metadata/custom_synsets.csv") as f:
+    with open(f"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/custom_synsets.csv") as f:
         reader = csv.DictReader(f)
         for row in reader:
             child = row["custom_synset"].strip()
@@ -149,7 +144,7 @@ def get_category_synset_mapping(provided_categories):
     # Get the category - synset mapping
     cat_to_synset = {}
     synset_to_cat = defaultdict(list)
-    with open(f"{os.path.pardir}/ig_pipeline/metadata/category_mapping.csv", newline='') as csvfile:
+    with open(f"{os.path.pardir}/category_mapping.csv", newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             category = row["category"].strip()
