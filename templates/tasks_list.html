@@ -52,7 +52,7 @@
         </thead>
         <tbody>
           {% for task_name, status in tasks_status.items() %}
-          <tr class="clickable-row" data-href="{{ '/b1k-integration' + url_for('tasks', task_name=task_name) }}">
+          <tr class="clickable-row" data-href="{{ prefix + url_for('tasks', task_name=task_name) }}">
             <td>{{ task_name }}</a></td>
             {% if status[0]|length == 0 %}
             <td class="bg-success"></td>
@@ -61,11 +61,15 @@
             {% endif %}
             {% if status[1]["matched"]|length > 0 %}
             <td class="bg-success"></td>
+            {% elif status[4]["matched"]|length > 0 %}
+            <td class="bg-warning"></td>
             {% else %}
             <td class="bg-danger"></td>
             {% endif %}
             {% if status[3]|length == 0 %}
             <td class="bg-success"></td>
+            {% elif status[6]|length == 0 %}
+            <td class="bg-warning"></td>
             {% else %}
             <td class="bg-danger"></td>
             {% endif %}

@@ -22,37 +22,20 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      # Fetch relavant data
-      - name: Fetch object category mapping
-        id: 'fetch_oc_mapping'
-        uses: jroehl/gsheet.action@v1.0.0
-        with:
-          spreadsheetId: 10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4
-          commands: |
-            [
-              { "command": "getData", "args": { "worksheetTitle": "Object Category Mapping" }}
-            ]
-        env:
-          GSHEET_CLIENT_EMAIL: ${{ secrets.GSHEET_CLIENT_EMAIL }}
-          GSHEET_PRIVATE_KEY: ${{ secrets.GCP_CREDENTIALS }}
-      - name: dump results
-        env:
-          RESULTS: ${{ steps.fetch_oc_mapping.outputs.results }}
-        # ref: https://stackoverflow.com/questions/32960857/how-to-convert-arbitrary-simple-json-to-csv-using-jq
-        run: echo "$RESULTS" | jq -r '(map(keys) | add | unique) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' > category_mapping.csv
+      # Fetch bddl data
       - name: Clone B100 BDDL Repo
         uses: actions/checkout@v3
         with:
           repository: StanfordVL/bddl
-          path: ./bddl 
+          path: bddl 
       - name: Clone B1K BDDL Repo
         uses: actions/checkout@v3
         with:
-          repository: sanjanasrivastava/ObjectPropertyAnnotation
+          repository: StanfordVL/ObjectPropertyAnnotation
           path: ./ObjectPropertyAnnotation
           token: ${{ secrets.REPO_TOKEN }}
 
-      # pull ig pipeline data
+      # Fetch ig pipeline data
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -62,7 +45,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: StanfordVL/ig_pipeline
-          path: ./ig_pipeline
+          path: ig_pipeline
           token: ${{ secrets.REPO_TOKEN }}
       - name: Install dvc
         run: pip install dvc[gs]
@@ -71,14 +54,19 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
       - name: Pull dvc data
-        run: dvc pull [combined_room_object_list, object_inventory]
+        working-directory: ig_pipeline
+        run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future
 
       # Build static content
       - name: Checkout integration repo
         uses: actions/checkout@v3
+        with:
+          path: b1k-integration
       - name: Install dependencies
+        working-directory: b1k-integration
         run: pip install -r requirements.txt
       - name: Build integration
+        working-directory: b1k-integration
         run: python server.py
       
       # Deploy to github pages
@@ -87,7 +75,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: './build'
+          path: b1k-integration/build
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

@@ -2,3 +2,4 @@ flask-frozen
 networkx
 bddl
 nltk
+gspread
