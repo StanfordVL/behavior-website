@@ -3,6 +3,8 @@ from flask import Flask, render_template, abort
 from data import *
 from flask_frozen import Freezer
 
+import nltk
+nltk.download('wordnet')
 
 G = get_all_synsets()
 tasks_to_fn = get_tasks()
