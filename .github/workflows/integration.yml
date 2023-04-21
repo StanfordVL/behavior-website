@@ -1,8 +1,8 @@
 name: Update Integration
 
 on:
-  schedule: # runs at 6am every day
-    - cron: "0 6 * * *" 
+  schedule: # runs at 6am PST every day
+    - cron: "0 13 * * *" 
   push: # runs on push to main
     branches: ["main"]
 

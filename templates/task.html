@@ -31,9 +31,9 @@
           {% endif %}
         </li>
         <li>Unmatched:
-          {% if task_data[1]["unmatched"]|length > 0 %}
+          {% if task_data[4]["unmatched"]|length > 0 %}
           <ul>
-            {% for scene, reason in task_data[1]["unmatched"].items() %}
+            {% for scene, reason in task_data[4]["unmatched"].items() %}
             <li>{{ scene }}: {{ reason }}</li>
             {% endfor %}
           </ul>
@@ -57,9 +57,9 @@
           {% endif %}
         </l1>
         <l1>Unmatched:
-          {% if task_data[3]|length > 0 %}
+          {% if task_data[6]|length > 0 %}
           <ul>
-            {% for obj in task_data[3] %}
+            {% for obj in task_data[6] %}
             <li>{{ obj }}</li>
             {% endfor %}
           </ul>
