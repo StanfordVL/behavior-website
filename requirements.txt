@@ -1,5 +1,6 @@
-flask-frozen
+frozen-flask
 networkx
 bddl
 nltk
 gspread
+future
