@@ -4,3 +4,4 @@ bddl
 nltk
 gspread
 future
+IPython
