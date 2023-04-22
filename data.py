@@ -144,10 +144,12 @@ def get_category_synset_mapping(all_categories, cur_categories):
         cur_cat_to_synset: dict mapping category to corresponding synset
         all_synset_to_cat: dict mapping synset to corresponding category
         cur_synset_to_cat: dict mapping synset to corresponding category
+        all_synsets_from_category_mapping: set of all synsets from category mapping
     """
     # Get the category - synset mapping
     all_cat_to_synset, cur_cat_to_synset = {}, {}
     all_synset_to_cat, cur_synset_to_cat = defaultdict(list), defaultdict(list)
+    all_synsets_from_category_mapping = set()
     gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
     worksheet = gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Category Mapping")
     with open(f"{os.path.pardir}/category_mapping.csv", 'w') as f:
@@ -162,13 +164,14 @@ def get_category_synset_mapping(all_categories, cur_categories):
                 print(f"Skipping problematic row: {row}")
                 continue
             synset = canonicalize(synset)
+            all_synsets_from_category_mapping.add(synset)
             if category in cur_categories:
                 cur_cat_to_synset[category] = synset
                 cur_synset_to_cat[synset].append(category)
             if category in all_categories:
                 all_cat_to_synset[category] = synset
                 all_synset_to_cat[synset].append(category)
-    return all_cat_to_synset, cur_cat_to_synset, all_synset_to_cat, cur_synset_to_cat
+    return all_cat_to_synset, cur_cat_to_synset, all_synset_to_cat, cur_synset_to_cat, all_synsets_from_category_mapping
 
 
 def get_available_synsets(G, task_to_legal_synsets, all_synset_to_cat, cur_synset_to_cat, all_cat_to_object, cur_cat_to_object):
