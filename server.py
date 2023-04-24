@@ -82,6 +82,7 @@ def format_list(iter):
 if __name__ == '__main__':
     if args.debug:
         print("Building local webserver...")
+        app.debug = True
         app.run()
     else:
         print("Generating static website files...")
