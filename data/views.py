@@ -125,7 +125,7 @@ def create_tasks():
                 assert len(cond[1:]) == 2, f"{task_name}: {str(cond[1:])} not in correct format"
                 room_requirements.append([cond[1].rsplit("_", 1)[0], cond[2]])
 
-        task.room_requirements = str(room_requirements)
+        task.room_requirements = json.dumps(room_requirements)
         for synset_name in synsets:
             synset, _ = Synset.objects.update_or_create(
                 name=synset_name, 

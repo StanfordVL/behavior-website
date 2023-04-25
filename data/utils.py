@@ -2,10 +2,11 @@ import collections
 import re
 import os
 import csv
+import json
 import networkx as nx
 
 from nltk.corpus import wordnet as wn
-
+from data.models import Scene
 
 
 def get_synset_graph():
@@ -65,10 +66,9 @@ def room_has_requirements(G, room_contents, room_reqs):
     return ""
 
 
-def any_room_has_requirements(G, scene_room_object_list, s, required_rm, required_stuff):
+def any_room_has_requirements(G, scene_contents, required_rm, required_stuff):
     """Check whether any room in a scene contains the required room-objects"""
     output = ""
-    scene_contents = scene_room_object_list[s]
     matching_scene_rooms = [x for x in scene_contents.keys() if re.fullmatch("^" + required_rm + "_[0-9]+$", x)]
     if len(matching_scene_rooms) == 0:
         return f" no {required_rm} found in scene;"
@@ -81,15 +81,15 @@ def any_room_has_requirements(G, scene_room_object_list, s, required_rm, require
     return output
             
 
-def scene_compatible_with_task(G, scene_room_object_list, s, task_requirements):
+def scene_compatible_with_task(G, scene_contents: str, task_requirements: str):
     """Check whether a scene is compatible with a task (i.e. contains all the scene-required room-objects)"""
     requirements_by_rm = collections.defaultdict(collections.Counter)
-    for obj, rm in task_requirements:
+    for obj, rm in json.loads(task_requirements):
         assert not rm.endswith("_0")
         requirements_by_rm[rm.replace("_0", "")][obj] += 1
     
     for required_rm, required_stuff in requirements_by_rm.items():
-        ret = any_room_has_requirements(G, scene_room_object_list, s, required_rm, required_stuff)
+        ret = any_room_has_requirements(G, json.loads(scene_contents), required_rm, required_stuff)
         if len(ret) > 0:
             return f"No matching {required_rm}:{ret[:-1]}."
     return ""

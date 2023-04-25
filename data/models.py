@@ -40,6 +40,8 @@ class Task(models.Model):
     def __str__(self):
         return self.name
     
+    def get_scene_matching(self, G, scene: Scene):
+        return scene_compatible_with_task(G, scene, self.room_requirements)
 
 class Category(models.Model):
     name = models.CharField(max_length=30, primary_key=True)
