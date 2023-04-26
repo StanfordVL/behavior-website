@@ -6,6 +6,7 @@ import gspread
 import pathlib
 from bddl.activity import Conditions
 from data.utils import get_synset_graph
+from nltk.corpus import wordnet as wn
 
 from data.models import *
 from django.db.utils import IntegrityError
@@ -87,7 +88,12 @@ class Command(BaseCommand):
                     print(f"Skipping problematic row: {row}")
                     continue
                 synset_name = canonicalize(synset_name)
-                synset, _ = Synset.objects.get_or_create(name=synset_name, legal=(synset_name in legal_synsets))
+                synset_definition = wn.synset(synset_name).definition() if wn.synset(synset_name) else ""
+                synset, _ = Synset.objects.get_or_create(
+                    name=synset_name, 
+                    definition=synset_definition,
+                    legal=(synset_name in legal_synsets)
+                )
                 # safeguard to ensure every category only appears once in the csv file
                 try:
                     _ = Category.objects.get_or_create(name=category_name, synset=synset)
@@ -159,7 +165,7 @@ class Command(BaseCommand):
                         synset=Synset.objects.get(name=obj_to_synset[cond[1].split('?')[-1]]),
                         defaults={"count": 1}
                     )
-                    # the requirement already occurred before, we increment the count by 1
+                    # if the requirement already occurred before, we increment the count by 1
                     if not created:
                         room_synset_requirements.count += 1
                         room_synset_requirements.save()
@@ -167,7 +173,11 @@ class Command(BaseCommand):
             for synset_name in synsets:
                 synset, _ = Synset.objects.update_or_create(
                     name=synset_name, 
-                    defaults={"is_substance": synset_name in substances, "legal": synset_name in legal_synsets}
+                    defaults={
+                        "definition": wn.synset(synset_name).definition() if wn.synset(synset_name) else "",
+                        "is_substance": synset_name in substances, 
+                        "legal": synset_name in legal_synsets
+                    }
                 )
                 task.synsets.add(synset)
             task.save()
@@ -183,4 +193,22 @@ class Command(BaseCommand):
                     if counts_for(G, synset_c, synset_p):
                         synset_p.children.add(synset_c)
                         synset_p.save()
-            # TODO: also add all its parents to the synset objects
+            # add all its hypernyms to the synset objects
+            self.add_hypernyms_to_synset(G, synset_c)
+
+    
+    def add_hypernyms_to_synset(self, G, synset):
+        for synset_hypernym_name in G.predecessors(synset.name):
+            synset_hypernym, _ = Synset.objects.get_or_create(
+                name=synset_hypernym_name, 
+                defaults={
+                    "definition": wn.synset(synset_hypernym_name).definition() if wn.synset(synset_hypernym_name) else "",
+                    "is_substance": False,  # we put False here because if it is a substance, it should have been added already
+                    "legal": True
+                }
+            )
+            # add parent-child relationship
+            synset_hypernym.children.add(synset)
+            synset_hypernym.save()
+            if synset_hypernym_name != 'entity.n.01': # root hypernym
+                self.add_hypernyms_to_synset(synset_hypernym)
