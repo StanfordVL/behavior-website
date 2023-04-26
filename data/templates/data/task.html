@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ task_name }} Details</title>
+    <title>{{ task.name }} Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
   <body>
     <div class="container">
-      <h1>{{ task_name }} Details</h1>
+      <h1>{{ task.name }} Details</h1>
       <h2>Invalid Definitions:</h2>
       {% if task_data[0]|length > 0 %}
       <ul>

@@ -51,9 +51,9 @@
           </tr>
         </thead>
         <tbody>
-          {% for task_name, status in tasks_status.items() %}
+          {% for task in tasks %}
           <tr class="clickable-row" data-href="{{ prefix + url_for('tasks', task_name=task_name) }}">
-            <td>{{ task_name }}</a></td>
+            <td>{{ task.name }}</a></td>
             {% if status[0]|length == 0 %}
             <td class="bg-success"></td>
             {% else %}

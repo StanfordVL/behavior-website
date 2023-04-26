@@ -6,7 +6,6 @@ import json
 import networkx as nx
 
 from nltk.corpus import wordnet as wn
-from data.models import Scene
 
 
 def get_synset_graph():
