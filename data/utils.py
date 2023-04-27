@@ -10,6 +10,7 @@ STATE_PLANNED = "warning"
 STATE_UNMATCHED = "danger"
 STATE_SUBSTANCE = "info"
 STATE_ILLEGAL = "secondary"
+STATE_NONE = "light"
 
 def get_synset_graph():
     """

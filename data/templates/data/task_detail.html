@@ -9,35 +9,42 @@
       <h1>{{ task.name }} Details</h1>
       <h2>Synsets</h2>
       <ul>
-        {% for synset in task.synsets.all %}
-        <li> {{ synset.name }}</li>
+        {% for synset in task.synsets %}
+        <a href="{{ url 'synset detail' synset.name }}" class="{{ 'btn btn-' + synset.state }}"> {{ synset.name }}</a>
         {% empty %}
         <li>None</li>
         {% endfor %}
       </ul>
       <h2>Scenes</h2>
       <ul>
-        <li>Matched:
-          {% if task_data[1]["matched"]|length > 0 %}
+        <li>Matched ready:
           <ul>
-            {% for scene in task_data[1]["matched"] %}
+            {% for scene in task.matched_ready_scene %}
             <li>{{ scene }}</li>
+            {% empty %}
+            <li>None</li>
             {% endfor %}
           </ul>
-          {% else %}
-          <p>None</p>
-          {% endif %}
         </li>
-        <li>Unmatched:
-          {% if task_data[4]["unmatched"]|length > 0 %}
+        
+        <li>Matched all:
           <ul>
-            {% for scene, reason in task_data[4]["unmatched"].items() %}
-            <li>{{ scene }}: {{ reason }}</li>
+            {% for scene in task.matched_all_scene %}
+            <li>{{ scene }}</li>
+            {% empty %}
+            <li>None</li>
             {% endfor %}
           </ul>
-          {% else %}
-          <p>None</p>
-          {% endif %}
+        </li>
+
+        <li>Unmatched:
+          <ul>
+            {% for scene, info in task.unmatched_scene.items %}
+            <li>{{ scene }}: {{ info.1 }}</li>
+            {% empty %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
         </li>
       </ul>
     </div>

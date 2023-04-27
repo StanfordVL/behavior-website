@@ -23,7 +23,7 @@
         <thead>
           <tr>
             <th>Synset</th>
-            <th>Legal</th>
+            <th>State</th>
             <th>Requiring Tasks</th>
             <th>Matched Objects</th>
           </tr>
@@ -32,9 +32,9 @@
           {% for synset in synset_list %}
           <tr>
             <td>{{ synset.name }}</td>
-            <td>{{ synset.legal }}</td>
-            <td>{{ data[1] }}</td>
-            <td>{{ data[1] }}</td>
+            <td class="{{ 'bg-' + synset.state }}"></td>
+            <td class="{{ 'bg-' + synset.task_state }}"></td>
+            <td class="{{ 'bg-' + synset.object_state }}"></td>
           </tr>
           {% endfor %}
         </tbody>

@@ -1,5 +1,5 @@
 import numpy as np
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from django.db import models
 from data.utils import *
 
@@ -46,9 +46,17 @@ ROOM_TYPE_CHOICES = [
 ]
 
 
+
 class SceneManager(models.Manager):
-    def matching_task(self, task, ready: bool) -> Dict[str, bool]:
-        return {scene.name: task.matching_scene(scene=scene, ready=ready) for scene in self.all()}
+    def matching_task(self, task, ready: bool, matched: bool) -> Dict[str, Tuple[bool, str]]:
+        ret = {}
+        for scene in self.all():
+            result = task.matching_scene(scene=scene, ready=ready)
+            if result[0] == matched:
+                ret[scene.name] = result
+        return ret
+
+
 
 
 # Create your models here.    
@@ -60,6 +68,7 @@ class Scene(models.Model):
         return self.name 
     
 
+
 class Category(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     # the synset that the category belongs to
@@ -69,8 +78,9 @@ class Category(models.Model):
         return self.name
     
     def matching_synset(self, synset):
-        return self.synset.maching_synset(synset)
+        return self.synset.matching_synset(synset)
     
+
 
 class Object(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
@@ -87,6 +97,11 @@ class Object(models.Model):
     def matching_synset(self, synset):
         return self.category.matching_synset(synset)
     
+    @property
+    def state(self):
+        return STATE_MATCHED if self.ready else STATE_PLANNED
+    
+
 
 class Synset(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
@@ -109,13 +124,13 @@ class Synset(models.Model):
         for synset_c in synset_p.children.all():
             if synset_c == self:
                 return True
-            elif self.maching_synset(synset_c):
+            elif self.matching_synset(synset_c):
                 return True
         return False
     
     @property
     def state(self):
-        """state of the synset, one of STATE METADATA"""
+        """overall state of the synset, one of STATE METADATA"""
         if self.is_substance:
             return STATE_SUBSTANCE
         elif self.legal:
@@ -130,13 +145,39 @@ class Synset(models.Model):
     
     @property
     def matching_object(self) -> List[Object]:
-        return [obj for obj in Object.objects.all() if obj.matching_synset(self)]
+        matched_objs = []
+        for category in self.category_set.all():
+            matched_objs.extend(category.object_set.all())
+        for child in self.children.all():
+            matched_objs.extend(child.matching_object())
     
     @property
     def matching_ready_object(self) -> List[Object]:
         """whether the synset is mapped to at least one object"""
-        return [obj for obj in Object.objects.all() if obj.ready and obj.matching_synset(self)]
-
+        matched_ready_objs = []
+        for category in self.category_set.all():
+            matched_ready_objs.extend(category.object_set.filter(ready=True))
+        for child in self.children.all():
+            matched_ready_objs.extend(child.matching_ready_object())
+    
+    @property
+    def object_state(self) -> str:
+        """Get the matching state of objects, returns STATE METADATA"""
+        if not self.legal:
+            return STATE_ILLEGAL
+        else:
+            if len(self.matching_ready_object) > 0:
+                return STATE_MATCHED
+            elif len(self.matching_object) > 0:
+                return STATE_PLANNED
+            else:
+                return STATE_UNMATCHED
+    
+    @property
+    def task_state(self):
+        """Get whether the synset is required in any task, returns STATE METADATA"""
+        return STATE_MATCHED if self.task_set.count() > 0 else STATE_NONE
+    
     
 
 class Task(models.Model):
@@ -147,7 +188,7 @@ class Task(models.Model):
     def __str__(self):
         return self.name
     
-    def matching_scene(self, scene: Scene, ready: bool=True) -> bool:
+    def matching_scene(self, scene: Scene, ready: bool=True) -> Tuple[bool, str]:
         """checks whether a scene satisfies task requirements"""
         for room_requirement in self.room_requirement_set.all():
             room_matched = False
@@ -156,8 +197,8 @@ class Task(models.Model):
                     room_matched = True
                     break
             if not room_matched:
-                return False
-        return True
+                return False, f"Cannot find suitable {room_requirement.type}"
+        return True, ""
     
     @property
     def illegal_synsets(self):
@@ -185,22 +226,47 @@ class Task(models.Model):
         return [synset for synset in self.synsets.filter(legal=True) if len(synset.matching_object) == 0]
     
     @property
-    def metadata(self) -> List[str]:
-        synset_matching = METADATA_MATCHED if self.synsets.filter(legal=False).filter(is_substance=False).count() == 0 else METADATA_UNMATCHED
-        if np.any(list(Scene.matching_task(task=self, ready=True).values())):
-            scene_matching = METADATA_MATCHED
-        elif np.any(list(Scene.matching_task(task=self, ready=False).values())):
-            scene_matching = METADATA_PLANNED
+    def synset_state(self) -> str:
+        if self.illegal_synsets.count() == 0:
+            return STATE_UNMATCHED
+        elif len(self.not_ready_synsets) > 0:
+            return STATE_UNMATCHED
+        elif len(self.ready_synsets) == 0:
+            return STATE_PLANNED
         else:
-            scene_matching = METADATA_UNMATCHED
-        if np.all([len(Object.matching_synset(synset=synset, ready=True)) != 0 for synset in self.synsets.all()]):
-            object_matching = METADATA_MATCHED
-        elif np.all([len(Object.matching_synset(synset=synset, ready=False)) != 0 for synset in self.synsets.all()]):
-            object_matching = METADATA_PLANNED
-        else:
-            object_matching = METADATA_UNMATCHED
+            return STATE_MATCHED
+    
+    @property
+    def matched_ready_scene(self):
+        """scenes that are matched and ready"""
+        return Scene.matching_task(task=self, ready=True, matched=True)
+    
+    @property
+    def matched_all_scene(self):
+        """scenes that are matched"""
+        return Scene.matching_task(task=self, ready=False, matched=True)
+    
+    @property
+    def unmatched_scene(self):
+        """scenes that are unmatched"""
+        return Scene.matching_task(task=self, ready=False, matched=False)
 
-        return [synset_matching, scene_matching, object_matching]
+    @property
+    def scene_state(self) -> str:
+        if len(self.matched_ready_scene) > 0:
+            return STATE_MATCHED
+        elif len(self.matched_all_scene) > 0:
+            return STATE_PLANNED
+        else:
+            return STATE_UNMATCHED
+        
+    @property
+    def substance_required(self) -> str:
+        if self.substance_synsets.count() > 0:
+            return STATE_SUBSTANCE
+        else:
+            return STATE_NONE
+
 
 
 class RoomRequirement(models.Model):
@@ -211,6 +277,7 @@ class RoomRequirement(models.Model):
 
     def __str__(self):
         return f"{self.task.name}_{self.room_type}"        
+
 
 
 class RoomSynsetRequirement(models.Model):
@@ -224,6 +291,7 @@ class RoomSynsetRequirement(models.Model):
     def __str__(self):
         return f"{str(self.room_requirement)}_{self.synset.name}" 
     
+
 
 class Room(models.Model):
     name = models.CharField(max_length=64)
@@ -264,6 +332,7 @@ class Room(models.Model):
         M = nx.bipartite.maximum_matching(G, top_nodes=synset_node_to_synset.keys())
         # Now check that all required objects are matched
         return len(M) == len(synset_node_to_synset)
+
 
 
 class RoomObject(models.Model):
