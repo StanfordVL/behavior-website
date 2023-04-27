@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'data.apps.DataConfig'
+    'django.contrib.sites',
+    'data.apps.DataConfig',
+    'freeze'
 ]
 
 MIDDLEWARE = [
@@ -122,3 +124,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# freeze
+SITE_ID = 1
+FREEZE_BASE_URL = 'b1k-integration/'

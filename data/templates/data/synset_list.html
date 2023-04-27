@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>B1K synsets</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      h1 {
+        text-align: center;
+        padding: 5vh;
+      }
+      table {
+        border: 3px solid #dee2e6;
+      }
+      th, td {
+        border: 2px solid #dee2e6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>B1K synsets</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Synset</th>
+            <th>Legal</th>
+            <th>Requiring Tasks</th>
+            <th>Matched Objects</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for synset in synset_list %}
+          <tr>
+            <td>{{ synset.name }}</td>
+            <td>{{ synset.legal }}</td>
+            <td>{{ data[1] }}</td>
+            <td>{{ data[1] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

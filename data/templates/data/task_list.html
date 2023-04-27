@@ -51,28 +51,12 @@
           </tr>
         </thead>
         <tbody>
-          {% for task in tasks %}
-          <tr class="clickable-row" data-href="{{ prefix + url_for('tasks', task_name=task_name) }}">
-            <td>{{ task.name }}</a></td>
-            {% if status[0]|length == 0 %}
-            <td class="bg-success"></td>
-            {% else %}
-            <td class="bg-danger"></td>
-            {% endif %}
-            {% if status[1]["matched"]|length > 0 %}
-            <td class="bg-success"></td>
-            {% elif status[4]["matched"]|length > 0 %}
-            <td class="bg-warning"></td>
-            {% else %}
-            <td class="bg-danger"></td>
-            {% endif %}
-            {% if status[3]|length == 0 %}
-            <td class="bg-success"></td>
-            {% elif status[6]|length == 0 %}
-            <td class="bg-warning"></td>
-            {% else %}
-            <td class="bg-danger"></td>
-            {% endif %}
+          {% for task in task_list %}
+          <tr class="clickable-row" data-href="{{ url 'task detail' task_name }}">
+            <td>{{ name }}</a></td>
+            <td class="{{ 'bg-' + metadata[0] }}"></td>
+            <td class="{{ 'bg-' + metadata[1] }}"></td>
+            <td class="{{ 'bg-' + metadata[2] }}"></td>
           </tr>
           {% endfor %}
         </tbody>

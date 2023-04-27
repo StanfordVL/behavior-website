@@ -31,6 +31,20 @@ class Command(BaseCommand):
     
 
     # =============================== helper functions ===============================
+    def preparation(self):
+        """
+        put any preparation work (e.g. sanity check) here
+        """
+        # generate legal synsets
+        self.G = get_synset_graph()
+        self.legal_synsets = set(self.G.nodes)
+        # sanity check room types are up to date
+        room_types_from_model = set([room_type for _, room_type in ROOM_TYPE_CHOICES])
+        with open(f'{os.path.pardir}/ig_pipeline/metadata/allowed_room_types.csv', newline='') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            room_types_from_csv = set([row[0] for row in reader][1:])
+        assert room_types_from_model == room_types_from_csv, "room types are not up to date with allowed_room_types.csv"
+
     def create_scenes(self):
         """
         create scene objects (which stores the room config)
@@ -189,10 +203,11 @@ class Command(BaseCommand):
         """
         for synset_c in Synset.objects.all():
             for synset_p in Synset.objects.all():
-                if synset_c.legal and synset_p.legal:
-                    if counts_for(G, synset_c, synset_p):
-                        synset_p.children.add(synset_c)
-                        synset_p.save()
+                if G.has_edge(synset_p, synset_c):
+                    synset_p.children.add(synset_c)
+                    synset_p.save()
+                    synset_c.parents.add(synset_p)
+                    synset_c.save()
             # add all its hypernyms to the synset objects
             self.add_hypernyms_to_synset(G, synset_c)
 
@@ -210,5 +225,7 @@ class Command(BaseCommand):
             # add parent-child relationship
             synset_hypernym.children.add(synset)
             synset_hypernym.save()
+            synset.parents.add(synset_hypernym)
+            synset.save()
             if synset_hypernym_name != 'entity.n.01': # root hypernym
                 self.add_hypernyms_to_synset(synset_hypernym)

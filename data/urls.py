@@ -1,10 +1,10 @@
 from django.urls import path
-
-from . import views
+from data.views import *
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("tasks/", views.tasks_list, name="tasks list"),
-    path("tasks/<str:task_name>", views.task, name="task detail"),
-    path("synsets/", views.synsets, name="synsets"),
+    path("tasks/", TaskListView.as_view(), name="tasks list"),
+    path("tasks/<str:task_name>", TaskDetailView.as_view(), name="task detail"),
+    path("synsets/", SynsetListView.as_view(), name="synsets list"),
+    path("synsets/<str:synset_name>", SynsetDetailView.as_view(), name="synset detail"),
 ]
