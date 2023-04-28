@@ -1,40 +1,62 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>B1K synsets</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>B1K Synsets</title>
     <style>
       h1 {
         text-align: center;
         padding: 5vh;
       }
       table {
-        border: 3px solid #dee2e6;
+        border: 0.3vh solid #dee2e6;
       }
-      th, td {
-        border: 2px solid #dee2e6;
+      td, th {
+        border: 0.3vh solid #dee2e6;
+      }
+      .clickable-row:hover {
+        cursor: pointer;
+        border-left: 0.5vh solid darkorange;
+        color: darkorange;
       }
     </style>
+    <!-- Clickable row -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+          row.addEventListener("click", () => {
+            window.location.href = row.dataset.href;
+          });
+        });
+      });
+      </script>
   </head>
   <body>
     <div class="container">
       <h1>B1K synsets</h1>
-      <table class="table">
+      <table class="table table-striped">
         <thead>
           <tr>
-            <th>Synset</th>
-            <th>State</th>
+            <th>Name</th>
+            <th>Synset State</th>
             <th>Requiring Tasks</th>
             <th>Matched Objects</th>
           </tr>
         </thead>
         <tbody>
           {% for synset in synset_list %}
-          <tr>
+          <tr class="clickable-row" data-href="{% url 'synset detail' synset.name %}">
             <td>{{ synset.name }}</td>
-            <td class="{{ 'bg-' + synset.state }}"></td>
-            <td class="{{ 'bg-' + synset.task_state }}"></td>
-            <td class="{{ 'bg-' + synset.object_state }}"></td>
+            <td class="{{ 'bg-'|add:synset.state }}"></td>
+            <td class="{{ 'bg-'|add:synset.task_state }}"></td>
+            <td class="{{ 'bg-'|add:synset.object_state }}"></td>
           </tr>
           {% endfor %}
         </tbody>

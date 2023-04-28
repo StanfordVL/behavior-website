@@ -72,13 +72,14 @@ class Scene(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     # the synset that the category belongs to
-    synset = models.ForeignKey("Synset", on_delete=models.CASCADE)
+    synset = models.ForeignKey("Synset", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.name
     
-    def matching_synset(self, synset):
-        return self.synset.matching_synset(synset)
+    def matching_synset(self, synset) -> bool:
+        return self.synset.matching_synset(synset) if self.synset else False
+        
     
 
 
@@ -86,20 +87,26 @@ class Object(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     # whether the object is in the current dataset
     ready = models.BooleanField(default=False)
+    # whether the object is planned 
+    planned = models.BooleanField(default=True)
     # the category that the object belongs to
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     # the photo of the object
-    photo = models.ImageField("Object photo", blank=True)
+    photo = models.ImageField("Object photo", blank=True, null=True)
 
     def __str__(self):
         return self.name
     
-    def matching_synset(self, synset):
+    def matching_synset(self, synset) -> bool:
         return self.category.matching_synset(synset)
     
     @property
     def state(self):
-        return STATE_MATCHED if self.ready else STATE_PLANNED
+        if self.ready:
+            return STATE_MATCHED 
+        elif self.planned:
+            return STATE_PLANNED
+        return STATE_UNMATCHED
     
 
 
@@ -112,22 +119,30 @@ class Synset(models.Model):
     # whether the synset represents a substance
     is_substance = models.BooleanField(default=False)
     # all it's children in the synset graph
-    children = models.ManyToManyField("self", blank=True, symmetrical=False)
+    children = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="children_set")
     # all it's parent in the synset graph
-    parents = models.ManyToManyField("self", blank=True, symmetrical=False)
+    parents = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="parents_set")
 
     def __str__(self):
         return self.name
     
     def matching_synset(self, synset_p) -> bool:
         """check whether this could match to synset_p (i.e. whether self is a child of synset_p)"""
-        for synset_c in synset_p.children.all():
+        for synset_c in synset_p.children_set.all():
             if synset_c == self:
                 return True
             elif self.matching_synset(synset_c):
                 return True
         return False
     
+    def get_all_parents(self):
+        """get all parents of the synset"""
+        parents = []
+        for parent in self.parents_set.all():
+            parents.append(parent)
+            parents.extend(parent.get_parents())
+        return parents
+
     @property
     def state(self):
         """overall state of the synset, one of STATE METADATA"""
@@ -148,8 +163,9 @@ class Synset(models.Model):
         matched_objs = []
         for category in self.category_set.all():
             matched_objs.extend(category.object_set.all())
-        for child in self.children.all():
-            matched_objs.extend(child.matching_object())
+        for child in self.children_set.all():
+            matched_objs.extend(child.matching_object)
+        return matched_objs
     
     @property
     def matching_ready_object(self) -> List[Object]:
@@ -157,8 +173,9 @@ class Synset(models.Model):
         matched_ready_objs = []
         for category in self.category_set.all():
             matched_ready_objs.extend(category.object_set.filter(ready=True))
-        for child in self.children.all():
-            matched_ready_objs.extend(child.matching_ready_object())
+        for child in self.children_set.all():
+            matched_ready_objs.extend(child.matching_ready_object)
+        return matched_ready_objs
     
     @property
     def object_state(self) -> str:
@@ -190,7 +207,7 @@ class Task(models.Model):
     
     def matching_scene(self, scene: Scene, ready: bool=True) -> Tuple[bool, str]:
         """checks whether a scene satisfies task requirements"""
-        for room_requirement in self.room_requirement_set.all():
+        for room_requirement in self.roomrequirement_set.all():
             room_matched = False
             for room in scene.room_set.all():
                 if room.matching_room_requirement(room_requirement, ready):
@@ -239,17 +256,17 @@ class Task(models.Model):
     @property
     def matched_ready_scene(self):
         """scenes that are matched and ready"""
-        return Scene.matching_task(task=self, ready=True, matched=True)
+        return Scene.objects.matching_task(task=self, ready=True, matched=True)
     
     @property
     def matched_all_scene(self):
         """scenes that are matched"""
-        return Scene.matching_task(task=self, ready=False, matched=True)
+        return Scene.objects.matching_task(task=self, ready=False, matched=True)
     
     @property
     def unmatched_scene(self):
         """scenes that are unmatched"""
-        return Scene.matching_task(task=self, ready=False, matched=False)
+        return Scene.objects.matching_task(task=self, ready=False, matched=False)
 
     @property
     def scene_state(self) -> str:
@@ -313,20 +330,20 @@ class Room(models.Model):
         G = nx.Graph()
         # Add a node for each required object
         synset_node_to_synset = {}
-        for room_synset_requirement in room_requirement.room_synset_requirement_set.all():
+        for room_synset_requirement in room_requirement.roomsynsetrequirement_set.all():
             synset_name = room_synset_requirement.synset.name
             for i in range(room_synset_requirement.count):
                 node_name = f"{synset_name}_{i}"
                 G.add_node(node_name)
                 synset_node_to_synset[node_name] = room_synset_requirement.synset
         # Add a node for each object in the room
-        for object in self.room_object_set.all():
-            for i in range(object.count):
-                object_name = f"{object.name}_{i}"
+        for roomobject in self.roomobject_set.all():
+            for i in range(roomobject.count):
+                object_name = f"{roomobject.object.name}_{i}"
                 G.add_node(object_name)
                 # Add edges to all matching synsets
                 for synset_node, synset in synset_node_to_synset.items():
-                    if object.matching_synset(synset):
+                    if roomobject.object.matching_synset(synset):
                         G.add_edge(object_name, synset_node)
         # Now do a bipartite matching
         M = nx.bipartite.maximum_matching(G, top_nodes=synset_node_to_synset.keys())

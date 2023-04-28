@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>B1K task list</title>
+    <title>B1K Tasks</title>
     <style>
       h1 {
         text-align: center;
@@ -40,26 +40,26 @@
   </head>
   <body>
     <div class="container">
-      <h1>B1K task list</h1>
+      <h1>B1K tasks</h1>
       <table class="table table-striped">
         <thead>
           <tr>
             <th>Task Name</th>
             <th>Synsets</th>
-            <th>Scenes</th>
             <th>Substances</th>
           </tr>
         </thead>
         <tbody>
           {% for task in task_list %}
-          <tr class="clickable-row" data-href="{{ url 'task detail' task_name }}">
+          <tr class="clickable-row" data-href="{% url 'task detail' task.name %}">
             <td>{{ task.name }}</td>
-            <td class="{{ 'bg-' + task.synset_state }}"></td>
-            <td class="{{ 'bg-' + task.scene_state }}"></td>
-            <td class="{{ 'bg-' + task.substance_required }}"></td>
+            <td class="{{ 'bg-'|add:task.synset_state }}"></td>
+            <td class="{{ 'bg-'|add:task.substance_required }}"></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
+  </body>
+</html>
 

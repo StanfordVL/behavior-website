@@ -1,8 +1,10 @@
-import os
 import csv
+import os
 import networkx as nx
-
 from nltk.corpus import wordnet as wn
+
+from data.models import *
+
 
 # STATE METADATA
 STATE_MATCHED = "success"
@@ -11,6 +13,11 @@ STATE_UNMATCHED = "danger"
 STATE_SUBSTANCE = "info"
 STATE_ILLEGAL = "secondary"
 STATE_NONE = "light"
+
+
+# predicates that indicates the presence of a substance in bddl
+SUBSTANCE_PREDICATE = {"filled", "insource", "empty", "saturated", "contains", "covered"}
+
 
 def get_synset_graph():
     """
@@ -41,7 +48,15 @@ def canonicalize(s):
         return wn.synset(s).name()
     except:
         return s
-    
+
+
+def wn_synset_exists(synset):
+  try:
+    wn.synset(synset)
+    return True
+  except:
+    return False
+
 
 def counts_for(G, child, parent):  
     """Checks if child is a child of parent in the synset graph G"""

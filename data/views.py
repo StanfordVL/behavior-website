@@ -11,7 +11,9 @@ class TaskListView(ListView):
 class TaskDetailView(DetailView):
     model = Task
     context_object_name = "task"
-        
+    slug_field = 'name'
+    slug_url_kwarg = 'task_name'
+
     def get_queryset(self):
         self.task_name = get_object_or_404(Task, name=self.kwargs["task_name"])
         return Task.objects.filter(name=self.task_name)
@@ -25,15 +27,20 @@ class SynsetListView(ListView):
 class SynsetDetailView(DetailView):
     model = Synset
     context_object_name = "synset"
+    slug_field = 'name'
+    slug_url_kwarg = 'synset_name'
 
     def get_queryset(self):
         self.synset_name = get_object_or_404(Synset, name=self.kwargs["synset_name"])
         return Synset.objects.filter(name=self.synset_name)
+        
 
 
 class ObjectDetailView(DetailView):
     model = Object
     context_object_name = "object"
+    slug_field = 'name'
+    slug_url_kwarg = 'object_name'
 
     def get_queryset(self):
         self.object_name = get_object_or_404(Object, name=self.kwargs["object_name"])
