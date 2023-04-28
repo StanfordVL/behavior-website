@@ -19,7 +19,7 @@
       <ul>
         <li>Matched ready:
           <ul>
-            {% for scene in task.matched_ready_scene %}
+            {% for scene in task.matched_ready_scene.matched.ready %}
             <li>{{ scene }}</li>
             {% empty %}
             <li>None</li>
@@ -29,7 +29,7 @@
         
         <li>Matched all:
           <ul>
-            {% for scene in task.matched_all_scene %}
+            {% for scene in task.matching_scenes.matched.all %}
             <li>{{ scene }}</li>
             {% empty %}
             <li>None</li>
@@ -39,7 +39,7 @@
 
         <li>Unmatched:
           <ul>
-            {% for scene, info in task.unmatched_scene.items %}
+            {% for scene, info in task.matching_scene.unmatched %}
             <li>{{ scene }}: {{ info.1 }}</li>
             {% empty %}
             <li>None</li>

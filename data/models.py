@@ -48,12 +48,13 @@ ROOM_TYPE_CHOICES = [
 
 
 class SceneManager(models.Manager):
-    def matching_task(self, task, ready: bool, matched: bool) -> Dict[str, Tuple[bool, str]]:
-        ret = {}
+    def matching_task(self, task) -> Dict[str, Tuple[bool, str]]:
+        ret = {readiness: {"matched": {}, "unmatched": {}} for readiness in ["ready", "not ready"]}
         for scene in self.all():
-            result = task.matching_scene(scene=scene, ready=ready)
-            if result[0] == matched:
-                ret[scene.name] = result
+            for ready, ready_bool in zip(["ready", "not ready"], [True, False]):
+                result = task.matching_scene(scene=scene, ready=ready_bool)
+                if result[0] == matched:
+                    ret[ready][scene.name] = result
         return ret
 
 
