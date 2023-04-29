@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'data.apps.DataConfig',
-    'freeze'
+    'freeze',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +128,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # freeze
 SITE_ID = 1
 FREEZE_BASE_URL = 'b1k-integration/'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "my_cache_table",
+        "OPTIONS": {"MAX_ENTRIES": 10000000},
+    }
+}

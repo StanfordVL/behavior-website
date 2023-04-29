@@ -17,9 +17,9 @@
       </ul>
       <h2>Scenes</h2>
       <ul>
-        <li>Matched ready:
+        <li>Matched:
           <ul>
-            {% for scene in task.matched_ready_scene.matched.ready %}
+            {% for scene in scene_matching_dict.matched %}
             <li>{{ scene }}</li>
             {% empty %}
             <li>None</li>
@@ -27,10 +27,10 @@
           </ul>
         </li>
         
-        <li>Matched all:
+        <li>Planned:
           <ul>
-            {% for scene in task.matching_scenes.matched.all %}
-            <li>{{ scene }}</li>
+            {% for scene, info in scene_matching_dict.planned.items %}
+            <li>{{ scene }}: {{ info.1 }}</li>
             {% empty %}
             <li>None</li>
             {% endfor %}
@@ -39,7 +39,7 @@
 
         <li>Unmatched:
           <ul>
-            {% for scene, info in task.matching_scene.unmatched %}
+            {% for scene, info in scene_matching_dict.unmatched.items %}
             <li>{{ scene }}: {{ info.1 }}</li>
             {% empty %}
             <li>None</li>

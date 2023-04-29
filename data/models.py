@@ -1,4 +1,5 @@
-import numpy as np
+import networkx as nx
+from django.utils.functional import cached_property
 from typing import List, Dict, Tuple
 from django.db import models
 from data.utils import *
@@ -46,23 +47,8 @@ ROOM_TYPE_CHOICES = [
 ]
 
 
-
-class SceneManager(models.Manager):
-    def matching_task(self, task) -> Dict[str, Tuple[bool, str]]:
-        ret = {readiness: {"matched": {}, "unmatched": {}} for readiness in ["ready", "not ready"]}
-        for scene in self.all():
-            for ready, ready_bool in zip(["ready", "not ready"], [True, False]):
-                result = task.matching_scene(scene=scene, ready=ready_bool)
-                if result[0] == matched:
-                    ret[ready][scene.name] = result
-        return ret
-
-
-
-
 # Create your models here.    
 class Scene(models.Model):
-    objects = SceneManager()
     name = models.CharField(max_length=64, primary_key=True)
 
     def __str__(self):
@@ -79,7 +65,7 @@ class Category(models.Model):
         return self.name
     
     def matching_synset(self, synset) -> bool:
-        return self.synset.matching_synset(synset) if self.synset else False
+        return synset in self.synset.descendants.all() if self.synset else False
         
     
 
@@ -101,7 +87,11 @@ class Object(models.Model):
     def matching_synset(self, synset) -> bool:
         return self.category.matching_synset(synset)
     
-    @property
+    @cached_property
+    def synset_set(self):
+        return self.category.synset.ancestors.all()
+    
+    @cached_property
     def state(self):
         if self.ready:
             return STATE_MATCHED 
@@ -119,32 +109,15 @@ class Synset(models.Model):
     legal = models.BooleanField(default=False)
     # whether the synset represents a substance
     is_substance = models.BooleanField(default=False)
-    # all it's children in the synset graph
-    children = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="children_set")
-    # all it's parent in the synset graph
-    parents = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="parents_set")
+    # all it's parents in the synset graph (NOTE: this does not include self)
+    parents = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="children")
+    # all ancestors (NOTE: this include self)
+    ancestors = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="descendants")
 
     def __str__(self):
         return self.name
-    
-    def matching_synset(self, synset_p) -> bool:
-        """check whether this could match to synset_p (i.e. whether self is a child of synset_p)"""
-        for synset_c in synset_p.children_set.all():
-            if synset_c == self:
-                return True
-            elif self.matching_synset(synset_c):
-                return True
-        return False
-    
-    def get_all_parents(self):
-        """get all parents of the synset"""
-        parents = []
-        for parent in self.parents_set.all():
-            parents.append(parent)
-            parents.extend(parent.get_parents())
-        return parents
 
-    @property
+    @cached_property
     def state(self):
         """overall state of the synset, one of STATE METADATA"""
         if self.is_substance:
@@ -159,26 +132,26 @@ class Synset(models.Model):
         else:
             return STATE_ILLEGAL
     
-    @property
+    @cached_property
     def matching_object(self) -> List[Object]:
         matched_objs = []
         for category in self.category_set.all():
             matched_objs.extend(category.object_set.all())
-        for child in self.children_set.all():
+        for child in self.children.all():
             matched_objs.extend(child.matching_object)
         return matched_objs
     
-    @property
+    @cached_property
     def matching_ready_object(self) -> List[Object]:
         """whether the synset is mapped to at least one object"""
         matched_ready_objs = []
         for category in self.category_set.all():
             matched_ready_objs.extend(category.object_set.filter(ready=True))
-        for child in self.children_set.all():
+        for child in self.children.all():
             matched_ready_objs.extend(child.matching_ready_object)
         return matched_ready_objs
     
-    @property
+    @cached_property
     def object_state(self) -> str:
         """Get the matching state of objects, returns STATE METADATA"""
         if not self.legal:
@@ -191,7 +164,7 @@ class Synset(models.Model):
             else:
                 return STATE_UNMATCHED
     
-    @property
+    @cached_property
     def task_state(self):
         """Get whether the synset is required in any task, returns STATE METADATA"""
         return STATE_MATCHED if self.task_set.count() > 0 else STATE_NONE
@@ -214,36 +187,36 @@ class Task(models.Model):
                 if room.matching_room_requirement(room_requirement, ready):
                     room_matched = True
                     break
-            if not room_matched:
+            if not room_matched:  # TODO: Return ALL the rooms we can't match
                 return False, f"Cannot find suitable {room_requirement.type}"
         return True, ""
     
-    @property
+    @cached_property
     def illegal_synsets(self):
         """synsets that are not legal (in the synset graph)"""
         return self.synsets.filter(legal=False).filter(is_substance=False)
     
-    @property
+    @cached_property
     def substance_synsets(self):
         """synsets that represent a substance"""
         return self.synsets.filter(is_substance=True)
     
-    @property
+    @cached_property
     def ready_synsets(self):
         """legal synsets that are mapped to at least one ready object"""
         return [synset for synset in self.synsets.filter(legal=True) if synset.matching_ready_object]
     
-    @property
+    @cached_property
     def planned_synsets(self):
         """legal synsets that are mapped to at least one planned object"""
         return [synset for synset in self.synsets.filter(legal=True) if len(synset.matching_object) > 0]
     
-    @property
+    @cached_property
     def not_ready_synsets(self):
         """legal synsets that are mapped to no object"""
         return [synset for synset in self.synsets.filter(legal=True) if len(synset.matching_object) == 0]
     
-    @property
+    @cached_property
     def synset_state(self) -> str:
         if self.illegal_synsets.count() == 0:
             return STATE_UNMATCHED
@@ -254,31 +227,34 @@ class Task(models.Model):
         else:
             return STATE_MATCHED
     
-    @property
-    def matched_ready_scene(self):
-        """scenes that are matched and ready"""
-        return Scene.objects.matching_task(task=self, ready=True, matched=True)
-    
-    @property
-    def matched_all_scene(self):
-        """scenes that are matched"""
-        return Scene.objects.matching_task(task=self, ready=False, matched=True)
-    
-    @property
-    def unmatched_scene(self):
-        """scenes that are unmatched"""
-        return Scene.objects.matching_task(task=self, ready=False, matched=False)
+    @cached_property
+    def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
+        ret = {status: {} for status in ["matched", "planned", "unmatched"]}
+        for scene in Scene.objects.all():
+            # first check whether it can be matched to the task in the future
+            result = self.matching_scene(scene=scene, ready=False)
+            # if it is matched, check whether it can be matched to the task it its current state
+            if result[0]:
+                result_cur = self.matching_scene(scene=scene, ready=True)
+                if result_cur[0]:
+                    ret["matched"][scene.name] = result_cur
+                else:
+                    ret["planned"][scene.name] = result_cur # store why it can't be matched currently
+            else:
+                ret["unmatched"][scene.name] = result
+        return ret
 
-    @property
+    @cached_property
     def scene_state(self) -> str:
-        if len(self.matched_ready_scene) > 0:
+        scene_matching_dict = self.scene_matching_dict
+        if len(scene_matching_dict["matched"]) > 0:
             return STATE_MATCHED
-        elif len(self.matched_all_scene) > 0:
+        elif len(scene_matching_dict["planned"]) > 0:
             return STATE_PLANNED
         else:
             return STATE_UNMATCHED
         
-    @property
+    @cached_property
     def substance_required(self) -> str:
         if self.substance_synsets.count() > 0:
             return STATE_SUBSTANCE

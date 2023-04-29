@@ -213,34 +213,31 @@ class Command(BaseCommand):
 
     def generate_synset_hierarchy(self, G):
         """
-        generate the parent-child relationship for synsets
+        generate the parent/child and ancestor/descendent relationship for synsets
         """
-        for synset_c in Synset.objects.all():
-            for synset_p in Synset.objects.all():
-                if G.has_edge(synset_p.name, synset_c.name):
-                    synset_p.children.add(synset_c)
-                    synset_p.save()
-                    synset_c.parents.add(synset_p)
-                    synset_c.save()
-            # add all its hypernyms to the synset objects
-            self.add_hypernyms_to_synset(G, synset_c)
+        def _add_hypernyms_to_synset(G, synset: Synset):
+            """Add all the hypernyms to G"""
+            if G.has_node(synset.name):
+                for synset_hypernym_name in G.predecessors(synset.name):
+                    synset_hypernym, _ = Synset.objects.get_or_create(
+                        name=synset_hypernym_name, 
+                        defaults={
+                            "definition": wn.synset(synset_hypernym_name).definition() if wn_synset_exists(synset_hypernym_name) else "",
+                            "is_substance": False,  # we put False here because if it is a substance, it should have been added already
+                            "legal": True
+                        }
+                    )
+                    _add_hypernyms_to_synset(G, synset_hypernym)
 
-    
-    def add_hypernyms_to_synset(self, G, synset):
-        if G.has_node(synset.name):
-            for synset_hypernym_name in G.predecessors(synset.name):
-                synset_hypernym, _ = Synset.objects.get_or_create(
-                    name=synset_hypernym_name, 
-                    defaults={
-                        "definition": wn.synset(synset_hypernym_name).definition() if wn_synset_exists(synset_hypernym_name) else "",
-                        "is_substance": False,  # we put False here because if it is a substance, it should have been added already
-                        "legal": True
-                    }
-                )
-                # add parent-child relationship
-                synset_hypernym.children.add(synset)
-                synset_hypernym.save()
-                synset.parents.add(synset_hypernym)
-                synset.save()
-                if synset_hypernym_name != 'entity.n.01': # root hypernym
-                    self.add_hypernyms_to_synset(G, synset_hypernym)
+        for synset in Synset.objects.all():
+            _add_hypernyms_to_synset(G, synset)
+
+        for synset_c in Synset.objects.all():
+            if G.has_node(synset_c.name):
+                for synset_p in Synset.objects.all():
+                    if G.has_node(synset_p.name):
+                        if nx.has_path(G, synset_p.name, synset_c.name):
+                            synset_c.ancestors.add(synset_p)
+                            if G.has_edge(synset_p.name, synset_c.name):
+                                synset_c.parents.add(synset_p)
+                            synset_c.save()

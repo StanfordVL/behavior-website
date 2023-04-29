@@ -46,6 +46,7 @@
           <tr>
             <th>Task Name</th>
             <th>Synsets</th>
+            <th>Scenes</th>
             <th>Substances</th>
           </tr>
         </thead>
@@ -54,6 +55,7 @@
           <tr class="clickable-row" data-href="{% url 'task detail' task.name %}">
             <td>{{ task.name }}</td>
             <td class="{{ 'bg-'|add:task.synset_state }}"></td>
+            <td class="{{ 'bg-'|add:task.scene_state }}"></td>
             <td class="{{ 'bg-'|add:task.substance_required }}"></td>
           </tr>
           {% endfor %}
