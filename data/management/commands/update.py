@@ -40,6 +40,22 @@ class Command(BaseCommand):
             room_types_from_csv = set([row[0] for row in reader][1:])
         assert room_types_from_model == room_types_from_csv, "room types are not up to date with allowed_room_types.csv"
 
+        # get object rename file
+        gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+        worksheet = gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Renames")
+        with open(f"{os.path.pardir}/object_renames.csv", 'w') as f:
+            writer = csv.writer(f)
+            writer.writerows(worksheet.get_all_values())
+        self.object_rename_mapping = {}
+        with open(f"{os.path.pardir}/object_renames.csv", newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                new_cat = row["New Category"].strip()
+                obj_name = row["Object name"].strip()
+                # sanity checks
+                assert len(obj_name.split('-')) == 2, f"{obj_name} should only have one \'-\'"
+                self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_name.split('-')[1]}"
+
 
     def create_synsets(self, legal_synsets):
         """
@@ -78,11 +94,17 @@ class Command(BaseCommand):
         """
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
             for object_name in json.load(f)["providers"].keys():
+                if object_name in self.object_rename_mapping:
+                    print(f"[object_inventory_future] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
+                    object_name = self.object_rename_mapping[object_name]
                 category_name = object_name.split("-")[0]
                 category, _ = Category.objects.get_or_create(name=category_name)
                 object = Object.objects.create(name=object_name, ready=False, category=category)
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             for object_name in json.load(f)["providers"].keys():
+                if object_name in self.object_rename_mapping:
+                    print(f"[object_inventory] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
+                    object_name = self.object_rename_mapping[object_name]
                 category_name = object_name.split("-")[0]
                 category, _ = Category.objects.get_or_create(name=category_name)
                 # safeguard to ensure currently available objects are also in future planned dataset
@@ -115,6 +137,9 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (not ready) already exists!")
                     for object_name, count in planned_scene_dict[scene_name][room_name].items():
+                        if object_name in self.object_rename_mapping:
+                            print(f"[combined_room_object_list_future] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
+                            object_name = self.object_rename_mapping[object_name]
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "ready": False,
                             "planned": False, 
@@ -137,6 +162,9 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
                     for object_name, count in current_scene_dict[scene_name][room_name].items():
+                        if object_name in self.object_rename_mapping:
+                            print(f"[combined_room_object_list] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
+                            object_name = self.object_rename_mapping[object_name]
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "ready": False,
                             "planned": False,
