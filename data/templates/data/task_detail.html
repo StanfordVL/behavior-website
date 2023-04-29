@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ task.name }} Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{ task.name }} Details</h1>
+      <h2>Synsets</h2>
+      <ul>
+        {% for synset in task.synsets.all %}
+        <a href="{% url 'synset detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}"> {{ synset.name }}</a>
+        {% empty %}
+        <li>None</li>
+        {% endfor %}
+      </ul>
+      <h2>Scenes</h2>
+      <ul>
+        <li>Matched:
+          <ul>
+            {% for scene in scene_matching_dict.matched %}
+            <li>{{ scene }}</li>
+            {% empty %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+        </li>
+        
+        <li>Planned:
+          <ul>
+            {% for scene, info in scene_matching_dict.planned.items %}
+            <li>{{ scene }}: {{ info.1 }}</li>
+            {% empty %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+        </li>
+
+        <li>Unmatched:
+          <ul>
+            {% for scene, info in scene_matching_dict.unmatched.items %}
+            <li>{{ scene }}: {{ info.1 }}</li>
+            {% empty %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

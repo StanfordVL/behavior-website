@@ -1,4 +1,5 @@
-frozen-flask
+django
+django-freeze
 networkx
 bddl==3.0.0b1
 nltk
