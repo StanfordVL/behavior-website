@@ -22,7 +22,7 @@ class Command(BaseCommand):
         self.create_objects()
         self.create_scenes()
         self.create_tasks(self.legal_synsets)
-        self.generate_synset_hierarchy(self.G)
+        self.post_complete_operation()
     
 
     # =============================== helper functions ===============================
@@ -55,6 +55,14 @@ class Command(BaseCommand):
                 # sanity checks
                 assert len(obj_name.split('-')) == 2, f"{obj_name} should only have one \'-\'"
                 self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_name.split('-')[1]}"
+
+
+    def post_complete_operation(self):
+        """
+        put any post completion work (e.g. update stuff) here
+        """
+        self.generate_synset_hierarchy(self.G)
+        self.generate_synset_sate()
 
 
     def create_synsets(self, legal_synsets):
@@ -269,3 +277,19 @@ class Command(BaseCommand):
                             if G.has_edge(synset_p.name, synset_c.name):
                                 synset_c.parents.add(synset_p)
                             synset_c.save()
+
+
+    def generate_synset_sate(self):
+        for synset in Synset.objects.all():
+            if synset.is_substance:
+                synset.state = STATE_SUBSTANCE
+            elif synset.legal:
+                if len(synset.matching_ready_object) > 0:
+                    synset.state = STATE_MATCHED
+                elif len(synset.matching_object) > 0:
+                    synset.state = STATE_PLANNED
+                else:
+                    synset.state = STATE_UNMATCHED
+            else:
+                synset.state = STATE_ILLEGAL
+            synset.save()

@@ -1,6 +1,6 @@
 import networkx as nx
 from django.utils.functional import cached_property
-from typing import List, Dict, Tuple
+from typing import List, Dict, Set
 from django.db import models
 from data.utils import *
 
@@ -88,10 +88,6 @@ class Object(models.Model):
         return self.category.matching_synset(synset)
     
     @cached_property
-    def synset_set(self):
-        return self.category.synset.ancestors.all()
-    
-    @cached_property
     def state(self):
         if self.ready:
             return STATE_MATCHED 
@@ -113,42 +109,27 @@ class Synset(models.Model):
     parents = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="children")
     # all ancestors (NOTE: this include self)
     ancestors = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="descendants")
+    # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
+    state = models.CharField(max_length=64, default=STATE_NONE)
 
     def __str__(self):
         return self.name
-
-    @cached_property
-    def state(self):
-        """overall state of the synset, one of STATE METADATA"""
-        if self.is_substance:
-            return STATE_SUBSTANCE
-        elif self.legal:
-            if len(self.matching_ready_object) > 0:
-                return STATE_MATCHED
-            elif len(self.matching_object) > 0:
-                return STATE_PLANNED
-            else:
-                return STATE_UNMATCHED
-        else:
-            return STATE_ILLEGAL
     
     @cached_property
-    def matching_object(self) -> List[Object]:
-        matched_objs = []
-        for category in self.category_set.all():
-            matched_objs.extend(category.object_set.all())
-        for child in self.children.all():
-            matched_objs.extend(child.matching_object)
+    def matching_object(self) -> Set[Object]:
+        matched_objs = set()
+        for synset in self.descendants.all():
+            for category in synset.category_set.all():
+                matched_objs.update(category.object_set.all())
         return matched_objs
     
     @cached_property
-    def matching_ready_object(self) -> List[Object]:
+    def matching_ready_object(self) -> Set[Object]:
         """whether the synset is mapped to at least one object"""
-        matched_ready_objs = []
-        for category in self.category_set.all():
-            matched_ready_objs.extend(category.object_set.filter(ready=True))
-        for child in self.children.all():
-            matched_ready_objs.extend(child.matching_ready_object)
+        matched_ready_objs = set()
+        for synset in self.descendants.all():
+            for category in synset.category_set.all():
+                matched_ready_objs.update(category.object_set.filter(ready=True))
         return matched_ready_objs
     
     @cached_property
@@ -179,17 +160,18 @@ class Task(models.Model):
     def __str__(self):
         return self.name
     
-    def matching_scene(self, scene: Scene, ready: bool=True) -> Tuple[bool, str]:
+    def matching_scene(self, scene: Scene, ready: bool=True) -> str:
         """checks whether a scene satisfies task requirements"""
+        ret = ""
         for room_requirement in self.roomrequirement_set.all():
             room_matched = False
             for room in scene.room_set.all():
                 if room.matching_room_requirement(room_requirement, ready):
                     room_matched = True
                     break
-            if not room_matched:  # TODO: Return ALL the rooms we can't match
-                return False, f"Cannot find suitable {room_requirement.type}"
-        return True, ""
+            if not room_matched:
+                ret += f"Cannot find suitable {room_requirement.type}; "
+        return ret
     
     @cached_property
     def illegal_synsets(self):
@@ -234,9 +216,9 @@ class Task(models.Model):
             # first check whether it can be matched to the task in the future
             result = self.matching_scene(scene=scene, ready=False)
             # if it is matched, check whether it can be matched to the task it its current state
-            if result[0]:
+            if len(result) == 0:
                 result_cur = self.matching_scene(scene=scene, ready=True)
-                if result_cur[0]:
+                if len(result_cur) == 0:
                     ret["matched"][scene.name] = result_cur
                 else:
                     ret["planned"][scene.name] = result_cur # store why it can't be matched currently

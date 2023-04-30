@@ -8,7 +8,7 @@ class TaskListView(ListView):
     context_object_name = "task_list"
     
     def get_queryset(self):
-        return Task.objects.order_by("name")
+        return Task.objects.order_by("name")[:5]
 
 
 class TaskDetailView(DetailView):
@@ -32,7 +32,10 @@ class TaskDetailView(DetailView):
 class SynsetListView(ListView):
     model = Synset
     context_object_name = "synset_list"
-
+    
+    def get_queryset(self):
+        return Synset.objects.order_by("name")
+    
 
 class SynsetDetailView(DetailView):
     model = Synset

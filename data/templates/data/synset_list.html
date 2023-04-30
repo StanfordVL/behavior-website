@@ -47,7 +47,6 @@
             <th>Name</th>
             <th>Synset State</th>
             <th>Requiring Tasks</th>
-            <th>Matched Objects</th>
           </tr>
         </thead>
         <tbody>
@@ -56,7 +55,6 @@
             <td>{{ synset.name }}</td>
             <td class="{{ 'bg-'|add:synset.state }}"></td>
             <td class="{{ 'bg-'|add:synset.task_state }}"></td>
-            <td class="{{ 'bg-'|add:synset.object_state }}"></td>
           </tr>
           {% endfor %}
         </tbody>
