@@ -49,13 +49,18 @@ ROOM_TYPE_CHOICES = [
 ]
 
 
+class SceneManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("room_set__roomobject_set__object__category__synset")
+
+    
 class Scene(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
+    objects_with_data = SceneManager()
 
     def __str__(self):
         return self.name 
     
-
 
 class Category(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
@@ -200,11 +205,11 @@ class Task(models.Model):
     @cached_property
     def problem_synsets(self):
         return self.illegal_synsets | self.synsets.filter(state=STATE_UNMATCHED)
-    
+       
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {status: {} for status in ["matched", "planned", "unmatched"]}
-        for scene in Scene.objects.prefetch_related("room_set__roomobject_set__object__category__synset").all():
+        for scene in Scene.objects_with_data.all():
             # first check whether it can be matched to the task in the future
             result = self.matching_scene(scene=scene, ready=False)
             # if it is matched, check whether it can be matched to the task it its current state
