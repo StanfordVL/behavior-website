@@ -79,14 +79,12 @@ jobs:
         run: kill $(lsof -t -i:8000)
       
       # Deploy to github pages
-      - name: sanity check
-        run: ls && ls b1k-integration
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: /b1k-integration/build
+          path: b1k-integration/build
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

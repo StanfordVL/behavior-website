@@ -71,7 +71,7 @@ class Command(BaseCommand):
         put any post completion work (e.g. update stuff) here
         """
         self.generate_synset_hierarchy(self.G)
-        self.generate_synset_sate()
+        self.generate_synset_state()
 
 
     def create_synsets(self, legal_synsets):
@@ -131,7 +131,8 @@ class Command(BaseCommand):
                 except Object.DoesNotExist:
                     raise Exception(f"{object_name} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!")
                 object.ready = True
-                object.save()
+                objs.append(object)
+            Object.objects.bulk_update(objs, ["ready"])
 
 
 
@@ -290,7 +291,8 @@ class Command(BaseCommand):
                             synset_c.save()
 
 
-    def generate_synset_sate(self):
+    def generate_synset_state(self):
+        synsets = []
         for synset in Synset.objects.all():
             if synset.is_substance:
                 synset.state = STATE_SUBSTANCE
@@ -303,4 +305,5 @@ class Command(BaseCommand):
                     synset.state = STATE_UNMATCHED
             else:
                 synset.state = STATE_ILLEGAL
-            synset.save()
+            synsets.append(synsets)
+        Synset.objects.bulk_update(synsets, ["state"])
