@@ -6,6 +6,7 @@ from django.db import models
 from data.utils import *
 from collections import defaultdict
 
+
 ROOM_TYPE_CHOICES = [
     ('bar', 'bar'), 
     ('bathroom', 'bathroom'), 
@@ -49,18 +50,29 @@ ROOM_TYPE_CHOICES = [
 ]
 
 
-class SceneManager(models.Manager):
+class CachingManager(models.Manager):
+    @cached_property
+    def _queryset(self):
+        return super().get_queryset().prefetch_related(*self._PREFETCH)
+
     def get_queryset(self):
-        return super().get_queryset().prefetch_related("room_set__roomobject_set__object__category__synset")
+        return self._queryset
+    
+
+def get_caching_manager(prefetch):
+    class _CachingManager(CachingManager):
+        _PREFETCH = prefetch
+
+    return _CachingManager
 
     
 class Scene(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
-    objects_with_data = SceneManager()
+    objects = get_caching_manager(["room_set__roomobject_set__object__category__synset"])()
 
     def __str__(self):
         return self.name 
-    
+
 
 class Category(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
@@ -146,16 +158,9 @@ class Synset(models.Model):
         return STATE_MATCHED if self.task_set.count() > 0 else STATE_NONE
     
 
-class TaskManager(models.Manager):
-    def get_queryset(self) -> QuerySet:
-        return super().get_queryset().prefetch_related(
-            "synsets",
-            "roomrequirement_set__roomsynsetrequirement_set__synset"
-        )
-            
 
 class Task(models.Model):
-    objects = TaskManager()
+    objects = get_caching_manager(["synsets", "roomrequirement_set__roomsynsetrequirement_set__synset"])()
     name = models.CharField(max_length=64, primary_key=True)
     # the synsets required by this task
     synsets = models.ManyToManyField(Synset)
@@ -209,7 +214,7 @@ class Task(models.Model):
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {status: {} for status in ["matched", "planned", "unmatched"]}
-        for scene in Scene.objects_with_data.all():
+        for scene in Scene.objects.all():
             # first check whether it can be matched to the task in the future
             result = self.matching_scene(scene=scene, ready=False)
             # if it is matched, check whether it can be matched to the task it its current state
@@ -241,7 +246,6 @@ class Task(models.Model):
             return STATE_NONE
 
 
-
 class RoomRequirement(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     type = models.CharField(max_length=64, choices=ROOM_TYPE_CHOICES)
@@ -249,8 +253,7 @@ class RoomRequirement(models.Model):
         unique_together = ('task', 'type')
 
     def __str__(self):
-        return f"{self.task.name}_{self.room_type}"        
-
+        return f"{self.task.name}_{self.type}"        
 
 
 class RoomSynsetRequirement(models.Model):
@@ -264,7 +267,6 @@ class RoomSynsetRequirement(models.Model):
     def __str__(self):
         return f"{str(self.room_requirement)}_{self.synset.name}" 
     
-
 
 class Room(models.Model):
     name = models.CharField(max_length=64)
@@ -314,8 +316,6 @@ class Room(models.Model):
                 if synset_node not in M:
                     missing_synsets[synset.name] += 1
             return ", ".join([f"{count} {synset}" for synset, count in missing_synsets.items()])
-
-
 
 
 class RoomObject(models.Model):

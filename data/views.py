@@ -2,6 +2,7 @@ from data.models import *
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView
 
+
 B20 = {
     "attach_a_camera_to_a_tripod",
     "boil_water",
@@ -25,12 +26,13 @@ B20 = {
     "thawing_frozen_food",
 }
 
+
 class TaskListView(ListView):
     model = Task
     context_object_name = "task_list"
     
     def get_queryset(self):
-        return Task.objects.filter(name__in=B20).order_by("name")
+        return Task.objects.order_by("name")
 
 
 class TaskDetailView(DetailView):
@@ -70,7 +72,6 @@ class SynsetDetailView(DetailView):
         return Synset.objects.filter(name=self.synset_name)
         
 
-
 class ObjectDetailView(DetailView):
     model = Object
     context_object_name = "object"
@@ -82,7 +83,5 @@ class ObjectDetailView(DetailView):
         return Object.objects.filter(name=self.object_name)   
 
     
-
-# TODO: deprecated
 def index(request):
     return render(request, "data/index.html", {})

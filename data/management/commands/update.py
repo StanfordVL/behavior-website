@@ -10,6 +10,7 @@ from data.utils import *
 from data.models import *
 from nltk.corpus import wordnet as wn
 from django.db.utils import IntegrityError
+from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
 
@@ -31,6 +32,11 @@ class Command(BaseCommand):
         """
         put any preparation work (e.g. sanity check) here
         """
+        # Update the site
+        site = Site.objects.first()
+        site.domain = "localhost:8000"
+        site.save()
+
         # install wordnet
         nltk.download('wordnet')
         # generate legal synsets
