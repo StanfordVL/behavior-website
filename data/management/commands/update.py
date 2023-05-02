@@ -1,4 +1,5 @@
 import csv
+import nltk
 import os
 import json
 import glob
@@ -30,6 +31,8 @@ class Command(BaseCommand):
         """
         put any preparation work (e.g. sanity check) here
         """
+        # install wordnet
+        nltk.download('wordnet')
         # generate legal synsets
         self.G = get_synset_graph()
         self.legal_synsets = set(self.G.nodes)
