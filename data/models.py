@@ -1,9 +1,10 @@
 from django.db.models.query import QuerySet
 import networkx as nx
 from django.utils.functional import cached_property
-from typing import List, Dict, Set
+from typing import Dict, Set
 from django.db import models
 from data.utils import *
+from collections import defaultdict
 
 ROOM_TYPE_CHOICES = [
     ('bar', 'bar'), 
@@ -143,12 +144,9 @@ class Synset(models.Model):
 class TaskManager(models.Manager):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset().prefetch_related(
-            # "synsets",
             "synsets",
-            # "roomrequirement_set",
-            # "roomrequirement_set__roomsynsetrequirement_set",
-            # "roomrequirement_set__roomsynsetrequirement_set__synset",
-            "roomrequirement_set__roomsynsetrequirement_set__synset")
+            "roomrequirement_set__roomsynsetrequirement_set__synset"
+        )
             
 
 class Task(models.Model):
@@ -164,15 +162,18 @@ class Task(models.Model):
         """checks whether a scene satisfies task requirements"""
         ret = ""
         for room_requirement in self.roomrequirement_set.all():
-            room_matched = False
+            scene_ret = f"Cannot find suitable {room_requirement.type}: "
             for room in scene.room_set.all():
                 if room.type != room_requirement.type or room.ready != ready:
                     continue
-                if room.matching_room_requirement(room_requirement):
-                    room_matched = True
+                room_ret = room.matching_room_requirement(room_requirement)
+                if len(room_ret)== 0:
+                    scene_ret = ""
                     break
-            if not room_matched:
-                ret += f"Cannot find suitable {room_requirement.type}; "
+                else: 
+                    scene_ret += f"{room.name} is missing {room_ret}; "
+            if len(scene_ret) > 0:
+                ret += scene_ret[:-2] + "."
         return ret
     
     @cached_property
@@ -274,8 +275,11 @@ class Room(models.Model):
     def __str__(self):
         return f"{self.scene.name}_{self.type}_{'ready' if self.ready else 'planned'}" 
 
-    def matching_room_requirement(self, room_requirement: RoomRequirement) -> bool:
-        """checks whether the room satisfies the room requirement from a task"""
+    def matching_room_requirement(self, room_requirement: RoomRequirement) -> str:
+        """
+        checks whether the room satisfies the room requirement from a task
+        returns an empty string if it does, otherwise returns a string describing what is missing
+        """
         G = nx.Graph()
         # Add a node for each required object
         synset_node_to_synset = {}
@@ -297,7 +301,15 @@ class Room(models.Model):
         # Now do a bipartite matching
         M = nx.bipartite.maximum_matching(G, top_nodes=synset_node_to_synset.keys())
         # Now check that all required objects are matched
-        return len(M) == len(synset_node_to_synset)
+        if len(M) == len(synset_node_to_synset):
+            return ""
+        else: 
+            missing_synsets = defaultdict(int)  # default value is 0
+            for synset_node, synset in synset_node_to_synset.items():
+                if synset_node not in M:
+                    missing_synsets[synset.name] += 1
+            return ", ".join([f"{count} {synset}" for synset, count in missing_synsets.items()])
+
 
 
 
