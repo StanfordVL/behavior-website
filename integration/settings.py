@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,8 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # freeze
 SITE_ID = 1
-FREEZE_BASE_URL = '/'
-FREEZE_ROOT = r'D:\static-site'
+FREEZE_BASE_URL = '/b1k-integration/'
+FREEZE_ROOT = f"{os.path.abspath(os.path.curdir)}/build"
 FREEZE_FOLLOW_SITEMAP_URLS = False
 FREEZE_INCLUDE_STATIC = False
 FREEZE_FOLLOW_HTML_URLS = True
