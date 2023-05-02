@@ -305,5 +305,5 @@ class Command(BaseCommand):
                     synset.state = STATE_UNMATCHED
             else:
                 synset.state = STATE_ILLEGAL
-            synsets.append(synsets)
+            synsets.append(synset)
         Synset.objects.bulk_update(synsets, ["state"])
