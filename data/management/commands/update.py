@@ -72,6 +72,7 @@ class Command(BaseCommand):
         """
         create categories and synsets (with category_mappings.csv)
         """
+        print("Creating synsets...")
         gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
         worksheet = gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Category Mapping")
         with open(f"{os.path.pardir}/category_mapping.csv", 'w') as f:
@@ -103,10 +104,10 @@ class Command(BaseCommand):
         """
         Create objects and map to categories (with object inventory)
         """
+        print("Creating objects...")
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
             for object_name in json.load(f)["providers"].keys():
                 if object_name in self.object_rename_mapping:
-                    print(f"[object_inventory_future] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
                     object_name = self.object_rename_mapping[object_name]
                 category_name = object_name.split("-")[0]
                 category, _ = Category.objects.get_or_create(name=category_name)
@@ -114,7 +115,6 @@ class Command(BaseCommand):
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             for object_name in json.load(f)["providers"].keys():
                 if object_name in self.object_rename_mapping:
-                    print(f"[object_inventory] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
                     object_name = self.object_rename_mapping[object_name]
                 category_name = object_name.split("-")[0]
                 category, _ = Category.objects.get_or_create(name=category_name)
@@ -133,6 +133,7 @@ class Command(BaseCommand):
         create scene objects (which stores the room config)
         scene matching to tasks will be generated later when creating task objects
         """
+        print("Creating scenes...")
         with open(rf"{os.path.pardir}/ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json", "r") as f:
             planned_scene_dict = json.load(f)["scenes"]
             for scene_name in planned_scene_dict:
@@ -149,7 +150,6 @@ class Command(BaseCommand):
                         raise Exception(f"room {room_name} in {scene.name} (not ready) already exists!")
                     for object_name, count in planned_scene_dict[scene_name][room_name].items():
                         if object_name in self.object_rename_mapping:
-                            print(f"[combined_room_object_list_future] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
                             object_name = self.object_rename_mapping[object_name]
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "ready": False,
@@ -174,7 +174,6 @@ class Command(BaseCommand):
                         raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
                     for object_name, count in current_scene_dict[scene_name][room_name].items():
                         if object_name in self.object_rename_mapping:
-                            print(f"[combined_room_object_list] Renaming {object_name} to {self.object_rename_mapping[object_name]}")
                             object_name = self.object_rename_mapping[object_name]
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "ready": False,
@@ -188,6 +187,7 @@ class Command(BaseCommand):
         """
         create tasks and map to synsets
         """
+        print("Creating tasks...")
         b1k_tasks = glob.glob(rf"{os.path.pardir}/ObjectPropertyAnnotation/init_goal_cond_annotations/problem_files_verified_b1k/*")
         b100_tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
         for filename in sorted(b1k_tasks + b100_tasks):
@@ -254,6 +254,7 @@ class Command(BaseCommand):
         """
         generate the parent/child and ancestor/descendent relationship for synsets
         """
+        print("Generating synset hierarchy...")
         def _add_hypernyms_to_synset(G, synset: Synset):
             """Add all the hypernyms to G"""
             if G.has_node(synset.name):
