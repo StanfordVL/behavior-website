@@ -9,6 +9,7 @@ from bddl.activity import Conditions
 from data.utils import *
 from data.models import *
 from nltk.corpus import wordnet as wn
+from django.db import transaction
 from django.db.utils import IntegrityError
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
@@ -74,6 +75,7 @@ class Command(BaseCommand):
         self.generate_synset_state()
 
 
+    @transaction.atomic
     def create_synsets(self, legal_synsets):
         """
         create categories and synsets (with category_mappings.csv)
@@ -105,7 +107,7 @@ class Command(BaseCommand):
                 except IntegrityError:
                     raise Exception(f"{category_name} mapped to multiple synsets in category_mapping.csv!")
 
-
+    @transaction.atomic
     def create_objects(self):
         """
         Create objects and map to categories (with object inventory)
@@ -134,8 +136,7 @@ class Command(BaseCommand):
                 objs.append(object)
             Object.objects.bulk_update(objs, ["ready"])
 
-
-
+    @transaction.atomic
     def create_scenes(self):
         """
         create scene objects (which stores the room config)
@@ -190,7 +191,7 @@ class Command(BaseCommand):
                         })
                         RoomObject.objects.create(room=room, object=object, count=count)
 
-
+    @transaction.atomic
     def create_tasks(self, legal_synsets):
         """
         create tasks and map to synsets
@@ -257,7 +258,7 @@ class Command(BaseCommand):
                             room_synset_requirements.save()
 
 
-
+    @transaction.atomic
     def generate_synset_hierarchy(self, G):
         """
         generate the parent/child and ancestor/descendent relationship for synsets
@@ -282,15 +283,12 @@ class Command(BaseCommand):
 
         for synset_c in Synset.objects.all():
             if G.has_node(synset_c.name):
-                for synset_p in Synset.objects.all():
-                    if G.has_node(synset_p.name):
-                        if nx.has_path(G, synset_p.name, synset_c.name):
-                            synset_c.ancestors.add(synset_p)
-                            if G.has_edge(synset_p.name, synset_c.name):
-                                synset_c.parents.add(synset_p)
-                            synset_c.save()
+                for synset_p in Synset.objects.filter(name__in=G.predecessors(synset_c.name)):
+                    synset_c.parents.add(synset_p)
+                for synset_p in Synset.objects.filter(name__in=nx.ancestors(G, synset_c.name)):
+                    synset_c.ancestors.add(synset_p)
 
-
+    @transaction.atomic
     def generate_synset_state(self):
         synsets = []
         for synset in Synset.objects.all():
