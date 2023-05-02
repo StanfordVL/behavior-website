@@ -10,20 +10,6 @@
         color: #8C1515;
         border-color: #8C1515;
       }
-      .card {
-        border-radius: 1vh;
-        border-width: 0.3vh;
-        border-color: black;
-        color: #000;
-      }
-      .card-title {
-        font-size: 1.5vw;
-        padding: 0.5vw;
-      }
-      .card-text {
-        font-size: 3vw;
-        padding: 2vw;
-      }
     </style>
   </head>
   <body>
@@ -31,40 +17,106 @@
       <h1 class="text-center">B1K Integration</h1>
       <div class="row mt-5">
         <div class="col-md-6">
-          <a href="{{ url 'task list' }}" class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">Tasks</h5>
-              <p class="card-text">{{ "{} | {} | {}".format(metadata[0][0], metadata[0][1], metadata[0][2]) }}</p>
+          <div class="card text-center mb-4">
+            <div class="card-header h5">Tasks</div>
+            <div class="row no-gutters">
+              <div class="col-sm-4 border-right py-4">
+                <h6 class="text-success">Sampleable:</h6>
+                <strong>100</strong>
+              </div>
+              <div class="col-sm-4 py-4">
+                <h6 class="text-warning">In Progress:</h6>
+                <strong>200</strong>
+              </div>
+              <div class="col-sm-4 border-left py-4">
+                <h6 class="text-danger">Needs Action:</h6>
+                <strong>800</strong>
+              </div>
             </div>
-        </a>
+            <a href="{% url 'tasks list' %}" class="stretched-link"></a>
+          </div>
         </div>
         <div class="col-md-6">
-          <a href="{{ url 'synset list' }}" div class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">Synsets</h5>
-              <p class="card-text">{{ "{} | {} | {}".format(metadata[1][0], metadata[1][1], metadata[1][2]) }}</p>
+          <div class="card text-center mb-4">
+            <div class="card-header h5">Synsets</div>
+            <div class="row no-gutters">
+              <div class="col-sm-4 border-right py-4">
+                <h6 class="text-success">Valid:</h6>
+                <strong>500</strong>
+              </div>
+              <div class="col-sm-4 py-4">
+                <h6 class="text-danger">Missing Objects:</h6>
+                <strong>800</strong>
+              </div>
+              <div class="col-sm-4 border-left py-4">
+                <h6 class="text-danger">Missing Definition:</h6>
+                <strong>1500</strong>
+              </div>
             </div>
-          </a>
+            <a href="{% url 'synsets list' %}" class="stretched-link"></a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card text-center mb-4">
+            <div class="card-header h5">Objects</div>
+            <div class="row no-gutters">
+              <div class="col-sm-4 border-right py-4">
+                <h6 class="text-success">Valid:</h6>
+                <strong>100</strong>
+              </div>
+              <div class="col-sm-4 py-4">
+                <h6 class="text-warning">In Progress:</h6>
+                <strong>200</strong>
+              </div>
+              <div class="col-sm-4 border-left py-4">
+                <!-- This is for things like missing synset assignment, etc. -->
+                <h6 class="text-danger">Needs Action:</h6>
+                <strong>800</strong>
+              </div>
+            </div>
+            <a href="{% url 'index' %}" class="stretched-link"></a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card text-center mb-4">
+            <div class="card-header h5">Scenes</div>
+            <div class="row no-gutters">
+              <div class="col-sm-6 border-right py-4">
+                <h6 class="text-success">Sampleable:</h6>
+                <strong>10</strong>
+              </div>
+              <div class="col-sm-6 py-4">
+                <h6 class="text-warning">In Progress:</h6>
+                <strong>41</strong>
+              </div>
+            </div>
+            <a href="{% url 'index' %}" class="stretched-link"></a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card text-center mb-4">
+            <div class="card-header h5">Substances</div>
+            <div class="row no-gutters">
+              <div class="col-sm-4 border-right py-4">
+                <h6 class="text-success">Valid:</h6>
+                <strong>100</strong>
+              </div>
+              <div class="col-sm-4 py-4">
+                <h6 class="text-warning">In Progress:</h6>
+                <strong>200</strong>
+              </div>
+              <div class="col-sm-4 border-left py-4">
+                <!-- This is for things like missing synset assignment, etc. -->
+                <h6 class="text-danger">Needs Action:</h6>
+                <strong>800</strong>
+              </div>
+            </div>
+            <a href="{% url 'index' %}" class="stretched-link"></a>
+          </div>
         </div>
       </div>
-      <div class="row mt-5">
-        <div class="col-md-6">
-          <a href="{{ url 'index' }}" class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">Objects</h5>
-              <p class="card-text">{{ "{} / {}".format(metadata[2][0], metadata[2][1]) }}</p>
-            </div>
-          </a>
-        </div>
-        <div class="col-md-6">
-          <a href="{{ url 'index' }}" class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">Scenes</h5>
-              <p class="card-text">{{ "{} / {}".format(metadata[3][0], metadata[3][1]) }}</p>
-            </div>
-          </a>
-        </div>
-      </div>
+    </div>
+    </div>
     </div>
   </body>
 </html>

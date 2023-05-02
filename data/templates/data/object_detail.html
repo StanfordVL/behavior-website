@@ -16,7 +16,7 @@
 
       <h2>Synsets</h2>
       <ul>
-        {% for synset in object.synset_set %}
+        {% for synset in object.category.synset.ancestors.all %}
         <a href="{% url 'synset detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}">{{ synset.name }}</a>
         {% empty %}
         <li>None</li>

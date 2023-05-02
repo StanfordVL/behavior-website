@@ -54,9 +54,21 @@
           {% for task in task_list %}
           <tr class="clickable-row" data-href="{% url 'task detail' task.name %}">
             <td>{{ task.name }}</td>
-            <td class="{{ 'bg-'|add:task.synset_state }}"></td>
-            <td class="{{ 'bg-'|add:task.scene_state }}"></td>
-            <td class="{{ 'bg-'|add:task.substance_required }}"></td>
+            <td class="{{ 'bg-'|add:task.synset_state }}">
+              {% for synset in task.problem_synsets %}
+                {{ synset }}, 
+              {% endfor %}
+            </td>
+            <td class="{{ 'bg-'|add:task.scene_state }}">
+              {% for scene in task.scene_matching_dict.matched %}
+                {{ scene }}, 
+              {% endfor %}
+            </td>
+            <td class="{{ 'bg-'|add:task.substance_required }}">
+              {% for substance in task.substance_synsets %}
+                {{ substance }}, 
+              {% endfor %}
+            </td>
           </tr>
           {% endfor %}
         </tbody>

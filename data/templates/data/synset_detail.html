@@ -8,6 +8,14 @@
     <div class="container">
       <h1>{{ synset.name }} Details</h1>
       <h2>Is legal: {{ synset.legal }}</h2>
+      <h2>Ancestors</h2>
+      <ul>
+        {% for ancestor in synset.ancestors.all %}
+        <a href="{% url 'synset detail' ancestor.name %}" class="{{ 'btn btn-'|add:ancestor.state }}">{{ ancestor.name }}</a>
+        {% empty %}
+        <li>None</li>
+        {% endfor %}
+      </ul>
       <h2>Parents</h2>
       <ul>
         {% for parent in synset.parents.all %}

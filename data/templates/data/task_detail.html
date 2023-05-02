@@ -30,7 +30,7 @@
         <li>Planned:
           <ul>
             {% for scene, info in scene_matching_dict.planned.items %}
-            <li>{{ scene }}: {{ info.1 }}</li>
+            <li>{{ scene }}: {{ info }}</li>
             {% empty %}
             <li>None</li>
             {% endfor %}
@@ -40,7 +40,7 @@
         <li>Unmatched:
           <ul>
             {% for scene, info in scene_matching_dict.unmatched.items %}
-            <li>{{ scene }}: {{ info.1 }}</li>
+            <li>{{ scene }}: {{ info }}</li>
             {% empty %}
             <li>None</li>
             {% endfor %}

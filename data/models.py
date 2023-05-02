@@ -1,8 +1,10 @@
+from django.db.models.query import QuerySet
 import networkx as nx
 from django.utils.functional import cached_property
-from typing import List, Dict, Tuple
+from typing import Dict, Set
 from django.db import models
 from data.utils import *
+from collections import defaultdict
 
 ROOM_TYPE_CHOICES = [
     ('bar', 'bar'), 
@@ -47,7 +49,6 @@ ROOM_TYPE_CHOICES = [
 ]
 
 
-# Create your models here.    
 class Scene(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
 
@@ -65,9 +66,11 @@ class Category(models.Model):
         return self.name
     
     def matching_synset(self, synset) -> bool:
-        return synset in self.synset.descendants.all() if self.synset else False
-        
-    
+        return synset.name in self.matching_synsets
+
+    @cached_property
+    def matching_synsets(self) -> Set["Synset"]:
+        return set(self.synset.ancestors.values_list("name", flat=True)) if self.synset else set()
 
 
 class Object(models.Model):
@@ -86,10 +89,6 @@ class Object(models.Model):
     
     def matching_synset(self, synset) -> bool:
         return self.category.matching_synset(synset)
-    
-    @cached_property
-    def synset_set(self):
-        return self.category.synset.ancestors.all()
     
     @cached_property
     def state(self):
@@ -113,65 +112,45 @@ class Synset(models.Model):
     parents = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="children")
     # all ancestors (NOTE: this include self)
     ancestors = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="descendants")
+    # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
+    state = models.CharField(max_length=64, default=STATE_NONE)
 
     def __str__(self):
         return self.name
-
-    @cached_property
-    def state(self):
-        """overall state of the synset, one of STATE METADATA"""
-        if self.is_substance:
-            return STATE_SUBSTANCE
-        elif self.legal:
-            if len(self.matching_ready_object) > 0:
-                return STATE_MATCHED
-            elif len(self.matching_object) > 0:
-                return STATE_PLANNED
-            else:
-                return STATE_UNMATCHED
-        else:
-            return STATE_ILLEGAL
     
     @cached_property
-    def matching_object(self) -> List[Object]:
-        matched_objs = []
-        for category in self.category_set.all():
-            matched_objs.extend(category.object_set.all())
-        for child in self.children.all():
-            matched_objs.extend(child.matching_object)
+    def matching_object(self) -> Set[Object]:
+        matched_objs = set()
+        for synset in self.descendants.all():
+            for category in synset.category_set.all():
+                matched_objs.update(category.object_set.all())
         return matched_objs
     
     @cached_property
-    def matching_ready_object(self) -> List[Object]:
+    def matching_ready_object(self) -> Set[Object]:
         """whether the synset is mapped to at least one object"""
-        matched_ready_objs = []
-        for category in self.category_set.all():
-            matched_ready_objs.extend(category.object_set.filter(ready=True))
-        for child in self.children.all():
-            matched_ready_objs.extend(child.matching_ready_object)
+        matched_ready_objs = set()
+        for synset in self.descendants.all():
+            for category in synset.category_set.all():
+                matched_ready_objs.update(category.object_set.filter(ready=True))
         return matched_ready_objs
-    
-    @cached_property
-    def object_state(self) -> str:
-        """Get the matching state of objects, returns STATE METADATA"""
-        if not self.legal:
-            return STATE_ILLEGAL
-        else:
-            if len(self.matching_ready_object) > 0:
-                return STATE_MATCHED
-            elif len(self.matching_object) > 0:
-                return STATE_PLANNED
-            else:
-                return STATE_UNMATCHED
     
     @cached_property
     def task_state(self):
         """Get whether the synset is required in any task, returns STATE METADATA"""
         return STATE_MATCHED if self.task_set.count() > 0 else STATE_NONE
     
-    
+
+class TaskManager(models.Manager):
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().prefetch_related(
+            "synsets",
+            "roomrequirement_set__roomsynsetrequirement_set__synset"
+        )
+            
 
 class Task(models.Model):
+    objects = TaskManager()
     name = models.CharField(max_length=64, primary_key=True)
     # the synsets required by this task
     synsets = models.ManyToManyField(Synset)
@@ -179,22 +158,28 @@ class Task(models.Model):
     def __str__(self):
         return self.name
     
-    def matching_scene(self, scene: Scene, ready: bool=True) -> Tuple[bool, str]:
+    def matching_scene(self, scene: Scene, ready: bool=True) -> str:
         """checks whether a scene satisfies task requirements"""
+        ret = ""
         for room_requirement in self.roomrequirement_set.all():
-            room_matched = False
+            scene_ret = f"Cannot find suitable {room_requirement.type}: "
             for room in scene.room_set.all():
-                if room.matching_room_requirement(room_requirement, ready):
-                    room_matched = True
+                if room.type != room_requirement.type or room.ready != ready:
+                    continue
+                room_ret = room.matching_room_requirement(room_requirement)
+                if len(room_ret)== 0:
+                    scene_ret = ""
                     break
-            if not room_matched:  # TODO: Return ALL the rooms we can't match
-                return False, f"Cannot find suitable {room_requirement.type}"
-        return True, ""
+                else: 
+                    scene_ret += f"{room.name} is missing {room_ret}; "
+            if len(scene_ret) > 0:
+                ret += scene_ret[:-2] + "."
+        return ret
     
     @cached_property
     def illegal_synsets(self):
         """synsets that are not legal (in the synset graph)"""
-        return self.synsets.filter(legal=False).filter(is_substance=False)
+        return self.synsets.filter(legal=False, is_substance=False)
     
     @cached_property
     def substance_synsets(self):
@@ -202,48 +187,37 @@ class Task(models.Model):
         return self.synsets.filter(is_substance=True)
     
     @cached_property
-    def ready_synsets(self):
-        """legal synsets that are mapped to at least one ready object"""
-        return [synset for synset in self.synsets.filter(legal=True) if synset.matching_ready_object]
-    
-    @cached_property
-    def planned_synsets(self):
-        """legal synsets that are mapped to at least one planned object"""
-        return [synset for synset in self.synsets.filter(legal=True) if len(synset.matching_object) > 0]
-    
-    @cached_property
-    def not_ready_synsets(self):
-        """legal synsets that are mapped to no object"""
-        return [synset for synset in self.synsets.filter(legal=True) if len(synset.matching_object) == 0]
-    
-    @cached_property
     def synset_state(self) -> str:
-        if self.illegal_synsets.count() == 0:
+        if self.illegal_synsets.count() > 0:
             return STATE_UNMATCHED
-        elif len(self.not_ready_synsets) > 0:
+        elif self.synsets.filter(state=STATE_UNMATCHED).count() > 0:
             return STATE_UNMATCHED
-        elif len(self.ready_synsets) == 0:
+        elif self.synsets.filter(state=STATE_MATCHED).count() == 0:
             return STATE_PLANNED
         else:
             return STATE_MATCHED
+        
+    @cached_property
+    def problem_synsets(self):
+        return self.illegal_synsets | self.synsets.filter(state=STATE_UNMATCHED)
     
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {status: {} for status in ["matched", "planned", "unmatched"]}
-        for scene in Scene.objects.all():
+        for scene in Scene.objects.prefetch_related("room_set__roomobject_set__object__category__synset").all():
             # first check whether it can be matched to the task in the future
             result = self.matching_scene(scene=scene, ready=False)
             # if it is matched, check whether it can be matched to the task it its current state
-            if result[0]:
+            if len(result) == 0:
                 result_cur = self.matching_scene(scene=scene, ready=True)
-                if result_cur[0]:
+                if len(result_cur) == 0:
                     ret["matched"][scene.name] = result_cur
                 else:
                     ret["planned"][scene.name] = result_cur # store why it can't be matched currently
             else:
                 ret["unmatched"][scene.name] = result
         return ret
-
+    
     @cached_property
     def scene_state(self) -> str:
         scene_matching_dict = self.scene_matching_dict
@@ -301,9 +275,11 @@ class Room(models.Model):
     def __str__(self):
         return f"{self.scene.name}_{self.type}_{'ready' if self.ready else 'planned'}" 
 
-    def matching_room_requirement(self, room_requirement: RoomRequirement, ready: bool) -> bool:
-        """checks whether the room satisfies the room requirement from a task"""
-        if self.type != room_requirement.type or self.ready != ready: return False
+    def matching_room_requirement(self, room_requirement: RoomRequirement) -> str:
+        """
+        checks whether the room satisfies the room requirement from a task
+        returns an empty string if it does, otherwise returns a string describing what is missing
+        """
         G = nx.Graph()
         # Add a node for each required object
         synset_node_to_synset = {}
@@ -325,7 +301,15 @@ class Room(models.Model):
         # Now do a bipartite matching
         M = nx.bipartite.maximum_matching(G, top_nodes=synset_node_to_synset.keys())
         # Now check that all required objects are matched
-        return len(M) == len(synset_node_to_synset)
+        if len(M) == len(synset_node_to_synset):
+            return ""
+        else: 
+            missing_synsets = defaultdict(int)  # default value is 0
+            for synset_node, synset in synset_node_to_synset.items():
+                if synset_node not in M:
+                    missing_synsets[synset.name] += 1
+            return ", ".join([f"{count} {synset}" for synset, count in missing_synsets.items()])
+
 
 
 

@@ -65,9 +65,17 @@ jobs:
       - name: Install dependencies
         working-directory: b1k-integration
         run: pip install -r requirements.txt
-      - name: Build integration
+      - name: Build database
         working-directory: b1k-integration
-        run: python server.py
+        run: python manage.py makemigrations data && python manage.py migrate && python manage.py update
+      - name: Start local server
+        working-directory: b1k-integration
+        run: python manage.py runserver &
+      - name: freeze static files
+        working-directory: b1k-integration
+        run: python manage.py generate_static_site
+      - name: kill local server
+        run: kill $(lsof -t -i:8000)
       
       # Deploy to github pages
       - name: Setup Pages
@@ -75,7 +83,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: b1k-integration/build
+          path: /b1k-integration/build
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
