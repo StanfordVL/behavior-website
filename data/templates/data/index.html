@@ -31,36 +31,36 @@
       <h1 class="text-center">B1K Integration</h1>
       <div class="row mt-5">
         <div class="col-md-6">
-          <a href="{{ url 'task list' }}" class="card text-center">
+          <a href="{% url 'tasks list' %}" class="card text-center">
             <div class="card-body">
               <h5 class="card-title">Tasks</h5>
-              <p class="card-text">{{ "{} | {} | {}".format(metadata[0][0], metadata[0][1], metadata[0][2]) }}</p>
+              <p class="card-text">XYZ</p>
             </div>
         </a>
         </div>
         <div class="col-md-6">
-          <a href="{{ url 'synset list' }}" div class="card text-center">
+          <a href="{% url 'synsets list' %}" div class="card text-center">
             <div class="card-body">
               <h5 class="card-title">Synsets</h5>
-              <p class="card-text">{{ "{} | {} | {}".format(metadata[1][0], metadata[1][1], metadata[1][2]) }}</p>
+              <p class="card-text">XYZ</p>
             </div>
           </a>
         </div>
       </div>
       <div class="row mt-5">
         <div class="col-md-6">
-          <a href="{{ url 'index' }}" class="card text-center">
+          <a href="{% url 'index' %}" class="card text-center">
             <div class="card-body">
               <h5 class="card-title">Objects</h5>
-              <p class="card-text">{{ "{} / {}".format(metadata[2][0], metadata[2][1]) }}</p>
+              <p class="card-text">XYZ</p>
             </div>
           </a>
         </div>
         <div class="col-md-6">
-          <a href="{{ url 'index' }}" class="card text-center">
+          <a href="{% url 'index' %}" class="card text-center">
             <div class="card-body">
               <h5 class="card-title">Scenes</h5>
-              <p class="card-text">{{ "{} / {}".format(metadata[3][0], metadata[3][1]) }}</p>
+              <p class="card-text">XYZ</p>
             </div>
           </a>
         </div>
