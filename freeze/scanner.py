@@ -43,122 +43,125 @@ def scan(
         errs.append(f"{err} {req.url}")
         logger.info(err)
 
-    def scan_url(url):
-        if url.find(site_url) == 0:
-            # clean only static-site urls
-            url_qm = url.find("?")
-            if url_qm > -1:
-                url = url[0:url_qm]
+    def scan_url(url_to_scan):
+        urls_to_scan = {url_to_scan}
+        while urls_to_scan:
+            url = urls_to_scan.pop()
+            if url.find(site_url) == 0:
+                # clean only static-site urls
+                url_qm = url.find("?")
+                if url_qm > -1:
+                    url = url[0:url_qm]
 
-            url_hash = url.find("#")
-            if url_hash > -1:
-                url = url[0:url_hash]
+                url_hash = url.find("#")
+                if url_hash > -1:
+                    url = url[0:url_hash]
 
-        if url not in memo:
-            memo.append(url)
-        else:
-            return
-
-        logger.info(f"\nfetch url: {url}")
-
-        req = requests.get(url, headers=request_headers)
-        req.encoding = "utf-8"
-
-        if req.status_code == requests.codes.ok:
-            if req.url.find(site_url) != 0:
-                # skip non static-site urls (external links)
+            if url not in memo:
+                memo.append(url)
+            else:
                 return
 
-            is_redirect = req.url != url and req.history
+            logger.info(f"\nfetch url: {url}")
 
-            if is_redirect:
+            req = requests.get(url, headers=request_headers)
+            req.encoding = "utf-8"
+
+            if req.status_code == requests.codes.ok:
                 if req.url.find(site_url) != 0:
-                    # redirected to a page of another domain
-                    logger.info(f"[OK DONT FOLLOW REDIRECT] -> {req.url}")
+                    # skip non static-site urls (external links)
                     return
 
-                redirect_url = req.url.replace(site_url, "")
-                html_data = {
-                    "redirect_url": redirect_url,
-                    "local_urls": settings.FREEZE_LOCAL_URLS,
-                }
+                is_redirect = req.url != url and req.history
 
-                html_str = render_to_string("freeze/redirect.html", html_data)
-                html = f"{html_str}"
-                logger.info(f"[OK FOLLOW REDIRECT] -> {req.url}")
+                if is_redirect:
+                    if req.url.find(site_url) != 0:
+                        # redirected to a page of another domain
+                        logger.info(f"[OK DONT FOLLOW REDIRECT] -> {req.url}")
+                        return
 
-            else:
-                html = f"{req.text}"
-                html = html.replace(site_url, "")
-                html = html.strip()
+                    redirect_url = req.url.replace(site_url, "")
+                    html_data = {
+                        "redirect_url": redirect_url,
+                        "local_urls": settings.FREEZE_LOCAL_URLS,
+                    }
 
-                if local_urls:
-                    # prevent local directory index
-                    html = html.replace(
-                        "</body>",
-                        "<script>"
-                        + render_to_string("freeze/js/local_urls.js")
-                        + "</script></body>",
-                    )
+                    html_str = render_to_string("freeze/redirect.html", html_data)
+                    html = f"{html_str}"
+                    logger.info(f"[OK FOLLOW REDIRECT] -> {req.url}")
 
-                logger.info("[OK]")
-
-            path = os.path.normpath(url.replace(site_url, ""))
-
-            if path.endswith(".html"):
-                logger.debug("path (HTML) -> " + path)
-                file_slash = path.rfind("/") + 1
-                file_dirs = path[0:file_slash]
-                file_name = path[file_slash:]
-            else:
-                logger.debug("path -> " + path)
-                file_dirs = path
-                file_name = "index.html"
-
-            file_path = os.path.join(file_dirs, file_name)
-            file_base_url = base_url
-
-            if relative_urls:
-                file_depth = len(list(filter(bool, file_dirs.split("/"))))
-                if file_depth > 0:
-                    file_base_url = "../" * file_depth
                 else:
-                    file_base_url = ""
+                    html = f"{req.text}"
+                    html = html.replace(site_url, "")
+                    html = html.strip()
 
-            file_data = parser.replace_base_url(html, file_base_url)
+                    if local_urls:
+                        # prevent local directory index
+                        html = html.replace(
+                            "</body>",
+                            "<script>"
+                            + render_to_string("freeze/js/local_urls.js")
+                            + "</script></body>",
+                        )
 
-            logger.debug("file dirs: " + file_dirs)
-            logger.debug("file name: " + file_name)
-            logger.debug("file path: " + file_path)
-            logger.debug("file base url: " + file_base_url)
-            logger.debug("file data: " + file_data)
-            logger.debug("---")
+                    logger.info("[OK]")
 
-            urls_data.append(
-                {
-                    "url": url,
-                    "file_dirs": file_dirs,
-                    "file_path": file_path,
-                    "file_data": file_data,
-                }
-            )
+                path = os.path.normpath(url.replace(site_url, ""))
 
-            if is_redirect:
-                scan_url(req.url)
+                if path.endswith(".html"):
+                    logger.debug("path (HTML) -> " + path)
+                    file_slash = path.rfind("/") + 1
+                    file_dirs = path[0:file_slash]
+                    file_name = path[file_slash:]
+                else:
+                    logger.debug("path -> " + path)
+                    file_dirs = path
+                    file_name = "index.html"
+
+                file_path = os.path.join(file_dirs, file_name)
+                file_base_url = base_url
+
+                if relative_urls:
+                    file_depth = len(list(filter(bool, file_dirs.split("/"))))
+                    if file_depth > 0:
+                        file_base_url = "../" * file_depth
+                    else:
+                        file_base_url = ""
+
+                file_data = parser.replace_base_url(html, file_base_url)
+
+                logger.debug("file dirs: " + file_dirs)
+                logger.debug("file name: " + file_name)
+                logger.debug("file path: " + file_path)
+                logger.debug("file base url: " + file_base_url)
+                logger.debug("file data: " + file_data)
+                logger.debug("---")
+
+                urls_data.append(
+                    {
+                        "url": url,
+                        "file_dirs": file_dirs,
+                        "file_path": file_path,
+                        "file_data": file_data,
+                    }
+                )
+
+                if is_redirect:
+                    scan_url(req.url)
+                else:
+                    if follow_html_urls:
+                        html_urls = parser.parse_html_urls(
+                            html=html,
+                            site_url=site_url,
+                            base_url=path,
+                            media_urls=False,
+                            static_urls=False,
+                            external_urls=False,
+                        )
+                        for url in html_urls:
+                            urls_to_scan.add(url)
             else:
-                if follow_html_urls:
-                    html_urls = parser.parse_html_urls(
-                        html=html,
-                        site_url=site_url,
-                        base_url=path,
-                        media_urls=False,
-                        static_urls=False,
-                        external_urls=False,
-                    )
-                    for url in html_urls:
-                        scan_url(url)
-        else:
-            scan_error(req)
+                scan_error(req)
 
     for url in urls:
         scan_url(url)
