@@ -8,3 +8,4 @@ pillow
 future
 xmltodict
 beautifulsoup4
+html5lib
