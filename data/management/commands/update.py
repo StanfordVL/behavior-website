@@ -119,6 +119,7 @@ class Command(BaseCommand):
                 category, _ = Category.objects.get_or_create(name=category_name)
                 object = Object.objects.create(name=object_name, ready=False, category=category)
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
+            objs = []
             for object_name in json.load(f)["providers"].keys():
                 if object_name in self.object_rename_mapping:
                     object_name = self.object_rename_mapping[object_name]

@@ -4,28 +4,6 @@ from data.utils import *
 from data.models import *
 from django.core.management.base import BaseCommand
 
-scene_name_filter = [
-    "attach_a_camera_to_a_tripod",
-    "boil_water",
-    "chop_an_onion",
-    "clean_up_broken_glass",
-    "cleaning_bathtub",
-    "fill_a_bucket_in_a_small_sink",
-    "folding_piece_of_cloth",
-    "freeze_pies",
-    "hanging_up_bedsheets",
-    "make_a_steak",
-    "make_a_strawberry_slushie",
-    "melt_white_chocolate",
-    "mixing_drinks",
-    "mowing_the_lawn",
-    "putting_away_Halloween_decorations",
-    "putting_away_toys",
-    "putting_up_shelves",
-    "setting_the_fire",
-    "spraying_for_bugs",
-    "thawing_frozen_food"
-]
 
 class Command(BaseCommand):
     help = "generates task-scene mapping csv and missing synsets csv"
@@ -47,13 +25,13 @@ class Command(BaseCommand):
         # # get task-scene mapping csv
         with open('task_scene_matching.csv', 'w', newline='') as f:
             csv_writer = csv.writer(f)
-            csv_writer.writerow(["task", "matched scenes", "planned scenes"])
+            csv_writer.writerow(["task", "matched scenes", "synset matched"])
             for task in tqdm(Task.objects.all()):   
-                if task.name in scene_name_filter:   
-                    result = task.scene_matching_dict
-                    csv_writer.writerow([
-                        task.name,
-                        ",".join(result["matched"].keys()),
-                        ",".join(result["planned"].keys())
-                    ])
+                result = task.scene_matching_dict
+                synset_state = True if task.synset_state == STATE_MATCHED else False
+                csv_writer.writerow([
+                    task.name,
+                    ",".join(result["matched"].keys()),
+                    synset_state,
+                ])
         
