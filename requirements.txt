@@ -6,3 +6,4 @@ gspread
 IPython
 pillow
 future
+xmltodict
