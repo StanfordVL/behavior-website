@@ -75,7 +75,7 @@ jobs:
         working-directory: b1k-integration
         run: python manage.py generate_static_site
       - name: kill local server
-        if: always()
+        if: success() || failure()
         run: kill $(lsof -t -i:8000)
       
       # Deploy to github pages
