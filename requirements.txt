@@ -7,3 +7,4 @@ IPython
 pillow
 future
 xmltodict
+beautifulsoup4
