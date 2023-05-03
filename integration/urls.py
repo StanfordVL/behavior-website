@@ -16,9 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.shortcuts import redirect
-from django.urls import include, path, reverse
+from django.urls import include, path
 
-from data.views import index
 
 urlpatterns = [
     path('b1k-integration/', include("data.urls")),

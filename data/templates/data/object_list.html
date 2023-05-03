@@ -25,10 +25,24 @@
       });
     });
   </script>
+  <!-- Search bar -->
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
-  <h3 class="text-center">Total count: {{ object_list | length }}</h3>
+  <h4 class="text-center">Total count: {{ object_list | length }}</h4>
+  <br>
+  <input class="form-control" id="myInput" type="text" placeholder="Search...">
+  <br>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -38,10 +52,10 @@
         <th>Ready?</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="myTable">
       {% for object in object_list %}
       <tr class="clickable-row" data-href="{% url 'object_detail' object.name %}">
-        <td><a href="{% url 'object_detail' object.name %}">{{ object.name }}</a></td>
+        <td>{{ object.name }}<a href="{% url 'object_detail' object.name %}"></a></td>
         <td>{{ object.category.name }}</td>
         <td>{{ object.category.synset.name }}</td>
         <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>

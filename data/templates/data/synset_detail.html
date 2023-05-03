@@ -7,7 +7,7 @@
   <h2>Tasks</h2>
   <ul>
     {% for task in synset.task_set.all %}
-    <a href="{% url 'task_detail' task.name %}" class="btn btn-primary">{{ task.name }}</a>
+    <a href="{% url 'task_detail' task.name %}" class="{{ 'btn btn-'|add:task.state }}">{{ task.name }}</a>
     {% empty %}
     <li>None</li>
     {% endfor %}

@@ -25,10 +25,24 @@
       });
     });
   </script>
+  <!-- Search bar -->
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Scenes{% endif %}</h1>
-  <h3 class="text-center">Total count: {{ scene_list | length }}</h3>
+  <h4 class="text-center">Total count: {{ scene_list | length }}</h4>
+  <br>
+  <input class="form-control" id="myInput" type="text" placeholder="Search...">
+  <br>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -38,10 +52,10 @@
         <th>Ready?</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="myTable">
       {% for scene in scene_list %}
       <tr class="clickable-row" data-href="{% url 'scene_detail' scene.name %}">
-        <td><a href="{% url 'scene_detail' scene.name %}">{{ scene.name }}</a></td>
+        <td>{{ scene.name }}<a href="{% url 'scene_detail' scene.name %}"></a></td>
         <td>{{ scene.room_count }}</td>
         <td>{{ scene.object_count }}</td>
         <td class="{% if scene.ready %}bg-success{% else %}bg-warning{% endif %}">{{ scene.ready }}</td>
