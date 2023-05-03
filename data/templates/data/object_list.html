@@ -41,7 +41,7 @@
     <tbody>
       {% for object in object_list %}
       <tr class="clickable-row" data-href="{% url 'object_detail' object.name %}">
-        <td>{{ object.name }}</td>
+        <td><a href="{% url 'object_detail' object.name %}">{{ object.name }}</a></td>
         <td>{{ object.category.name }}</td>
         <td>{{ object.category.synset.name }}</td>
         <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>

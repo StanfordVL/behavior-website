@@ -73,7 +73,7 @@ jobs:
         run: python manage.py runserver &
       - name: freeze static files
         working-directory: b1k-integration
-        run: python manage.py generate_static_site
+        run: wget -mpEk http://localhost:8000
       - name: kill local server
         if: success() || failure()
         run: kill $(lsof -t -i:8000)
@@ -84,7 +84,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: b1k-integration/build
+          path: b1k-integration/localhost:8000
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

@@ -40,7 +40,7 @@
     <tbody>
       {% for synset in synset_list %}
       <tr class="clickable-row" data-href="{% url 'synset_detail' synset.name %}">
-        <td>{{ synset.name }}</td>
+        <td><a href="{% url 'synset_detail' synset.name %}">{{ synset.name }}</a></td>
         <td class="{{ 'bg-'|add:synset.state }}"></td>
         <td class="{{ 'bg-'|add:synset.task_state }}"></td>
       </tr>

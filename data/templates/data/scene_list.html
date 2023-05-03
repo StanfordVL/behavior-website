@@ -41,7 +41,7 @@
     <tbody>
       {% for scene in scene_list %}
       <tr class="clickable-row" data-href="{% url 'scene_detail' scene.name %}">
-        <td>{{ scene.name }}</td>
+        <td><a href="{% url 'scene_detail' scene.name %}">{{ scene.name }}</a></td>
         <td>{{ scene.room_count }}</td>
         <td>{{ scene.object_count }}</td>
         <td class="{% if scene.ready %}bg-success{% else %}bg-warning{% endif %}">{{ scene.ready }}</td>
