@@ -15,7 +15,7 @@
     <li>Matched:
       <ul>
         {% for scene in task.scene_matching_dict.matched %}
-        <li>{{ scene }}</li>
+        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a></li>
         {% empty %}
         <li>None</li>
         {% endfor %}
@@ -25,7 +25,7 @@
     <li>Planned:
       <ul>
         {% for scene, info in task.scene_matching_dict.planned.items %}
-        <li>{{ scene }}: {{ info }}</li>
+        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: {{ info }}</li>
         {% empty %}
         <li>None</li>
         {% endfor %}
@@ -35,7 +35,7 @@
     <li>Unmatched:
       <ul>
         {% for scene, info in task.scene_matching_dict.unmatched.items %}
-        <li>{{ scene }}: {{ info }}</li>
+        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: {{ info }}</li>
         {% empty %}
         <li>None</li>
         {% endfor %}
