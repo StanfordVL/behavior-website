@@ -157,7 +157,7 @@ class Synset(models.Model):
         return matched_objs
     
     @cached_property
-    def direct_matching_objects(self) -> Set[Object]:
+    def direct_matching_ready_objects(self) -> Set[Object]:
         matched_objs = set()
         for category in self.category_set.all():
             matched_objs.update(category.object_set.filter(ready=True).all())
