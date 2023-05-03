@@ -289,7 +289,7 @@ class Command(BaseCommand):
             if synset.is_substance:
                 synset.state = STATE_SUBSTANCE
             elif synset.legal:
-                if len(synset.matching_ready_object) > 0:
+                if len(synset.matching_ready_objects) > 0:
                     synset.state = STATE_MATCHED
                 elif len(synset.matching_objects) > 0:
                     synset.state = STATE_PLANNED
