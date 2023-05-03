@@ -107,7 +107,9 @@ class Category(models.Model):
 
     @cached_property
     def matching_synsets(self) -> Set["Synset"]:
-        return set(self.synset.ancestors.values_list("name", flat=True)) if self.synset else set()
+        if not self.synset:
+            return set()
+        return set(self.synset.ancestors.values_list("name", flat=True)) | {self.synset.name}
 
 
 class Object(models.Model):

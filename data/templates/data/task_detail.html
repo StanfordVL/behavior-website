@@ -25,7 +25,9 @@
     <li>Planned:
       <ul>
         {% for scene, info in task.scene_matching_dict.planned.items %}
-        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: {{ info }}</li>
+        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: <ul>
+          <li>This scene will match in its planned form. In its currently ready form it does not match, because: {{ info }}</li>
+        </ul></li>
         {% empty %}
         <li>None</li>
         {% endfor %}
