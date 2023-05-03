@@ -23,5 +23,5 @@ from data.views import index
 urlpatterns = [
     path('b1k-integration/', include("data.urls")),
     path('admin/', admin.site.urls),
-    path('', lambda _: redirect(reverse(index))),
+    path('', lambda _: redirect("index", permanent=True)),
 ]

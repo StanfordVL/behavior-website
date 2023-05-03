@@ -73,7 +73,7 @@ jobs:
         run: python manage.py runserver &
       - name: freeze static files
         working-directory: b1k-integration
-        run: wget -mpEk http://localhost:8000
+        run: wget -mpEk http://localhost:8000/b1k-integration/
       - name: kill local server
         if: success() || failure()
         run: kill $(lsof -t -i:8000)
