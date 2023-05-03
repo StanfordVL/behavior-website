@@ -70,6 +70,20 @@ class Scene(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     objects = get_caching_manager(["room_set__roomobject_set__object__category__synset"])()
 
+    @cached_property
+    def room_count(self):
+        return self.room_set.count()
+    
+    @cached_property
+    def object_count(self):
+        return self.room_set.filter(ready=False).aggregate(models.Sum("roomobject__count"))["roomobject__count__sum"]
+    
+    @cached_property
+    def ready(self):
+        ready_count = self.room_set.filter(ready=True).aggregate(models.Sum("roomobject__count"))["roomobject__count__sum"]
+        unready_count = self.object_count
+        return ready_count == unready_count
+
     def __str__(self):
         return self.name 
 
@@ -136,27 +150,54 @@ class Synset(models.Model):
         return self.name
     
     @cached_property
-    def matching_object(self) -> Set[Object]:
+    def direct_matching_objects(self) -> Set[Object]:
         matched_objs = set()
-        for synset in self.descendants.all():
-            for category in synset.category_set.all():
-                matched_objs.update(category.object_set.all())
+        for category in self.category_set.all():
+            matched_objs.update(category.object_set.all())
         return matched_objs
     
     @cached_property
-    def matching_ready_object(self) -> Set[Object]:
-        """whether the synset is mapped to at least one object"""
-        matched_ready_objs = set()
+    def direct_matching_objects(self) -> Set[Object]:
+        matched_objs = set()
+        for category in self.category_set.all():
+            matched_objs.update(category.object_set.filter(ready=True).all())
+        return matched_objs
+
+    @cached_property
+    def matching_objects(self) -> Set[Object]:
+        matched_objs = set(self.direct_matching_objects)
         for synset in self.descendants.all():
-            for category in synset.category_set.all():
-                matched_ready_objs.update(category.object_set.filter(ready=True))
-        return matched_ready_objs
+            matched_objs.update(synset.direct_matching_objects)
+        return matched_objs
+    
+    @cached_property
+    def matching_ready_objects(self) -> Set[Object]:
+        matched_objs = set(self.direct_matching_ready_objects)
+        for synset in self.descendants.all():
+            matched_objs.update(synset.direct_matching_ready_objects)
+        return matched_objs
     
     @cached_property
     def task_state(self):
         """Get whether the synset is required in any task, returns STATE METADATA"""
         return STATE_MATCHED if self.task_set.count() > 0 else STATE_NONE
     
+    @cached_property
+    def subgraph(self):
+        """Get the edges of the subgraph of the synset"""
+        G = nx.DiGraph()
+        next_to_query = [(self, True, True)]
+        while next_to_query:
+            synset, query_parents, query_children = next_to_query.pop()
+            if query_parents:
+                for parent in synset.parents.all():
+                    G.add_edge(parent, synset)
+                    next_to_query.append((parent, True, False))
+            if query_children:
+                for child in synset.children.all():
+                    G.add_edge(synset, child)
+                    next_to_query.append((child, False, True))
+        return G    
 
 
 class Task(models.Model):

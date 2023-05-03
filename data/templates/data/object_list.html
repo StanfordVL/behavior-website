@@ -1,5 +1,5 @@
 {% extends "data/base.html" %}
-{% block title %}{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}{% endblock %}
+{% block title %}{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
     table {
@@ -27,22 +27,24 @@
   </script>
 {% endblock %}
 {% block content %}
-  <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}</h1>
-  <h3 class="text-center">Total count: {{ synset_list | length }}</h3>
+  <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
+  <h3 class="text-center">Total count: {{ object_list | length }}</h3>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Synset State</th>
-        <th>Requiring Tasks</th>
+        <th>Object</th>
+        <th>Category</th>
+        <th>Synset</th>
+        <th>Ready?</th>
       </tr>
     </thead>
     <tbody>
-      {% for synset in synset_list %}
-      <tr class="clickable-row" data-href="{% url 'synset_detail' synset.name %}">
-        <td>{{ synset.name }}</td>
-        <td class="{{ 'bg-'|add:synset.state }}"></td>
-        <td class="{{ 'bg-'|add:synset.task_state }}"></td>
+      {% for object in object_list %}
+      <tr class="clickable-row" data-href="{% url 'object_detail' object.name %}">
+        <td>{{ object.name }}</td>
+        <td>{{ object.category.name }}</td>
+        <td>{{ object.category.synset.name }}</td>
+        <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>
       </tr>
       {% endfor %}
     </tbody>

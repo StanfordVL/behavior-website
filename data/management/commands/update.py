@@ -291,7 +291,7 @@ class Command(BaseCommand):
             elif synset.legal:
                 if len(synset.matching_ready_object) > 0:
                     synset.state = STATE_MATCHED
-                elif len(synset.matching_object) > 0:
+                elif len(synset.matching_objects) > 0:
                     synset.state = STATE_PLANNED
                 else:
                     synset.state = STATE_UNMATCHED

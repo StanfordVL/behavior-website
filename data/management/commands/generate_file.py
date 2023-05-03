@@ -15,7 +15,7 @@ class Command(BaseCommand):
             csv_writer.writerow(["synset", "required task", "is substance"])
             for synset in tqdm(Synset.objects.all()):
                 if synset.task_set.count() != 0:
-                    if len(synset.matching_object) == 0:
+                    if len(synset.matching_objects) == 0:
                         csv_writer.writerow([
                             synset.name,
                             ",".join([task.name for task in synset.task_set.all()]),

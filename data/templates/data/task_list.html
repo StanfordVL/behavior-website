@@ -2,10 +2,6 @@
 {% block title %}BEHAVIOR-1K Tasks{% endblock %}
 {% block customstyle %}
   <style>
-    h1 {
-      text-align: center;
-      padding: 5vh;
-    }
     table {
       border: 0.3vh solid #dee2e6;
     }
@@ -43,7 +39,7 @@
     </thead>
     <tbody>
       {% for task in task_list %}
-      <tr class="clickable-row" data-href="{% url 'task detail' task.name %}">
+      <tr class="clickable-row" data-href="{% url 'task_detail' task.name %}">
         <td>{{ task.name }}</td>
         <td class="{{ 'bg-'|add:task.synset_state }}">
           {% for synset in task.problem_synsets %}

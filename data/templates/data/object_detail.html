@@ -10,11 +10,5 @@
   <p>{{ object.category }}</p>
 
   <h2>Synsets</h2>
-  <ul>
-    {% for synset in object.category.synset.ancestors.all %}
-    <a href="{% url 'synset detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}">{{ synset.name }}</a>
-    {% empty %}
-    <li>None</li>
-    {% endfor %}
-  </ul>
+  {% include "data/synset_graph_module.html" with G=object.category.synset.subgraph center_node=object.category.synset %}
 {% endblock %}
