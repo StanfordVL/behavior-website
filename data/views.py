@@ -141,7 +141,7 @@ class IndexView(TemplateView):
             Object.objects.filter(planned=False).count(),
         ]
         # scene metadata
-        num_ready_scenes = sum([scene.ready for scene in Scene.objects.all()])
+        num_ready_scenes = sum([scene.any_ready for scene in Scene.objects.all()])
         num_planned_scenes = Scene.objects.count() - num_ready_scenes
         context["scene_metadata"] = [num_ready_scenes, num_planned_scenes]
         return context

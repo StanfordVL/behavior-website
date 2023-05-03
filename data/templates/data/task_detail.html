@@ -14,8 +14,10 @@
   <ul>
     <li>Matched:
       <ul>
-        {% for scene in task.scene_matching_dict.matched %}
-        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a></li>
+        {% for scene, info in task.scene_matching_dict.items %}
+          {% if info.matched_ready %}
+            <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a></li>
+          {% endif %}
         {% empty %}
         <li>None</li>
         {% endfor %}
@@ -24,10 +26,12 @@
     
     <li>Planned:
       <ul>
-        {% for scene, info in task.scene_matching_dict.planned.items %}
-        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: <ul>
-          <li>This scene will match in its planned form. In its currently ready form it does not match, because: {{ info }}</li>
-        </ul></li>
+        {% for scene, info in task.scene_matching_dict.items %}
+          {% if not info.matched_ready and info.matched_planned %}
+            <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: <ul>
+              <li>This scene will match in its planned form. In its currently ready form it does not match, because: {{ info.reason_ready }}</li>
+            </ul></li>
+          {% endif %}
         {% empty %}
         <li>None</li>
         {% endfor %}
@@ -36,8 +40,10 @@
 
     <li>Unmatched:
       <ul>
-        {% for scene, info in task.scene_matching_dict.unmatched.items %}
-        <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: {{ info }}</li>
+        {% for scene, info in task.scene_matching_dict.items %}
+          {% if not info.matched_ready and not info.matched_planned %}
+            <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: {{ info.reason_planned }}</li>
+          {% endif %}
         {% empty %}
         <li>None</li>
         {% endfor %}

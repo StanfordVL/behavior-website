@@ -280,27 +280,27 @@ class Task(models.Model):
        
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
-        ret = {status: {} for status in ["matched", "planned", "unmatched"]}
+        ret = {}
         for scene in Scene.objects.all():
-            # first check whether it can be matched to the task in the future
-            result = self.matching_scene(scene=scene, ready=False)
-            # if it is matched, check whether it can be matched to the task it its current state
-            if len(result) == 0:
-                result_cur = self.matching_scene(scene=scene, ready=True)
-                if len(result_cur) == 0:
-                    ret["matched"][scene.name] = result_cur
-                else:
-                    ret["planned"][scene.name] = result_cur # store why it can't be matched currently
+            if scene.room_set.filter(ready=True).count() == 0:
+                result_ready = "Scene does not have a ready version currently."
             else:
-                ret["unmatched"][scene.name] = result
+                result_ready = self.matching_scene(scene=scene, ready=True)
+            result_partial = self.matching_scene(scene=scene, ready=False)
+            ret[scene] = {
+                "matched_ready": len(result_ready) == 0,
+                "reason_ready": result_ready,
+                "matched_planned": len(result_partial) == 0,
+                "reason_planned": result_partial,
+            }
         return ret
     
     @cached_property
     def scene_state(self) -> str:
         scene_matching_dict = self.scene_matching_dict
-        if len(scene_matching_dict["matched"]) > 0:
+        if any(x["matched_ready"] for x in scene_matching_dict.values()):
             return STATE_MATCHED
-        elif len(scene_matching_dict["planned"]) > 0:
+        elif any(x["matched_planned"] for x in scene_matching_dict.values()):
             return STATE_PLANNED
         else:
             return STATE_UNMATCHED
