@@ -58,7 +58,9 @@
         <td>{{ scene.name }}<a href="{% url 'scene_detail' scene.name %}"></a></td>
         <td>{{ scene.room_count }}</td>
         <td>{{ scene.object_count }}</td>
-        <td class="{% if scene.ready %}bg-success{% else %}bg-warning{% endif %}">{{ scene.ready }}</td>
+        <td class="{% if scene.fully_ready %}bg-success{% elif scene.any_ready %}bg-warning{% else %}bg-danger{% endif %}">
+          {% if scene.fully_ready %}Fully Ready{% elif scene.any_ready %}Partially Ready{% else %}Not Ready{% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

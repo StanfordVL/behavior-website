@@ -2,7 +2,7 @@
 {% block title %}Scene {{ scene.name }} Details{% endblock %}
 {% block content %}
   <h1>{{ scene.name }} Details</h1>
-  <h2>Is ready: {{ scene.ready }}</h2>
+  <h2>Is ready: {% if scene.fully_ready %}Fully Ready{% elif scene.any_ready %}Partially Ready{% else %}Not Ready{% endif %}</h2>
   <h2>Rooms</h2>
   {% for room in scene.room_set.all %}
   <h3>{{ room.name }}</h3>
