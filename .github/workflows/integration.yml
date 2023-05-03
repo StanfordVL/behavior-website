@@ -84,7 +84,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: b1k-integration/localhost:8000
+          path: b1k-integration/localhost:8000/b1k-integration
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

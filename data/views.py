@@ -1,3 +1,5 @@
+from typing import Any, List
+from django.db.models.query import QuerySet
 from data.models import *
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
@@ -31,59 +33,46 @@ B20 = {
 class TaskListView(ListView):
     model = Task
     context_object_name = "task_list"
-    
-    def get_queryset(self):
-        return Task.objects.order_by("name")
 
 
-class TaskDetailView(DetailView):
-    model = Task
-    context_object_name = "task"
-    slug_field = "name"
-    slug_url_kwarg = "task_name"
+class B20TaskListView(TaskListView):
+    queryset = Task.objects.order_by("name").filter(name__in=B20)
 
-    def get_queryset(self):
-        self.task = get_object_or_404(Task, name=self.kwargs["task_name"])
-        return Task.objects.filter(name=self.kwargs["task_name"])
-    
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in the publisher
-        context["scene_matching_dict"] = self.task.scene_matching_dict
+        context["page_title"] = "B-20 Tasks"
         return context
     
+
+class NonSceneMatchedTaskListView(TaskListView):
+    template_name = "data/task_list.html"
+
+    def get_queryset(self) -> List[Task]:
+        return [x for x in super().get_queryset().all() if x.scene_state == STATE_UNMATCHED]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Non-Scene-Matched Tasks"
+        return context
+
 
 class ObjectListView(ListView):
     model = Object
     context_object_name = "object_list"
-    
-    def get_queryset(self):
-        return Object.objects.order_by("name")
 
 
 class SceneListView(ListView):
     model = Scene
     context_object_name = "scene_list"
-    
-    def get_queryset(self):
-        return Scene.objects.order_by("name")
 
 
 class SynsetListView(ListView):
     model = Synset
     context_object_name = "synset_list"
     
-    def get_queryset(self):
-        return Synset.objects.order_by("name")
-    
 
-class NonLeafSynsetListView(ListView):
-    model = Synset
-    context_object_name = "synset_list"
-    
-    def get_queryset(self):
-        return (Synset.objects
+class NonLeafSynsetListView(SynsetListView):
+    queryset = (Synset.objects
                 .annotate(
                     num_objects=Count('category__object'),
                     num_child_synsets=Count('children'))
@@ -94,6 +83,13 @@ class NonLeafSynsetListView(ListView):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Non-Leaf Object-Assigned Synsets"
         return context
+
+
+class TaskDetailView(DetailView):
+    model = Task
+    context_object_name = "task"
+    slug_field = "name"
+    slug_url_kwarg = "task_name"
     
 
 class SynsetDetailView(DetailView):
@@ -101,21 +97,13 @@ class SynsetDetailView(DetailView):
     context_object_name = "synset"
     slug_field = "name"
     slug_url_kwarg = "synset_name"
-
-    def get_queryset(self):
-        self.synset_name = get_object_or_404(Synset, name=self.kwargs["synset_name"])
-        return Synset.objects.filter(name=self.synset_name)
         
 
 class ObjectDetailView(DetailView):
     model = Object
     context_object_name = "object"
     slug_field = "name"
-    slug_url_kwarg = "object_name"
-
-    def get_queryset(self):
-        self.object_name = get_object_or_404(Object, name=self.kwargs["object_name"])
-        return Object.objects.filter(name=self.object_name)   
+    slug_url_kwarg = "object_name" 
     
 
 class SceneDetailView(DetailView):
@@ -123,10 +111,6 @@ class SceneDetailView(DetailView):
     context_object_name = "scene"
     slug_field = "name"
     slug_url_kwarg = "scene_name"
-
-    def get_queryset(self):
-        self.scene_name = get_object_or_404(Scene, name=self.kwargs["scene_name"])
-        return Scene.objects.filter(name=self.scene_name)  
 
     
 def index(request):

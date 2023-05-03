@@ -41,8 +41,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'task_list' %}">Tasks</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdown1" href="{% url 'task_list' %}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Tasks
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                <a class="dropdown-item" href="{% url 'b20_task_list' %}">B-20 Tasks Only</a>
+              </div>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'synset_list' %}">Synsets</a>
@@ -54,11 +59,12 @@
               <a class="nav-link" href="{% url 'scene_list' %}">Scenes</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" id="navbarDropdown2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Error Views
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
                 <a class="dropdown-item" href="{% url 'non-leaf_synset_list' %}">Object-assigned Non-leaf Synsets</a>
+                <a class="dropdown-item" href="{% url 'non-scene-matched_task_list' %}">Non-scene-matched Tasks</a>
               </div>
             </li>
           </ul>

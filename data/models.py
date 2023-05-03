@@ -86,6 +86,9 @@ class Scene(models.Model):
 
     def __str__(self):
         return self.name 
+    
+    class Meta:
+        ordering = ["name"]
 
 
 class Category(models.Model):
@@ -96,6 +99,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        ordering = ["name"]
+
     def matching_synset(self, synset) -> bool:
         return synset.name in self.matching_synsets
 
@@ -118,6 +124,9 @@ class Object(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        ordering = ["name"]
+
     def matching_synset(self, synset) -> bool:
         return self.category.matching_synset(synset)
     
@@ -149,6 +158,9 @@ class Synset(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        ordering = ["name"]
+
     @cached_property
     def direct_matching_objects(self) -> Set[Object]:
         matched_objs = set()
@@ -209,6 +221,9 @@ class Task(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        ordering = ["name"]
+
     def matching_scene(self, scene: Scene, ready: bool=True) -> str:
         """checks whether a scene satisfies task requirements"""
         ret = ""
@@ -292,6 +307,7 @@ class RoomRequirement(models.Model):
     type = models.CharField(max_length=64, choices=ROOM_TYPE_CHOICES)
     class Meta:
         unique_together = ('task', 'type')
+        ordering = ["type"]
 
     def __str__(self):
         return f"{self.task.name}_{self.type}"        
@@ -304,6 +320,7 @@ class RoomSynsetRequirement(models.Model):
 
     class Meta:
         unique_together = ('room_requirement', 'synset')
+        ordering = ["synset__name"]
 
     def __str__(self):
         return f"{str(self.room_requirement)}_{self.synset.name}" 
@@ -319,6 +336,7 @@ class Room(models.Model):
     scene = models.ForeignKey(Scene, on_delete=models.CASCADE)
     class Meta:
         unique_together = ('name', 'ready', 'scene')
+        ordering = ["name"]
     
     def __str__(self):
         return f"{self.scene.name}_{self.type}_{'ready' if self.ready else 'planned'}" 
@@ -369,6 +387,7 @@ class RoomObject(models.Model):
 
     class Meta:
         unique_together = ('room', 'object')
+        ordering = ["room__name", "object__name"]
 
     def __str__(self):
         return f"{str(self.room)}_{self.object.name}"   
