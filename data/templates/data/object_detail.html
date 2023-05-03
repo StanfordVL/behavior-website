@@ -1,27 +1,20 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ object.name }} Details</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  </head>
-  <body>
-    <div class="container">
-      <h1>{{ object.name }} Details</h1>
+{% extends "data/base.html" %}
+{% block title %}Object {{ object.name }} Details{% endblock %}
+{% block content %}
+  <h1>{{ object.name }} Details</h1>
 
-      <!-- TODO: Add image here -->
+  <!-- TODO: Add image here -->
 
-      <h2>Is ready: {{ object.ready }}</h2>
-      <h2>Category:</h2>
-      <p>{{ object.category }}</p>
+  <h2>Is ready: {{ object.ready }}</h2>
+  <h2>Category:</h2>
+  <p>{{ object.category }}</p>
 
-      <h2>Synsets</h2>
-      <ul>
-        {% for synset in object.category.synset.ancestors.all %}
-        <a href="{% url 'synset detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}">{{ synset.name }}</a>
-        {% empty %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
-    </div>
-  </body>
-</html>
+  <h2>Synsets</h2>
+  <ul>
+    {% for synset in object.category.synset.ancestors.all %}
+    <a href="{% url 'synset detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}">{{ synset.name }}</a>
+    {% empty %}
+    <li>None</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

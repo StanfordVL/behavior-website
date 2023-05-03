@@ -1,79 +1,68 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <title>B1K Tasks</title>
-    <style>
-      h1 {
-        text-align: center;
-        padding: 5vh;
-      }
-      table {
-        border: 0.3vh solid #dee2e6;
-      }
-      td, th {
-        border: 0.3vh solid #dee2e6;
-      }
-      .clickable-row:hover {
-        cursor: pointer;
-        border-left: 0.5vh solid darkorange;
-        color: darkorange;
-      }
-    </style>
-    <!-- Clickable row -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const rows = document.querySelectorAll(".clickable-row");
-        rows.forEach(row => {
-          row.addEventListener("click", () => {
-            window.location.href = row.dataset.href;
-          });
+{% extends "data/base.html" %}
+{% block title %}BEHAVIOR-1K Tasks{% endblock %}
+{% block customstyle %}
+  <style>
+    h1 {
+      text-align: center;
+      padding: 5vh;
+    }
+    table {
+      border: 0.3vh solid #dee2e6;
+    }
+    td, th {
+      border: 0.3vh solid #dee2e6;
+    }
+    .clickable-row:hover {
+      cursor: pointer;
+      border-left: 0.5vh solid darkorange;
+      color: darkorange;
+    }
+  </style>
+  <!-- Clickable row -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const rows = document.querySelectorAll(".clickable-row");
+      rows.forEach(row => {
+        row.addEventListener("click", () => {
+          window.location.href = row.dataset.href;
         });
       });
-      </script>
-  </head>
-  <body>
-    <div class="container">
-      <h1>B1K tasks</h1>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Task Name</th>
-            <th>Synsets</th>
-            <th>Scenes</th>
-            <th>Substances</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for task in task_list %}
-          <tr class="clickable-row" data-href="{% url 'task detail' task.name %}">
-            <td>{{ task.name }}</td>
-            <td class="{{ 'bg-'|add:task.synset_state }}">
-              {% for synset in task.problem_synsets %}
-                {{ synset }}, 
-              {% endfor %}
-            </td>
-            <td class="{{ 'bg-'|add:task.scene_state }}">
-              {% for scene in task.scene_matching_dict.matched %}
-                {{ scene }}, 
-              {% endfor %}
-            </td>
-            <td class="{{ 'bg-'|add:task.substance_required }}">
-              {% for substance in task.substance_synsets %}
-                {{ substance }}, 
-              {% endfor %}
-            </td>
-          </tr>
+    });
+    </script>
+{% endblock %}
+{% block content %}
+  <h1>B1K tasks</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Task Name</th>
+        <th>Synsets</th>
+        <th>Scenes</th>
+        <th>Substances</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in task_list %}
+      <tr class="clickable-row" data-href="{% url 'task detail' task.name %}">
+        <td>{{ task.name }}</td>
+        <td class="{{ 'bg-'|add:task.synset_state }}">
+          {% for synset in task.problem_synsets %}
+            {{ synset }}, 
           {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </body>
-</html>
+        </td>
+        <td class="{{ 'bg-'|add:task.scene_state }}">
+          {% for scene in task.scene_matching_dict.matched %}
+            {{ scene }}, 
+          {% endfor %}
+        </td>
+        <td class="{{ 'bg-'|add:task.substance_required }}">
+          {% for substance in task.substance_synsets %}
+            {{ substance }}, 
+          {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
 

@@ -75,7 +75,6 @@ class Command(BaseCommand):
         self.generate_synset_state()
 
 
-    @transaction.atomic
     def create_synsets(self, legal_synsets):
         """
         create categories and synsets (with category_mappings.csv)
@@ -107,7 +106,6 @@ class Command(BaseCommand):
                 except IntegrityError:
                     raise Exception(f"{category_name} mapped to multiple synsets in category_mapping.csv!")
 
-    @transaction.atomic
     def create_objects(self):
         """
         Create objects and map to categories (with object inventory)
@@ -136,7 +134,6 @@ class Command(BaseCommand):
                 objs.append(object)
             Object.objects.bulk_update(objs, ["ready"])
 
-    @transaction.atomic
     def create_scenes(self):
         """
         create scene objects (which stores the room config)
@@ -213,7 +210,7 @@ class Command(BaseCommand):
             synsets = set([canonicalize(synset) for synset in conds.parsed_objects.keys()]) - {"agent.n.01"}
             substances = set()
             obj_to_synset = {obj: canonicalize(synset) for synset, objs in conds.parsed_objects.items() for obj in objs}
-            task = Task.objects.create(name=task_name)
+            task = Task.objects.create(name=task_name, definition=predefined_problem)
             # check whether each synset is a substance
             for cond in conds.parsed_initial_conditions + conds.parsed_goal_conditions:
                 if cond[0] in SUBSTANCE_PREDICATE:
@@ -258,7 +255,6 @@ class Command(BaseCommand):
                             room_synset_requirements.save()
 
 
-    @transaction.atomic
     def generate_synset_hierarchy(self, G):
         """
         generate the parent/child and ancestor/descendent relationship for synsets
@@ -288,7 +284,6 @@ class Command(BaseCommand):
                 for synset_p in Synset.objects.filter(name__in=nx.ancestors(G, synset_c.name)):
                     synset_c.ancestors.add(synset_p)
 
-    @transaction.atomic
     def generate_synset_state(self):
         synsets = []
         for synset in Synset.objects.all():

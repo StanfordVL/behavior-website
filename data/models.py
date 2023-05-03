@@ -162,8 +162,8 @@ class Synset(models.Model):
 class Task(models.Model):
     objects = get_caching_manager(["synsets", "roomrequirement_set__roomsynsetrequirement_set__synset"])()
     name = models.CharField(max_length=64, primary_key=True)
-    # the synsets required by this task
-    synsets = models.ManyToManyField(Synset)
+    definition = models.TextField()
+    synsets = models.ManyToManyField(Synset) # the synsets required by this task
     
     def __str__(self):
         return self.name

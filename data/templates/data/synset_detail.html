@@ -1,56 +1,49 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{{ synset.name }} Details</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  </head>
-  <body>
-    <div class="container">
-      <h1>{{ synset.name }} Details</h1>
-      <h2>Is legal: {{ synset.legal }}</h2>
-      <h2>Ancestors</h2>
-      <ul>
-        {% for ancestor in synset.ancestors.all %}
-        <a href="{% url 'synset detail' ancestor.name %}" class="{{ 'btn btn-'|add:ancestor.state }}">{{ ancestor.name }}</a>
-        {% empty %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
-      <h2>Parents</h2>
-      <ul>
-        {% for parent in synset.parents.all %}
-        <a href="{% url 'synset detail' parent.name %}" class="{{ 'btn btn-'|add:parent.state }}">{{ parent.name }}</a>
-        {% empty %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
+{% extends "data/base.html" %}
+{% block title %}Synset {{ synset.name }} Details{% endblock %}
+{% block content %}
+  <h1>{{ synset.name }} Details</h1>
+  <h2>Is legal: {{ synset.legal }}</h2>
+  <h2>Ancestors</h2>
+  <ul>
+    {% for ancestor in synset.ancestors.all %}
+    <a href="{% url 'synset detail' ancestor.name %}" class="{{ 'btn btn-'|add:ancestor.state }}">{{ ancestor.name }}</a>
+    {% empty %}
+    <li>None</li>
+    {% endfor %}
+  </ul>
+  <h2>Parents</h2>
+  <ul>
+    {% for parent in synset.parents.all %}
+    <a href="{% url 'synset detail' parent.name %}" class="{{ 'btn btn-'|add:parent.state }}">{{ parent.name }}</a>
+    {% empty %}
+    <li>None</li>
+    {% endfor %}
+  </ul>
 
-      <h2>Children</h2>
-      <ul>
-        {% for child in synset.children.all %}
-        <a href="{% url 'synset detail' child.name %}" class="{{ 'btn btn-'|add:child.state }}">{{ child.name }}</a>
-        {% empty %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
+  <h2>Children</h2>
+  <ul>
+    {% for child in synset.children.all %}
+    <a href="{% url 'synset detail' child.name %}" class="{{ 'btn btn-'|add:child.state }}">{{ child.name }}</a>
+    {% empty %}
+    <li>None</li>
+    {% endfor %}
+  </ul>
 
-      <h2>Tasks</h2>
-      <ul>
-        {% for task in synset.task_set.all %}
-        <a href="{% url 'task detail' task.name %}" class="btn btn-primary">{{ task.name }}</a>
-        {% empty %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
-      
-      <h2>Objects</h2>
-      <ul>
-        {% for object in synset.matching_object %}
-        <a href="{% url 'object detail' object.name %}" class="{{ 'btn btn-'|add:object.state }}">{{ object.name }}</li>
-        {% empty %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
-    </div>
-  </body>
-</html>
+  <h2>Tasks</h2>
+  <ul>
+    {% for task in synset.task_set.all %}
+    <a href="{% url 'task detail' task.name %}" class="btn btn-primary">{{ task.name }}</a>
+    {% empty %}
+    <li>None</li>
+    {% endfor %}
+  </ul>
+  
+  <h2>Objects</h2>
+  <ul>
+    {% for object in synset.matching_object %}
+    <a href="{% url 'object detail' object.name %}" class="{{ 'btn btn-'|add:object.state }}">{{ object.name }}</li>
+    {% empty %}
+    <li>None</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
