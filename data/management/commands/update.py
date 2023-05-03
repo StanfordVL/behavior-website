@@ -188,7 +188,6 @@ class Command(BaseCommand):
                         })
                         RoomObject.objects.create(room=room, object=object, count=count)
 
-    @transaction.atomic
     def create_tasks(self, legal_synsets):
         """
         create tasks and map to synsets
