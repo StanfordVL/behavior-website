@@ -1,9 +1,8 @@
-from typing import Any, List
-from django.db.models.query import QuerySet
+from typing import List
 from data.models import *
+from data.utils import *
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 
 B20 = {
@@ -112,6 +111,38 @@ class SceneDetailView(DetailView):
     slug_field = "name"
     slug_url_kwarg = "scene_name"
 
+
+class IndexView(TemplateView):
+    template_name = "data/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # task metadata
+        tasks_state = [task.state for task in Task.objects.all()]
+        context["task_metadata"] = [
+            len([state for state in tasks_state if state == STATE_MATCHED]),
+            len([state for state in tasks_state if state == STATE_PLANNED]),
+            len([state for state in tasks_state if state == STATE_UNMATCHED]),
+            len(tasks_state)
+        ]
+        # sysnet metadata
+        context["synset_metadata"] = [
+            Synset.objects.filter(state=STATE_MATCHED).count(), 
+            Synset.objects.filter(state=STATE_PLANNED).count(),
+            Synset.objects.filter(state=STATE_SUBSTANCE).count(),
+            Synset.objects.filter(state=STATE_UNMATCHED).count(),
+            Synset.objects.filter(state=STATE_ILLEGAL).count(),
+            Synset.objects.count(),
+        ]
+        # object metadata
+        context["object_metadata"] = [
+            Object.objects.filter(ready=True).count(), 
+            Object.objects.filter(ready=False, planned=True).count(),
+            Object.objects.filter(planned=False).count(),
+        ]
+        # scene metadata
+        num_ready_scenes = sum([scene.ready for scene in Scene.objects.all()])
+        num_planned_scenes = Scene.objects.count() - num_ready_scenes
+        context["scene_metadata"] = [num_ready_scenes, num_planned_scenes]
+        return context
     
-def index(request):
-    return render(request, "data/index.html", {})

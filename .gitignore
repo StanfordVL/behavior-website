@@ -127,3 +127,4 @@ dmypy.json
 
 # integration specific
 data/migrations
+output

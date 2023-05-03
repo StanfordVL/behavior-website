@@ -226,6 +226,15 @@ class Task(models.Model):
     class Meta:
         ordering = ["name"]
 
+    @cached_property
+    def state(self):
+        if self.synset_state == STATE_MATCHED and self.scene_state == STATE_MATCHED and self.substance_required == STATE_NONE:
+            return STATE_MATCHED
+        elif self.synset_state == STATE_UNMATCHED or self.scene_state == STATE_UNMATCHED:
+            return STATE_UNMATCHED
+        else:
+            return STATE_PLANNED
+
     def matching_scene(self, scene: Scene, ready: bool=True) -> str:
         """checks whether a scene satisfies task requirements"""
         ret = ""

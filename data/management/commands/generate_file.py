@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # get missing synsets csv
-        with open('missing_synsets.csv', 'w', newline='') as f:
+        with open('output/missing_synsets.csv', 'w', newline='') as f:
             csv_writer = csv.writer(f)
             csv_writer.writerow(["synset", "required task", "is substance"])
             for synset in tqdm(Synset.objects.all()):
@@ -23,7 +23,7 @@ class Command(BaseCommand):
                         ])
                         
         # # get task-scene mapping csv
-        with open('task_scene_matching.csv', 'w', newline='') as f:
+        with open('output/task_scene_matching.csv', 'w', newline='') as f:
             csv_writer = csv.writer(f)
             csv_writer.writerow(["task", "matched scenes", "synset matched"])
             for task in tqdm(Task.objects.all()):   

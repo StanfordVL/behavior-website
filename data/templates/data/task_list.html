@@ -8,6 +8,12 @@
     td, th {
       border: 0.3vh solid #dee2e6;
     }
+    td a {
+      color: black;
+    }
+    td a:hover {
+      text-decoration: none;
+    }
     .clickable-row:hover {
       cursor: pointer;
       border-left: 0.5vh solid darkorange;
@@ -24,11 +30,25 @@
         });
       });
     });
-    </script>
+  </script>
+  <!-- Search bar -->
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Tasks{% endif %}</h1>
   <h3 class="text-center">Total count: {{ task_list | length }}</h3>
+  <br>
+  <input class="form-control" id="myInput" type="text" placeholder="Search...">
+  <br>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -38,10 +58,10 @@
         <th>Substances</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="myTable">
       {% for task in task_list %}
       <tr class="clickable-row" data-href="{% url 'task_detail' task.name %}">
-        <td><a href="{% url 'task_detail' task.name %}">{{ task.name }}</a></td>
+        <td>{{ task.name }}<a href="{% url 'task_detail' task.name %}"></a></td>
         <td class="{{ 'bg-'|add:task.synset_state }}">
           {% for synset in task.problem_synsets %}
             {{ synset }}, 

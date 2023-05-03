@@ -17,22 +17,27 @@
   <div class="container mt-5">
     <h1 class="text-center">B1K Integration Dashboard</h1>
     <h4 class="text-center">Last updated {% now "SHORT_DATETIME_FORMAT" %}</h4>
-    <div class="row mt-5">
+    <br>
+    <div class="row mt-4">
       <div class="col-md-6">
         <div class="card text-center mb-4">
           <div class="card-header h5">Tasks</div>
           <div class="row no-gutters">
-            <div class="col-sm-4 border-right py-4">
+            <div class="col-sm-4 border-right border-bottom py-4">
               <h6 class="text-success">Sampleable:</h6>
-              <strong>100</strong>
+              <strong>{{ task_metadata.0 }}</strong>
             </div>
-            <div class="col-sm-4 py-4">
+            <div class="col-sm-4 border-right border-bottom py-4">
               <h6 class="text-warning">In Progress:</h6>
-              <strong>200</strong>
+              <strong>{{ task_metadata.1 }}</strong>
             </div>
-            <div class="col-sm-4 border-left py-4">
+            <div class="col-sm-4 border-bottom py-4">
               <h6 class="text-danger">Needs Action:</h6>
-              <strong>800</strong>
+              <strong>{{ task_metadata.2 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-primary">Total:</h6>
+              <strong>{{ task_metadata.3 }}</strong>
             </div>
           </div>
           <a href="{% url 'task_list' %}" class="stretched-link"></a>
@@ -42,17 +47,29 @@
         <div class="card text-center mb-4">
           <div class="card-header h5">Synsets</div>
           <div class="row no-gutters">
-            <div class="col-sm-4 border-right py-4">
+            <div class="col-sm-4 border-right border-bottom py-4">
               <h6 class="text-success">Valid:</h6>
-              <strong>500</strong>
+              <strong>{{ synset_metadata.0 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right border-bottom py-4">
+              <h6 class="text-warning">Planned:</h6>
+              <strong>{{ synset_metadata.1 }}</strong>
+            </div>
+            <div class="col-sm-4 border-bottom py-4">
+              <h6 class="text-info">Substances:</h6>
+              <strong>{{ synset_metadata.2 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-danger">Missing Objects:</h6>
+              <strong>{{ synset_metadata.3 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-danger">Missing Definition:</h6>
+              <strong>{{ synset_metadata.4 }}</strong>
             </div>
             <div class="col-sm-4 py-4">
-              <h6 class="text-danger">Missing Objects:</h6>
-              <strong>800</strong>
-            </div>
-            <div class="col-sm-4 border-left py-4">
-              <h6 class="text-danger">Missing Definition:</h6>
-              <strong>1500</strong>
+              <h6 class="text-primary">Total:</h6>
+              <strong>{{ synset_metadata.5 }}</strong>
             </div>
           </div>
           <a href="{% url 'synset_list' %}" class="stretched-link"></a>
@@ -64,19 +81,19 @@
           <div class="row no-gutters">
             <div class="col-sm-4 border-right py-4">
               <h6 class="text-success">Valid:</h6>
-              <strong>100</strong>
+              <strong>{{ object_metadata.0 }}</strong>
             </div>
             <div class="col-sm-4 py-4">
               <h6 class="text-warning">In Progress:</h6>
-              <strong>200</strong>
+              <strong>{{ object_metadata.1 }}</strong>
             </div>
             <div class="col-sm-4 border-left py-4">
               <!-- This is for things like missing synset assignment, etc. -->
               <h6 class="text-danger">Needs Action:</h6>
-              <strong>800</strong>
+              <strong>{{ object_metadata.2 }}</strong>
             </div>
           </div>
-          <a href="{% url 'index' %}" class="stretched-link"></a>
+          <a href="{% url 'object_list' %}" class="stretched-link"></a>
         </div>
       </div>
       <div class="col-md-6">
@@ -85,35 +102,14 @@
           <div class="row no-gutters">
             <div class="col-sm-6 border-right py-4">
               <h6 class="text-success">Sampleable:</h6>
-              <strong>10</strong>
+              <strong>{{ scene_metadata.0 }}</strong>
             </div>
             <div class="col-sm-6 py-4">
               <h6 class="text-warning">In Progress:</h6>
-              <strong>41</strong>
+              <strong>{{ scene_metadata.1 }}</strong>
             </div>
           </div>
-          <a href="{% url 'index' %}" class="stretched-link"></a>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card text-center mb-4">
-          <div class="card-header h5">Substances</div>
-          <div class="row no-gutters">
-            <div class="col-sm-4 border-right py-4">
-              <h6 class="text-success">Valid:</h6>
-              <strong>100</strong>
-            </div>
-            <div class="col-sm-4 py-4">
-              <h6 class="text-warning">In Progress:</h6>
-              <strong>200</strong>
-            </div>
-            <div class="col-sm-4 border-left py-4">
-              <!-- This is for things like missing synset assignment, etc. -->
-              <h6 class="text-danger">Needs Action:</h6>
-              <strong>800</strong>
-            </div>
-          </div>
-          <a href="{% url 'index' %}" class="stretched-link"></a>
+          <a href="{% url 'scene_list' %}" class="stretched-link"></a>
         </div>
       </div>
     </div>
