@@ -75,7 +75,6 @@ class Command(BaseCommand):
         self.generate_synset_state()
 
 
-    @transaction.atomic
     def create_synsets(self, legal_synsets):
         """
         create categories and synsets (with category_mappings.csv)
@@ -107,7 +106,6 @@ class Command(BaseCommand):
                 except IntegrityError:
                     raise Exception(f"{category_name} mapped to multiple synsets in category_mapping.csv!")
 
-    @transaction.atomic
     def create_objects(self):
         """
         Create objects and map to categories (with object inventory)
@@ -136,7 +134,6 @@ class Command(BaseCommand):
                 objs.append(object)
             Object.objects.bulk_update(objs, ["ready"])
 
-    @transaction.atomic
     def create_scenes(self):
         """
         create scene objects (which stores the room config)
@@ -191,7 +188,6 @@ class Command(BaseCommand):
                         })
                         RoomObject.objects.create(room=room, object=object, count=count)
 
-    @transaction.atomic
     def create_tasks(self, legal_synsets):
         """
         create tasks and map to synsets
@@ -258,7 +254,6 @@ class Command(BaseCommand):
                             room_synset_requirements.save()
 
 
-    @transaction.atomic
     def generate_synset_hierarchy(self, G):
         """
         generate the parent/child and ancestor/descendent relationship for synsets
@@ -287,8 +282,8 @@ class Command(BaseCommand):
                     synset_c.parents.add(synset_p)
                 for synset_p in Synset.objects.filter(name__in=nx.ancestors(G, synset_c.name)):
                     synset_c.ancestors.add(synset_p)
-
-    @transaction.atomic
+                synset_c.save()
+ 
     def generate_synset_state(self):
         synsets = []
         for synset in Synset.objects.all():
