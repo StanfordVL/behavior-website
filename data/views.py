@@ -1,4 +1,5 @@
 from data.models import *
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView
 
@@ -53,12 +54,46 @@ class TaskDetailView(DetailView):
         return context
     
 
+class ObjectListView(ListView):
+    model = Object
+    context_object_name = "object_list"
+    
+    def get_queryset(self):
+        return Object.objects.order_by("name")
+
+
+class SceneListView(ListView):
+    model = Scene
+    context_object_name = "scene_list"
+    
+    def get_queryset(self):
+        return Scene.objects.order_by("name")
+
+
 class SynsetListView(ListView):
     model = Synset
     context_object_name = "synset_list"
     
     def get_queryset(self):
         return Synset.objects.order_by("name")
+    
+
+class NonLeafSynsetListView(ListView):
+    model = Synset
+    context_object_name = "synset_list"
+    
+    def get_queryset(self):
+        return (Synset.objects
+                .annotate(
+                    num_objects=Count('category__object'),
+                    num_child_synsets=Count('children'))
+                .filter(num_objects__gt=0, num_child_synsets__gt=0)
+                .order_by("name"))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Non-Leaf Object-Assigned Synsets"
+        return context
     
 
 class SynsetDetailView(DetailView):
@@ -81,6 +116,17 @@ class ObjectDetailView(DetailView):
     def get_queryset(self):
         self.object_name = get_object_or_404(Object, name=self.kwargs["object_name"])
         return Object.objects.filter(name=self.object_name)   
+    
+
+class SceneDetailView(DetailView):
+    model = Scene
+    context_object_name = "scene"
+    slug_field = "name"
+    slug_url_kwarg = "scene_name"
+
+    def get_queryset(self):
+        self.scene_name = get_object_or_404(Scene, name=self.kwargs["scene_name"])
+        return Scene.objects.filter(name=self.scene_name)  
 
     
 def index(request):

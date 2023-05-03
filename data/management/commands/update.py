@@ -209,7 +209,7 @@ class Command(BaseCommand):
             synsets = set([canonicalize(synset) for synset in conds.parsed_objects.keys()]) - {"agent.n.01"}
             substances = set()
             obj_to_synset = {obj: canonicalize(synset) for synset, objs in conds.parsed_objects.items() for obj in objs}
-            task = Task.objects.create(name=task_name)
+            task = Task.objects.create(name=task_name, definition=predefined_problem)
             # check whether each synset is a substance
             for cond in conds.parsed_initial_conditions + conds.parsed_goal_conditions:
                 if cond[0] in SUBSTANCE_PREDICATE:
@@ -282,8 +282,7 @@ class Command(BaseCommand):
                     synset_c.parents.add(synset_p)
                 for synset_p in Synset.objects.filter(name__in=nx.ancestors(G, synset_c.name)):
                     synset_c.ancestors.add(synset_p)
-                synset_c.save()
- 
+
     def generate_synset_state(self):
         synsets = []
         for synset in Synset.objects.all():
@@ -292,7 +291,7 @@ class Command(BaseCommand):
             elif synset.legal:
                 if len(synset.matching_ready_object) > 0:
                     synset.state = STATE_MATCHED
-                elif len(synset.matching_object) > 0:
+                elif len(synset.matching_objects) > 0:
                     synset.state = STATE_PLANNED
                 else:
                     synset.state = STATE_UNMATCHED
