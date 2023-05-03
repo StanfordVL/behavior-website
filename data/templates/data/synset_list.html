@@ -8,6 +8,9 @@
     td, th {
       border: 0.3vh solid #dee2e6;
     }
+    td a{
+      display: block;
+    }
     .clickable-row:hover {
       cursor: pointer;
       border-left: 0.5vh solid darkorange;
@@ -25,10 +28,24 @@
       });
     });
   </script>
+  <!-- Search bar -->
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}</h1>
-  <h3 class="text-center">Total count: {{ synset_list | length }}</h3>
+  <h4 class="text-center">Total count: {{ synset_list | length }}</h4>
+  <br>
+  <input class="form-control" id="myInput" type="text" placeholder="Search...">
+  <br>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -37,10 +54,10 @@
         <th>Requiring Tasks</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="myTable">
       {% for synset in synset_list %}
       <tr class="clickable-row" data-href="{% url 'synset_detail' synset.name %}">
-        <td><a href="{% url 'synset_detail' synset.name %}">{{ synset.name }}</a></td>
+        <td>{{ synset.name }}<a href="{% url 'synset_detail' synset.name %}"></a></td>
         <td class="{{ 'bg-'|add:synset.state }}"></td>
         <td class="{{ 'bg-'|add:synset.task_state }}"></td>
       </tr>
