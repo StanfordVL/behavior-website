@@ -192,19 +192,6 @@ class Command(BaseCommand):
         """
         create tasks and map to synsets
         """
-        def _get_bddl_leaf_conditions(conds):
-            """
-            get all leaf conditions (i.e. get rid of and/or/not predicates)
-            """
-            leaf_conds = []
-            for cond in conds:
-                if cond[0] in ["and", "or", "not"]:
-                    leaf_conds += _get_bddl_leaf_conditions(cond[1:])
-                else:
-                    leaf_conds.append(cond)
-            return leaf_conds
-
-
         print("Creating tasks...")
         b1k_tasks = glob.glob(rf"{os.path.pardir}/ObjectPropertyAnnotation/init_goal_cond_annotations/problem_files_verified_b1k/*")
         b100_tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
@@ -219,54 +206,44 @@ class Command(BaseCommand):
                 predefined_problem = "".join(f.readlines())
             dom = "omnigibson" if "ObjectPropertyAnnotation" in str(task_file) else "igibson"
             conds = Conditions(task_name, "potato", dom, predefined_problem=predefined_problem)
-            synsets = set([canonicalize(synset) for synset in conds.parsed_objects.keys()]) - {"agent.n.01"}
-            substances = set()
-            obj_to_synset = {obj: canonicalize(synset) for synset, objs in conds.parsed_objects.items() for obj in objs}
+            obj_to_synset = {obj: canonicalize(synset) for synset, objs in conds.parsed_objects.items() if synset != "agent.n.01" for obj in objs}
             task = Task.objects.create(name=task_name, definition=predefined_problem)
-            # check whether each synset is a substance
-            leaf_conditions = _get_bddl_leaf_conditions(conds.parsed_initial_conditions + conds.parsed_goal_conditions)
-            for cond in leaf_conditions:
-                if cond[0] in SUBSTANCE_PREDICATE:
-                    # in some bddl "covered" definitions, the substance is the 2nd one (reversed)
-                    try:
-                        if cond[0] == "covered" and ("stain" in cond[2] or "dust" in cond[2]):
-                            substances.add(obj_to_synset[cond[2].split('?')[-1]])
-                        else:
-                            substances.add(obj_to_synset[cond[1].split('?')[-1]])
-                    except KeyError:
-                        print(f"KeyError: {cond[1]} in task {task_name}, adding {cond[1].split('?')[-1]} to found_substances")
-                        substances.add(cond[1].split('?')[-1])
-
             # add any synset that is not currently in the database
-            for synset_name in synsets:
-                synset, _ = Synset.objects.update_or_create(
+            for object_name, synset_name in obj_to_synset.items():
+                is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, object_name)
+                synset, created = Synset.objects.get_or_create(
                     name=synset_name, 
                     defaults={
                         "definition": wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else "",
-                        "is_substance": synset_name in substances, 
-                        "legal": synset_name in legal_synsets
+                        "legal": synset_name in legal_synsets,
+                        "is_substance": is_used_as_substance,
+                        "is_used_as_substance": is_used_as_substance,
+                        "is_used_as_non_substance": is_used_as_non_substance
                     }
                 )
+                if not created:
+                    synset.is_substance = True if is_used_as_substance else synset.is_substance
+                    synset.is_used_as_substance = True if is_used_as_substance else synset.is_used_as_substance
+                    synset.is_used_as_non_substance = True if is_used_as_non_substance else synset.is_used_as_non_substance
+                    synset.save()
                 task.synsets.add(synset)
             task.save()
 
             # generate room requirements for task
-            for cond in leaf_conditions:
-                if cond[0] == "inroom":
-                    assert len(cond[1:]) == 2, f"{task_name}: {str(cond[1:])} not in correct format"
-                    # we don't check floor and wall because they are not in the room_object_list
-                    if obj_to_synset[cond[1].split('?')[-1]] not in {"floor.n.01", "wall.n.01"}:
-                        room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[2])
-                        room_synset_requirements, created = RoomSynsetRequirement.objects.get_or_create(
-                            room_requirement=room_requirement,
-                            synset=Synset.objects.get(name=obj_to_synset[cond[1].split('?')[-1]]),
-                            defaults={"count": 1}
-                        )
-                        # if the requirement already occurred before, we increment the count by 1
-                        if not created:
-                            room_synset_requirements.count += 1
-                            room_synset_requirements.save()
-
+            for cond in leaf_inroom_conds(conds.parsed_initial_conditions + conds.parsed_goal_conditions):
+                assert len(cond[1:]) == 2, f"{task_name}: {str(cond[1:])} not in correct format"
+                # we don't check floor and wall because they are not in the room_object_list
+                if obj_to_synset[cond[1].split('?')[-1]] not in {"floor.n.01", "wall.n.01"}:
+                    room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[2])
+                    room_synset_requirements, created = RoomSynsetRequirement.objects.get_or_create(
+                        room_requirement=room_requirement,
+                        synset=Synset.objects.get(name=obj_to_synset[cond[1].split('?')[-1]]),
+                        defaults={"count": 1}
+                    )
+                    # if the requirement already occurred before, we increment the count by 1
+                    if not created:
+                        room_synset_requirements.count += 1
+                        room_synset_requirements.save()
 
     def generate_synset_hierarchy(self, G):
         """
