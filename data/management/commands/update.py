@@ -85,6 +85,9 @@ class Command(BaseCommand):
         with open(f"{os.path.pardir}/category_mapping.csv", 'w') as f:
             writer = csv.writer(f)
             writer.writerows(worksheet.get_all_values())
+        # get all annotated substances
+        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/properties_to_synsets.json", "r") as f:
+            self.substances = json.load(f)["substance"]
         with open(f"{os.path.pardir}/category_mapping.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
@@ -97,8 +100,11 @@ class Command(BaseCommand):
                 synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
                 synset, _ = Synset.objects.get_or_create(
                     name=synset_name, 
-                    definition=synset_definition,
-                    legal=(synset_name in legal_synsets)
+                    defaults={
+                        "definition": synset_definition, 
+                        "legal": synset_name in legal_synsets,
+                        "is_substance": synset_name in self.substances,
+                    }
                 )
                 # safeguard to ensure every category only appears once in the csv file
                 try:
@@ -216,13 +222,12 @@ class Command(BaseCommand):
                     defaults={
                         "definition": wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else "",
                         "legal": synset_name in legal_synsets,
-                        "is_substance": is_used_as_substance,
+                        "is_substance": synset_name in self.substances,
                         "is_used_as_substance": is_used_as_substance,
                         "is_used_as_non_substance": is_used_as_non_substance
                     }
                 )
                 if not created:
-                    synset.is_substance = True if is_used_as_substance else synset.is_substance
                     synset.is_used_as_substance = True if is_used_as_substance else synset.is_used_as_substance
                     synset.is_used_as_non_substance = True if is_used_as_non_substance else synset.is_used_as_non_substance
                     synset.save()
