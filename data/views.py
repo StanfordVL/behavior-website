@@ -120,9 +120,10 @@ class IndexView(TemplateView):
         # task metadata
         tasks_state = [task.state for task in Task.objects.all()]
         context["task_metadata"] = [
-            len([state for state in tasks_state if state == STATE_MATCHED]),
-            len([state for state in tasks_state if state == STATE_PLANNED]),
-            len([state for state in tasks_state if state == STATE_UNMATCHED]),
+            sum([1 for state in tasks_state if state == STATE_MATCHED]),
+            sum([1 for state in tasks_state if state == STATE_PLANNED]),
+            sum([1 for state in tasks_state if state == STATE_UNMATCHED]),
+            sum([1 for x in Task.objects.all() if x.scene_state == STATE_UNMATCHED]),
             len(tasks_state)
         ]
         # sysnet metadata

@@ -23,21 +23,25 @@
         <div class="card text-center mb-4">
           <div class="card-header h5">Tasks</div>
           <div class="row no-gutters">
-            <div class="col-sm-4 border-right border-bottom py-4">
+            <div class="col-sm-6 border-right border-bottom py-4">
               <h6 class="text-success">Sampleable:</h6>
               <strong>{{ task_metadata.0 }}</strong>
             </div>
-            <div class="col-sm-4 border-right border-bottom py-4">
+            <div class="col-sm-6 border-right border-bottom py-4">
               <h6 class="text-warning">In Progress:</h6>
               <strong>{{ task_metadata.1 }}</strong>
             </div>
-            <div class="col-sm-4 border-bottom py-4">
-              <h6 class="text-danger">Needs Action:</h6>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-danger">Missing Objects:</h6>
               <strong>{{ task_metadata.2 }}</strong>
             </div>
             <div class="col-sm-4 border-right py-4">
-              <h6 class="text-primary">Total:</h6>
+              <h6 class="text-danger">Missing Scene:</h6>
               <strong>{{ task_metadata.3 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-primary">Total:</h6>
+              <strong>{{ task_metadata.4 }}</strong>
             </div>
           </div>
           <a href="{% url 'task_list' %}" class="stretched-link"></a>
