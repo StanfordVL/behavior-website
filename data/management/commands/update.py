@@ -6,14 +6,16 @@ import glob
 import gspread
 import pathlib
 from bddl.activity import Conditions
+import tqdm
 from data.utils import *
 from data.models import *
 from nltk.corpus import wordnet as wn
 from django.db import transaction
 from django.db.utils import IntegrityError
 from django.contrib.sites.models import Site
+from django.core.files import File
 from django.core.management.base import BaseCommand
-
+from fs.zipfs import ZipFS
 
 class Command(BaseCommand):
     help = "generates all the Django objects using data from ig_pipeline, B1K google sheets, and bddl"
@@ -73,6 +75,7 @@ class Command(BaseCommand):
         """
         self.generate_synset_hierarchy(self.G)
         self.generate_synset_state()
+        self.generate_object_images()
 
 
     def create_synsets(self, legal_synsets):
@@ -290,3 +293,14 @@ class Command(BaseCommand):
                 synset.state = STATE_ILLEGAL
             synsets.append(synset)
         Synset.objects.bulk_update(synsets, ["state"])
+
+    def generate_object_images(self):
+        print("Generating object images...")
+        with ZipFS(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_images.zip", write=False) as image_fs:
+            for obj in tqdm.tqdm(Object.objects.all()):
+                filename = f"{obj.name}.jpg"
+                if not image_fs.exists(filename):
+                    continue
+                bio = io.BytesIO(image_fs.getbytes(filename))
+                obj.photo = File(bio, name=filename)
+                obj.save()
