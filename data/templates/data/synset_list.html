@@ -28,25 +28,58 @@
       });
     });
   </script>
-  <!-- Search bar -->
+  <!-- datatable search -->
   <script>
-    $(document).ready(function(){
-      $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
+    $(document).ready(function() {
+      var table = $('#datatable').DataTable({
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [1, 2, 3]
+        },
+        columnDefs: [
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[2] > 0;}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[2] === 0;}
+                },
+              ]
+            },
+            targets: [2]
+          },
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[3] > 0;}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[3] === 0;}
+                },
+              ]
+            },
+            targets: [3]
+          },
+        ],
       });
-    });
+      table.searchPanes.container().prependTo(table.table().container());
+      table.searchPanes.resizePanes();
+  });
   </script>
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}</h1>
   <h4 class="text-center">Total count: {{ synset_list | length }}</h4>
   <br>
-  <input class="form-control" id="myInput" type="text" placeholder="Search...">
-  <br>
-  <table class="table table-striped">
+  <table class="table table-striped" id="datatable">
     <thead>
       <tr>
         <th>Name</th>
@@ -61,7 +94,14 @@
       {% for synset in synset_list %}
       <tr class="clickable-row" data-href="{% url 'synset_detail' synset.name %}">
         <td>{{ synset.name }}<a href="{% url 'synset_detail' synset.name %}"></a></td>
-        <td class="{{ 'bg-'|add:synset.state }}"></td>
+        <td class="{{ 'bg-'|add:synset.state }}">
+          {% if synset.state == 'success' %}Ready
+          {% elif synset.state == 'warning' %}Planned
+          {% elif synset.state == 'danger' %}Not Ready
+          {% elif synset.state == 'info' %}Substance
+          {% else %}Illegal
+          {% endif %}
+        </td>
         <td>{{ synset.direct_matching_objects | length }}</td>
         <td>{{ synset.matching_objects | length }}</td>
         <td>{{ synset.is_used_as_substance }}</td>

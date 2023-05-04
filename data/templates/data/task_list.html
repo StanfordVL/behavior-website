@@ -31,25 +31,58 @@
       });
     });
   </script>
-  <!-- Search bar -->
+  <!-- datatable search -->
   <script>
-    $(document).ready(function(){
-      $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
+    $(document).ready(function() {
+      var table = $('#datatable').DataTable({
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [1, 2, 3]
+        },
+        columnDefs: [
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Ready',
+                  value: function(rowData, rowIdx) {return rowData[1] === "";}
+                },
+                {
+                  label: 'Not Ready',
+                  value: function(rowData, rowIdx) {return rowData[1] !== "";}
+                },
+              ]
+            },
+            targets: [1]
+          },
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Required',
+                  value: function(rowData, rowIdx) {return rowData[3] !== "";}
+                },
+                {
+                  label: 'Not Required',
+                  value: function(rowData, rowIdx) {return rowData[3] === "";}
+                },
+              ]
+            },
+            targets: [3]
+          },
+        ],
       });
-    });
+      table.searchPanes.container().prependTo(table.table().container());
+      table.searchPanes.resizePanes();
+  });
   </script>
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Tasks{% endif %}</h1>
   <h3 class="text-center">Total count: {{ task_list | length }}</h3>
   <br>
-  <input class="form-control" id="myInput" type="text" placeholder="Search...">
-  <br>
-  <table class="table table-striped">
+  <table class="table table-striped" id="datatable">
     <thead>
       <tr>
         <th>Task Name</th>
@@ -68,9 +101,7 @@
           {% endfor %}
         </td>
         <td class="{{ 'bg-'|add:task.scene_state }}">
-          {% for scene in task.scene_matching_dict.matched %}
-            {{ scene }}, 
-          {% endfor %}
+          {% if task.scene_state == 'success' %}Matched{% elif task.scene_state == 'warning' %}Planned{% else %}Unmatched{% endif %}
         </td>
         <td class="{{ 'bg-'|add:task.substance_required }}">
           {% for substance in task.substance_synsets %}
