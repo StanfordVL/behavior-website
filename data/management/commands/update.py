@@ -192,6 +192,19 @@ class Command(BaseCommand):
         """
         create tasks and map to synsets
         """
+        def _get_bddl_leaf_conditions(conds):
+            """
+            get all leaf conditions (i.e. get rid of and/or/not predicates)
+            """
+            leaf_conds = []
+            for cond in conds:
+                if cond[0] in ["and", "or", "not"]:
+                    leaf_conds += _get_bddl_leaf_conditions(cond[1:])
+                else:
+                    leaf_conds.append(cond)
+            return leaf_conds
+
+
         print("Creating tasks...")
         b1k_tasks = glob.glob(rf"{os.path.pardir}/ObjectPropertyAnnotation/init_goal_cond_annotations/problem_files_verified_b1k/*")
         b100_tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
@@ -211,12 +224,13 @@ class Command(BaseCommand):
             obj_to_synset = {obj: canonicalize(synset) for synset, objs in conds.parsed_objects.items() for obj in objs}
             task = Task.objects.create(name=task_name, definition=predefined_problem)
             # check whether each synset is a substance
-            for cond in conds.parsed_initial_conditions + conds.parsed_goal_conditions:
+            leaf_conditions = _get_bddl_leaf_conditions(conds.parsed_initial_conditions + conds.parsed_goal_conditions)
+            for cond in leaf_conditions:
                 if cond[0] in SUBSTANCE_PREDICATE:
                     # in some bddl "covered" definitions, the substance is the 2nd one (reversed)
                     try:
                         if cond[0] == "covered" and ("stain" in cond[2] or "dust" in cond[2]):
-                            substances.add(obj_to_synset[cond[2]])
+                            substances.add(obj_to_synset[cond[2].split('?')[-1]])
                         else:
                             substances.add(obj_to_synset[cond[1].split('?')[-1]])
                     except KeyError:
@@ -237,7 +251,7 @@ class Command(BaseCommand):
             task.save()
 
             # generate room requirements for task
-            for cond in conds.parsed_initial_conditions + conds.parsed_goal_conditions:
+            for cond in leaf_conditions:
                 if cond[0] == "inroom":
                     assert len(cond[1:]) == 2, f"{task_name}: {str(cond[1:])} not in correct format"
                     # we don't check floor and wall because they are not in the room_object_list
