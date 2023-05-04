@@ -63,8 +63,10 @@
                 Error Views
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                <a class="dropdown-item" href="{% url 'non-leaf_synset_list' %}">Object-assigned Non-leaf Synsets</a>
-                <a class="dropdown-item" href="{% url 'non-scene-matched_task_list' %}">Non-scene-matched Tasks</a>
+                <a class="dropdown-item" href="{% url 'non-leaf_synset_list' %}">Object-Assigned Non-Leaf Synsets</a>
+                <a class="dropdown-item" href="{% url 'non-scene-matched_task_list' %}">Non-Scene-Matched Tasks</a>
+                <a class="dropdown-item" href="{% url 'substance_error_synset_list' %}">Substanceness Mismatch Synsets</a>
+                <a class="dropdown-item" href="{% url 'substance_mapped_object_list' %}">Objects Assigned to Substance Synsets</a>
               </div>
             </li>
           </ul>

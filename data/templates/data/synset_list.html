@@ -1,5 +1,5 @@
 {% extends "data/base.html" %}
-{% block title %}{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}{% endblock %}
+{% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
     table {
@@ -41,7 +41,7 @@
   </script>
 {% endblock %}
 {% block content %}
-  <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}</h1>
+  <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}</h1>
   <h4 class="text-center">Total count: {{ synset_list | length }}</h4>
   <br>
   <input class="form-control" id="myInput" type="text" placeholder="Search...">
@@ -53,6 +53,8 @@
         <th>Synset State</th>
         <th>Direct Objects</th>
         <th>Total Objects</th>
+        <th>Used as Substance in BDDL?</th>
+        <th>Used as Rigid Body in BDDL?</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -62,6 +64,8 @@
         <td class="{{ 'bg-'|add:synset.state }}"></td>
         <td>{{ synset.direct_matching_objects | length }}</td>
         <td>{{ synset.matching_objects | length }}</td>
+        <td>{{ synset.is_used_as_substance }}</td>
+        <td>{{ synset.is_used_as_non_substance }}</td>
       </tr>
       {% endfor %}
     </tbody>

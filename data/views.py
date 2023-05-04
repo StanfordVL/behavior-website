@@ -35,29 +35,26 @@ class TaskListView(ListView):
 
 
 class B20TaskListView(TaskListView):
+    page_title = "B-20 Tasks"
     queryset = Task.objects.order_by("name").filter(name__in=B20)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["page_title"] = "B-20 Tasks"
-        return context
     
 
 class NonSceneMatchedTaskListView(TaskListView):
     template_name = "data/task_list.html"
+    page_title = "Non-Scene-Matched Tasks"
 
     def get_queryset(self) -> List[Task]:
         return [x for x in super().get_queryset().all() if x.scene_state == STATE_UNMATCHED]
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["page_title"] = "Non-Scene-Matched Tasks"
-        return context
 
 
 class ObjectListView(ListView):
     model = Object
     context_object_name = "object_list"
+
+
+class SubstanceMappedObjectListView(ObjectListView):
+    page_title = "Objects Incorrectly Mapped to Substance Synsets"
+    queryset = Object.objects.filter(category__synset__is_substance=True).all()
 
 
 class SceneListView(ListView):
@@ -71,6 +68,7 @@ class SynsetListView(ListView):
     
 
 class NonLeafSynsetListView(SynsetListView):
+    page_title = "Non-Leaf Object-Assigned Synsets"
     queryset = (Synset.objects
                 .annotate(
                     num_objects=Count('category__object'),
@@ -78,10 +76,19 @@ class NonLeafSynsetListView(SynsetListView):
                 .filter(num_objects__gt=0, num_child_synsets__gt=0)
                 .order_by("name"))
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["page_title"] = "Non-Leaf Object-Assigned Synsets"
-        return context
+
+class SubstanceErrorSynsetListView(SynsetListView):
+    page_title = "Synsets Used in Wrong (Substance/Rigid) Predicates"
+    template_name = "data/synset_list.html"
+
+    def get_queryset(self) -> List[Task]:
+        return [
+            s for s in super().get_queryset().annotate(num_objects=Count('category__object')).all()
+            if (
+                (s.is_substance and s.is_used_as_non_substance) or 
+                (not s.is_substance and s.is_used_as_substance) or 
+                (s.is_used_as_substance and s.is_used_as_non_substance)
+            )]
 
 
 class TaskDetailView(DetailView):

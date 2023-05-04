@@ -1,5 +1,5 @@
 {% extends "data/base.html" %}
-{% block title %}{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}{% endblock %}
+{% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
     table {
@@ -38,7 +38,7 @@
   </script>
 {% endblock %}
 {% block content %}
-  <h1 class="text-center">{% if page_title %}{{ page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
+  <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
   <h4 class="text-center">Total count: {{ object_list | length }}</h4>
   <br>
   <input class="form-control" id="myInput" type="text" placeholder="Search...">
