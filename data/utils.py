@@ -17,6 +17,8 @@ STATE_NONE = "light"
 
 # predicates that indicates the presence of a substance in bddl
 SUBSTANCE_PREDICATES = {"filled", "insource", "empty", "saturated", "contains", "covered"}
+# predicates that can be used for both substance and non-substance
+UNIVERSAL_PREDICATES = {"future", "real"}
 
 
 def get_synset_graph():
@@ -80,12 +82,16 @@ def object_substance_match(cond, object) -> Tuple[bool, bool]:
             return True, False
         else:
             return False, False
-    if not isinstance(cond[0], list) and cond[0] in SUBSTANCE_PREDICATES:
-        # in some bddl "covered" definitions, the substance is the 2nd one (reversed)
-        if cond[0] == "covered" and ("stain.n.01" in cond[2] or "dust.n.01" in cond[2]):
-            return (False, True) if cond[2] == object.split('?')[-1] else (True, False)
-        elif cond[1] == object.split('?')[-1]:
-            return False, True
+    if not isinstance(cond[0], list):
+        if cond[0] in SUBSTANCE_PREDICATES:
+            # in some bddl "covered" definitions, the substance is the 2nd one (reversed)
+            if cond[0] == "covered" and ("stain.n.01" in cond[2] or "dust.n.01" in cond[2]):
+                return (False, True) if cond[2] == object.split('?')[-1] else (True, False)
+            elif cond[1] == object.split('?')[-1]:
+                return False, True
+        # if the predicate is universal, it can be used for both substance and non-substance, so we return False for both
+        elif cond[0] in UNIVERSAL_PREDICATES:
+            return False, False
     is_substance, is_non_substance = zip(*[object_substance_match(child, object) for child in cond])   
     return any(is_substance), any(is_non_substance)
 
