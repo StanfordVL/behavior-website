@@ -51,7 +51,8 @@
       <tr>
         <th>Name</th>
         <th>Synset State</th>
-        <th>Requiring Tasks</th>
+        <th>Direct Objects</th>
+        <th>Total Objects</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -59,7 +60,8 @@
       <tr class="clickable-row" data-href="{% url 'synset_detail' synset.name %}">
         <td>{{ synset.name }}<a href="{% url 'synset_detail' synset.name %}"></a></td>
         <td class="{{ 'bg-'|add:synset.state }}"></td>
-        <td class="{{ 'bg-'|add:synset.task_state }}"></td>
+        <td>{{ synset.direct_matching_objects | length }}</td>
+        <td>{{ synset.matching_objects | length }}</td>
       </tr>
       {% endfor %}
     </tbody>

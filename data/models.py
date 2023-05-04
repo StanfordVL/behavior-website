@@ -79,7 +79,11 @@ class Scene(models.Model):
         return self.room_set.filter(ready=False).aggregate(models.Sum("roomobject__count"))["roomobject__count__sum"]
     
     @cached_property
-    def ready(self):
+    def any_ready(self):
+        return self.room_set.filter(ready=True).count() > 0
+    
+    @cached_property
+    def fully_ready(self):
         ready_count = self.room_set.filter(ready=True).aggregate(models.Sum("roomobject__count"))["roomobject__count__sum"]
         unready_count = self.object_count
         return ready_count == unready_count
