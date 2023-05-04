@@ -29,7 +29,28 @@
   <script>
     $(document).ready(function() {
       var table = $('#datatable').DataTable({
-          searchPanes: true
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [2, 3]
+        },
+        columnDefs: [
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[2] !== "";}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[2] === "";}
+                },
+              ]
+            },
+            targets: [2]
+          },
+        ],
       });
       table.searchPanes.container().prependTo(table.table().container());
       table.searchPanes.resizePanes();

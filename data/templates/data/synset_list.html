@@ -32,7 +32,43 @@
   <script>
     $(document).ready(function() {
       var table = $('#datatable').DataTable({
-          searchPanes: true
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [1, 2, 3]
+        },
+        columnDefs: [
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[2] > 0;}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[2] === 0;}
+                },
+              ]
+            },
+            targets: [2]
+          },
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[3] > 0;}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[3] === 0;}
+                },
+              ]
+            },
+            targets: [3]
+          },
+        ],
       });
       table.searchPanes.container().prependTo(table.table().container());
       table.searchPanes.resizePanes();
@@ -58,7 +94,14 @@
       {% for synset in synset_list %}
       <tr class="clickable-row" data-href="{% url 'synset_detail' synset.name %}">
         <td>{{ synset.name }}<a href="{% url 'synset_detail' synset.name %}"></a></td>
-        <td class="{{ 'bg-'|add:synset.state }}"></td>
+        <td class="{{ 'bg-'|add:synset.state }}">
+          {% if synset.state == 'success' %}Ready
+          {% elif synset.state == 'warning' %}Planned
+          {% elif synset.state == 'danger' %}Not Ready
+          {% elif synset.state == 'info' %}Substance
+          {% else %}Illegal
+          {% endif %}
+        </td>
         <td>{{ synset.direct_matching_objects | length }}</td>
         <td>{{ synset.matching_objects | length }}</td>
         <td>{{ synset.is_used_as_substance }}</td>

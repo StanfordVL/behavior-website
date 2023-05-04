@@ -35,7 +35,43 @@
   <script>
     $(document).ready(function() {
       var table = $('#datatable').DataTable({
-          searchPanes: true
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [1, 2, 3]
+        },
+        columnDefs: [
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Ready',
+                  value: function(rowData, rowIdx) {return rowData[1] === "";}
+                },
+                {
+                  label: 'Not Ready',
+                  value: function(rowData, rowIdx) {return rowData[1] !== "";}
+                },
+              ]
+            },
+            targets: [1]
+          },
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Required',
+                  value: function(rowData, rowIdx) {return rowData[3] !== "";}
+                },
+                {
+                  label: 'Not Required',
+                  value: function(rowData, rowIdx) {return rowData[3] === "";}
+                },
+              ]
+            },
+            targets: [3]
+          },
+        ],
       });
       table.searchPanes.container().prependTo(table.table().container());
       table.searchPanes.resizePanes();
@@ -65,9 +101,7 @@
           {% endfor %}
         </td>
         <td class="{{ 'bg-'|add:task.scene_state }}">
-          {% for scene in task.scene_matching_dict.matched %}
-            {{ scene }}, 
-          {% endfor %}
+          {% if task.scene_state == 'success' %}Matched{% elif task.scene_state == 'warning' %}Planned{% else %}Unmatched{% endif %}
         </td>
         <td class="{{ 'bg-'|add:task.substance_required }}">
           {% for substance in task.substance_synsets %}
