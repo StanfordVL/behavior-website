@@ -25,25 +25,22 @@
       });
     });
   </script>
-  <!-- Search bar -->
+  <!-- datatable search -->
   <script>
-    $(document).ready(function(){
-      $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
+    $(document).ready(function() {
+      var table = $('#datatable').DataTable({
+          searchPanes: true
       });
-    });
+      table.searchPanes.container().prependTo(table.table().container());
+      table.searchPanes.resizePanes();
+  });
   </script>
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
   <h4 class="text-center">Total count: {{ object_list | length }}</h4>
   <br>
-  <input class="form-control" id="myInput" type="text" placeholder="Search...">
-  <br>
-  <table class="table table-striped">
+  <table class="table table-striped" id="datatable">
     <thead>
       <tr>
         <th>Object</th>

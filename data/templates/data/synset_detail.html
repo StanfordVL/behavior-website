@@ -5,14 +5,17 @@
   <h2>Is legal: {{ synset.legal }}</h2>
 
   <h2>Tasks</h2>
-  <ul>
-    {% for task in synset.task_set.all %}
-    <a href="{% url 'task_detail' task.name %}" class="{{ 'btn btn-'|add:task.state }}">{{ task.name }}</a>
-    {% empty %}
-    <li>None</li>
-    {% endfor %}
-  </ul>
-
+  <div class="container">
+    <div class="row justify-content-md-center">
+      {% for task in synset.task_set.all %}
+      <div class="col-md-auto my-1"><a href="{% url 'task_detail' task.name %}" class="{{ 'btn btn-'|add:task.state }}">{{ task.name }}</a></div>
+      {% empty %}
+      <li>None</li>
+      {% endfor %}
+    </div>
+  </div>
+  <br>
+  
   <h2>Directly Mapped Objects</h2>
   <div class="container">
     <div class="row justify-content-md-center">
@@ -23,6 +26,7 @@
       {% endfor %}
     </div>
   </div>
+  <br>
 
   <h2>All Descendant Objects (including Direct)</h2>
   <div class="container">
@@ -34,10 +38,12 @@
       {% endfor %}
     </div>
   </div>
+  <br>
 
   <h2>Related Synsets</h2>
   {% include "data/synset_graph_module.html" with G=synset.subgraph center_node=synset %}
-
+  <br>
+  
   <h2>Ancestor Synsets</h2>
   <div class="container">
     <div class="row justify-content-md-center">
@@ -48,6 +54,7 @@
       {% endfor %}
     </div>
   </div>
+  <br>
 
   <h2>Parents Synsets</h2>
   <div class="container">
@@ -59,6 +66,7 @@
       {% endfor %}
     </div>
   </div>
+  <br>
 
   <h2>Children Synsets</h2>
   <div class="container">
