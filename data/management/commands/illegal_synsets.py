@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = "generates task-scene mapping csv and missing synsets csv"
 
     def handle(self, *args, **options):
-        illegal_synsets = sorted(list(Synset.objects.filter(state=STATE_ILLEGAL).values_list("name", flat=True)))
+        illegal_synsets = sorted(list(Synset.objects.filter(legal=False).values_list("name", flat=True)))
         with open("output/all_illegal_synsets.json", "w") as f:
             json.dump(illegal_synsets, f, indent=4)
         
