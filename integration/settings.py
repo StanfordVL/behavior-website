@@ -119,19 +119,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/b1k-integration/static/'
 STATIC_ROOT = 'static/'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/b1k-integration/media/'
+MEDIA_ROOT = "media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# freeze
-SITE_ID = 1
-FREEZE_BASE_URL = '/b1k-integration/'
-FREEZE_ROOT = f"{os.path.abspath(os.path.curdir)}/build"
-FREEZE_FOLLOW_SITEMAP_URLS = False
-FREEZE_INCLUDE_STATIC = False
-FREEZE_FOLLOW_HTML_URLS = True

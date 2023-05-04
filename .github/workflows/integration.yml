@@ -55,8 +55,10 @@ jobs:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
       - name: Pull dvc data
         working-directory: ig_pipeline
-        run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future
-
+        run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future generate_object_images
+      - name: Unprotect images
+        working-directory: ig_pipeline
+        run: dvc unprotect artifacts/pipeline/object_images.zip
       # Build static content
       - name: Checkout integration repo
         uses: actions/checkout@v3

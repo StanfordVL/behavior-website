@@ -3,7 +3,9 @@
 {% block content %}
   <h1>{{ object.name }} Details</h1>
 
-  <!-- TODO: Add image here -->
+  {% if object.photo %}
+  <img class="img-fluid" src="{{ object.photo.url }}" alt="{{ object.name }} photo" />
+  {% endif %}
 
   <h2>Is ready: {{ object.ready }}</h2>
   <h2>Category:</h2>
