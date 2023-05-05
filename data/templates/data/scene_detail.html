@@ -1,8 +1,15 @@
 {% extends "data/base.html" %}
 {% block title %}Scene {{ scene.name }} Details{% endblock %}
 {% block content %}
-  <h1>{{ scene.name }} Details</h1>
-  <h2>Is ready: {% if scene.fully_ready %}Fully Ready{% elif scene.any_ready %}Partially Ready{% else %}Not Ready{% endif %}</h2>
+  <h1 class="text-center">{{ scene.name }}</h1>
+  <hr>
+  {% if scene.fully_ready %}
+  <h4 class="text-center text-success">Fully Ready</h4>
+  {% elif scene.any_ready %}
+  <h4 class="text-center text-warning">Partially Ready</h4>
+  {% else %}
+  <h4 class="text-center text-danger">Not Ready</h4>
+  {% endif %}
   <h2>Rooms</h2>
   {% for room in scene.room_set.all %}
   <h3>{{ room.name }}</h3>

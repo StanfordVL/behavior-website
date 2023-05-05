@@ -1,15 +1,18 @@
 {% extends "data/base.html" %}
 {% block title %}Task {{ task.name }} Details{% endblock %}
 {% block content %}
-  <h1>{{ task.name }} Details</h1>
+  <h1 class="text-center">{{ task.name }}</h1>
+  <hr>
   <h2>Synsets</h2>
-  <ul>
-    {% for synset in task.synsets.all %}
-    <a href="{% url 'synset_detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}"> {{ synset.name }}</a>
-    {% empty %}
-    <li>None</li>
-    {% endfor %}
-  </ul>
+  <div class="container">
+      <div class="row justify-content-md-center">
+      {% for synset in task.synsets.all %}
+      <div class="col-md-auto my-1"><a href="{% url 'synset_detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}"> {{ synset.name }}</a></div>
+      {% empty %}
+      <div>None</div>
+      {% endfor %}
+    </div>
+  </div>
   <h2>Scenes</h2>
   <ul>
     <li>Matched:
