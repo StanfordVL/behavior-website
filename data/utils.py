@@ -39,7 +39,7 @@ def get_synset_graph():
         reader = csv.DictReader(f)
         for row in reader:
             child = row["custom_synset"].strip()
-            parent = wn.synset(row["hypernyms"].strip()).name()
+            parent = wn.synset(row["hypernym"].strip()).name()
             assert parent in G.nodes, "Could not find " + parent
             G.add_edge(parent, child)
     return G
