@@ -116,33 +116,49 @@ class Command(BaseCommand):
                 except IntegrityError:
                     raise Exception(f"{category_name} mapped to multiple synsets in category_mapping.csv!")
 
+
     def create_objects(self):
         """
         Create objects and map to categories (with object inventory)
         """
         print("Creating objects...")
+        # first get Deletion Queue
+        deletion_queue = set()
+        gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+        worksheet = gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Deletion Queue")
+        with open(f"{os.path.pardir}/deletion_queue.csv", 'w') as f:
+            writer = csv.writer(f)
+            writer.writerows(worksheet.get_all_values())
+        with open(f"{os.path.pardir}/deletion_queue.csv", newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                deletion_queue.add(row["Object"].strip())
+        # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
             for object_name in json.load(f)["providers"].keys():
                 if object_name in self.object_rename_mapping:
                     object_name = self.object_rename_mapping[object_name]
-                category_name = object_name.split("-")[0]
-                category, _ = Category.objects.get_or_create(name=category_name)
-                object = Object.objects.create(name=object_name, ready=False, category=category)
+                if object_name not in deletion_queue:
+                    category_name = object_name.split("-")[0]
+                    category, _ = Category.objects.get_or_create(name=category_name)
+                    object = Object.objects.create(name=object_name, ready=False, category=category)
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             objs = []
             for object_name in json.load(f)["providers"].keys():
                 if object_name in self.object_rename_mapping:
                     object_name = self.object_rename_mapping[object_name]
-                category_name = object_name.split("-")[0]
-                category, _ = Category.objects.get_or_create(name=category_name)
-                # safeguard to ensure currently available objects are also in future planned dataset
-                try:
-                    object = Object.objects.get(name=object_name)
-                except Object.DoesNotExist:
-                    raise Exception(f"{object_name} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!")
-                object.ready = True
-                objs.append(object)
+                if object_name not in deletion_queue:
+                    category_name = object_name.split("-")[0]
+                    category, _ = Category.objects.get_or_create(name=category_name)
+                    # safeguard to ensure currently available objects are also in future planned dataset
+                    try:
+                        object = Object.objects.get(name=object_name)
+                    except Object.DoesNotExist:
+                        raise Exception(f"{object_name} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!")
+                    object.ready = True
+                    objs.append(object)
             Object.objects.bulk_update(objs, ["ready"])
+
 
     def create_scenes(self):
         """
@@ -198,6 +214,7 @@ class Command(BaseCommand):
                         })
                         RoomObject.objects.create(room=room, object=object, count=count)
 
+
     def create_tasks(self, legal_synsets):
         """
         create tasks and map to synsets
@@ -216,11 +233,12 @@ class Command(BaseCommand):
                 predefined_problem = "".join(f.readlines())
             dom = "omnigibson" if "ObjectPropertyAnnotation" in str(task_file) else "igibson"
             conds = Conditions(task_name, "potato", dom, predefined_problem=predefined_problem)
-            obj_to_synset = {obj: canonicalize(synset) for synset, objs in conds.parsed_objects.items() if synset != "agent.n.01" for obj in objs}
+            synsets = set(synset for synset in conds.parsed_objects if synset != "agent.n.01")
+            canonicalized_synsets = set(canonicalize(synset) for synset in synsets)
             task = Task.objects.create(name=task_name, definition=predefined_problem)
             # add any synset that is not currently in the database
-            for object_name, synset_name in obj_to_synset.items():
-                is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, object_name)
+            for synset_name in canonicalized_synsets:
+                is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
                 synset, created = Synset.objects.get_or_create(
                     name=synset_name, 
                     defaults={
@@ -239,20 +257,21 @@ class Command(BaseCommand):
             task.save()
 
             # generate room requirements for task
-            for cond in leaf_inroom_conds(conds.parsed_initial_conditions + conds.parsed_goal_conditions):
-                assert len(cond[1:]) == 2, f"{task_name}: {str(cond[1:])} not in correct format"
+            for cond in leaf_inroom_conds(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synsets, task_name):
+                assert len(cond) == 2, f"{task_name}: {str(cond)} not in correct format"
                 # we don't check floor and wall because they are not in the room_object_list
-                if obj_to_synset[cond[1].split('?')[-1]] not in {"floor.n.01", "wall.n.01"}:
-                    room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[2])
+                if cond[0] not in {"floor.n.01", "wall.n.01"}:
+                    room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[1])
                     room_synset_requirements, created = RoomSynsetRequirement.objects.get_or_create(
                         room_requirement=room_requirement,
-                        synset=Synset.objects.get(name=obj_to_synset[cond[1].split('?')[-1]]),
+                        synset=Synset.objects.get(name=cond[0]),
                         defaults={"count": 1}
                     )
                     # if the requirement already occurred before, we increment the count by 1
                     if not created:
                         room_synset_requirements.count += 1
                         room_synset_requirements.save()
+
 
     def generate_synset_hierarchy(self, G):
         """
@@ -283,6 +302,7 @@ class Command(BaseCommand):
                 for synset_p in Synset.objects.filter(name__in=nx.ancestors(G, synset_c.name)):
                     synset_c.ancestors.add(synset_p)
 
+
     def generate_synset_state(self):
         synsets = []
         for synset in Synset.objects.all():
@@ -299,6 +319,7 @@ class Command(BaseCommand):
                 synset.state = STATE_ILLEGAL
             synsets.append(synset)
         Synset.objects.bulk_update(synsets, ["state"])
+
 
     def generate_object_images(self):
         print("Generating object images...")

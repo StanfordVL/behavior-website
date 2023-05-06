@@ -2,9 +2,8 @@ import csv
 import os
 import networkx as nx
 from nltk.corpus import wordnet as wn
-from typing import Tuple, List
+from typing import Tuple, List, Set
 from data.models import *
-
 
 # STATE METADATA
 STATE_MATCHED = "success"
@@ -15,10 +14,13 @@ STATE_ILLEGAL = "secondary"
 STATE_NONE = "light"
 
 
-# predicates that indicates the presence of a substance in bddl
+# predicates that can only be used for substances
 SUBSTANCE_PREDICATES = {"filled", "insource", "empty", "saturated", "contains", "covered"}
-# predicates that can be used for both substance and non-substance
-UNIVERSAL_PREDICATES = {"future", "real"}
+# predicates that can only be used for non-substances
+NON_SUBSTANCE_PREDICATES = {
+    "cooked", "frozen", "closed", "open", "folded", "unfolded", "toggled_on", "hot", "on_fire", "assembled",
+    "broken", "ontop", "nextto", "under", "touching", "inside", "overlaid", "attached", "draped", "inroom"
+}
 
 
 def get_synset_graph():
@@ -73,37 +75,44 @@ def counts_for(G, child, parent):
         return False
 
 
-def object_substance_match(cond, object) -> Tuple[bool, bool]:
+def object_substance_match(cond, synset) -> Tuple[bool, bool]:
     """
     Return two bools corresponding to whether synset is used as a non-substance and as a substance, respectively, in this condition subtree
     """
     if not isinstance(cond, list):
-        if cond == object.split('?')[-1]:
+        if cond.split('?')[-1].rsplit('_', 1)[0] == synset:
             return True, False
         else:
             return False, False
-    if not isinstance(cond[0], list):
+    elif not isinstance(cond[0], list):
         if cond[0] in SUBSTANCE_PREDICATES:
-            # in some bddl "covered" definitions, the substance is the 2nd one (reversed)
-            if cond[0] == "covered" and ("stain.n.01" in cond[2] or "dust.n.01" in cond[2]):
-                return (False, True) if cond[2] == object.split('?')[-1] else (True, False)
-            elif cond[1] == object.split('?')[-1]:
+            if cond[1].split('?')[-1].rsplit('_', 1)[0] == synset:  # non-substance
+                return True, False
+            elif cond[2].split('?')[-1].rsplit('_', 1)[0] == synset: # substance
                 return False, True
+            else:
+                return False, False
         # if the predicate is universal, it can be used for both substance and non-substance, so we return False for both
-        elif cond[0] in UNIVERSAL_PREDICATES:
+        elif cond[0] in NON_SUBSTANCE_PREDICATES and \
+            (cond[1].split('?')[-1].rsplit('_', 1)[0] == synset or (len(cond) == 3 and cond[2].split('?')[-1].rsplit('_', 1)[0] == synset)):
+            return True, False
+        else:
             return False, False
-    is_substance, is_non_substance = zip(*[object_substance_match(child, object) for child in cond])   
+    else:
+        is_substance, is_non_substance = zip(*[object_substance_match(child, synset) for child in cond])   
     return any(is_substance), any(is_non_substance)
 
 
-def leaf_inroom_conds(cond) -> List[List[str]]:
+def leaf_inroom_conds(cond, synsets: Set[str], task_name: str) -> List[Tuple[str, str]]:
     """
     Return a list of all inroom conditions in the subtree of cond
     """
     ret = []
     if isinstance(cond, list):
         for child in cond:
-            ret.extend(leaf_inroom_conds(child))
+            ret.extend(leaf_inroom_conds(child, synsets, task_name))
         if cond[0] == "inroom":
-            ret.append(cond)
+            synset = cond[1].split('?')[-1].rsplit("_", 1)[0]
+            assert synset in synsets, f"{task_name}: {synset} not in valid format"
+            ret.append((canonicalize(synset), cond[2]))
     return ret    
