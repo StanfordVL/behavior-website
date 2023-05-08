@@ -66,8 +66,9 @@ class Command(BaseCommand):
                 new_cat = row["New Category"].strip()
                 obj_name = row["Object name"].strip()
                 # sanity checks
-                assert len(obj_name.split('-')) == 2, f"{obj_name} should only have one \'-\'"
-                self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_name.split('-')[1]}"
+                if obj_name != "":
+                    assert len(obj_name.split('-')) == 2, f"{obj_name} should only have one \'-\'"
+                    self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_name.split('-')[1]}"
 
 
     def post_complete_operation(self):
@@ -135,7 +136,7 @@ class Command(BaseCommand):
                 deletion_queue.add(row["Object"].strip())
         # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
-            for object_name in json.load(f)["providers"].keys():
+            for object_name in tqdm.tqdm(json.load(f)["providers"].keys()):
                 if object_name in self.object_rename_mapping:
                     object_name = self.object_rename_mapping[object_name]
                 if object_name not in deletion_queue:
@@ -144,7 +145,7 @@ class Command(BaseCommand):
                     object = Object.objects.create(name=object_name, ready=False, category=category)
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             objs = []
-            for object_name in json.load(f)["providers"].keys():
+            for object_name in tqdm.tqdm(json.load(f)["providers"].keys()):
                 if object_name in self.object_rename_mapping:
                     object_name = self.object_rename_mapping[object_name]
                 if object_name not in deletion_queue:
@@ -168,7 +169,7 @@ class Command(BaseCommand):
         print("Creating scenes...")
         with open(rf"{os.path.pardir}/ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json", "r") as f:
             planned_scene_dict = json.load(f)["scenes"]
-            for scene_name in planned_scene_dict:
+            for scene_name in tqdm.tqdm(planned_scene_dict):
                 scene, _ = Scene.objects.get_or_create(name=scene_name)
                 for room_name in planned_scene_dict[scene_name]:
                     try:
@@ -192,7 +193,7 @@ class Command(BaseCommand):
 
         with open(rf"{os.path.pardir}/ig_pipeline/artifacts/pipeline/combined_room_object_list.json", "r") as f:
             current_scene_dict = json.load(f)["scenes"]
-            for scene_name in current_scene_dict:
+            for scene_name in tqdm.tqdm(current_scene_dict):
                 scene, _ = Scene.objects.get_or_create(name=scene_name)
                 for room_name in current_scene_dict[scene_name]:
                     try:
@@ -222,7 +223,7 @@ class Command(BaseCommand):
         print("Creating tasks...")
         b1k_tasks = glob.glob(rf"{os.path.pardir}/ObjectPropertyAnnotation/init_goal_cond_annotations/problem_files_verified_b1k/*")
         b100_tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
-        for filename in sorted(b1k_tasks + b100_tasks):
+        for filename in tqdm.tqdm(sorted(b1k_tasks + b100_tasks)):
             task_filepath = pathlib.Path(filename)
             if not task_filepath.is_dir():
                 continue
