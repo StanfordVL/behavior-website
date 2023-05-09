@@ -41,7 +41,7 @@ def get_synset_graph():
         reader = csv.DictReader(f)
         for row in reader:
             child = row["custom_synset"].strip()
-            parent = wn.synset(row["hypernym"].strip()).name()
+            parent = wn.synset(row["hypernyms"].strip()).name()
             assert parent in G.nodes, f"Could not find {parent}"
             assert child not in G.nodes, f"Custom synset {child} already in wordnet!"
             G.add_edge(parent, child)
