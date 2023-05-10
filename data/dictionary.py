@@ -1,4 +1,7 @@
+import nltk
 from nltk.corpus import words
+
+nltk.download('words')
 
 DICTIONARY_WORDS = set(words.words())
 CUSTOM_WORDS = set()
