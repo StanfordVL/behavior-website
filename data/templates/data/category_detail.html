@@ -2,7 +2,7 @@
 {% block title %}Category {{ category.name }} Details{% endblock %}
 {% block content %}
   <h1 class="text-center">{{ category.name }}</h1>
-  <h3 class="text-center">Synset: <a href={% url 'synset_detail' category.synset.name %}>{{ category.synset.name }}</a></h2>
+  <h3 class="text-center">Synset: {% if category.synset %}<a href={% url 'synset_detail' category.synset.name %}>{{ category.synset.name }}</a>{% else %}None{% endif %}</h2>
 
   <h2>Objects</h2>
   <div class="container">
