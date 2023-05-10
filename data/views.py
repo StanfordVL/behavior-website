@@ -65,7 +65,20 @@ class SceneListView(ListView):
 class SynsetListView(ListView):
     model = Synset
     context_object_name = "synset_list"
-    
+
+
+class CategoryListView(ListView):
+    model = Category
+    context_object_name = "category_list"
+
+
+class MisspelledCategoryListView(CategoryListView):
+    page_title = "Misspelled Categories"
+    template_name = "data/category_list.html"
+
+    def get_queryset(self) -> List[Task]:
+        return [x for x in super().get_queryset().all() if x.is_misspelled]
+
 
 class NonLeafSynsetListView(SynsetListView):
     page_title = "Non-Leaf Object-Assigned Synsets"
@@ -89,6 +102,14 @@ class SubstanceErrorSynsetListView(SynsetListView):
                 (not s.is_substance and s.is_used_as_substance) or 
                 (s.is_used_as_substance and s.is_used_as_non_substance)
             )]
+    
+
+class MisspelledSynsetListView(SynsetListView):
+    page_title = "Misspelled Synsets"
+    template_name = "data/synset_list.html"
+
+    def get_queryset(self) -> List[Task]:
+        return [s for s in super().get_queryset().all() if s.is_misspelled]
 
 
 class TaskDetailView(DetailView):
@@ -103,6 +124,13 @@ class SynsetDetailView(DetailView):
     context_object_name = "synset"
     slug_field = "name"
     slug_url_kwarg = "synset_name"
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    context_object_name = "category"
+    slug_field = "name"
+    slug_url_kwarg = "category_name"
         
 
 class ObjectDetailView(DetailView):

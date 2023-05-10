@@ -1,5 +1,5 @@
 {% extends "data/base.html" %}
-{% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}{% endblock %}
+{% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Categories{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
     table {
@@ -7,6 +7,9 @@
     }
     td, th {
       border: 0.3vh solid #dee2e6;
+    }
+    td a{
+      display: block;
     }
     .clickable-row:hover {
       cursor: pointer;
@@ -32,19 +35,19 @@
         paging: false,
         searchPanes: {
             viewTotal: true,
-            columns: [2, 3]
+            columns: [2]
         },
         columnDefs: [
           {
             searchPanes: {
               options: [
                 {
-                  label: 'Matched',
-                  value: function(rowData, rowIdx) {return rowData[2] !== "";}
+                  label: 'Has Objects',
+                  value: function(rowData, rowIdx) {return rowData[2] > 0;}
                 },
                 {
-                  label: 'Unmatched',
-                  value: function(rowData, rowIdx) {return rowData[2] === "";}
+                  label: 'Has No Objects',
+                  value: function(rowData, rowIdx) {return rowData[2] == 0;}
                 },
               ]
             },
@@ -58,27 +61,23 @@
   </script>
 {% endblock %}
 {% block content %}
-  <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
-  <h4 class="text-center">Total count: {{ object_list | length }}</h4>
+  <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Categories{% endif %}</h1>
+  <h4 class="text-center">Total count: {{ category_list | length }}</h4>
   <br>
   <table class="table table-striped" id="datatable">
     <thead>
       <tr>
-        <th>Object</th>
-        <th>Category</th>
+        <th>Name</th>
         <th>Synset</th>
-        <th>Used Rooms</th>
-        <th>Ready?</th>
+        <th>Objects</th>
       </tr>
     </thead>
     <tbody id="myTable">
-      {% for object in object_list %}
-      <tr class="clickable-row" data-href="{% url 'object_detail' object.name %}">
-        <td>{{ object.name }}<a href="{% url 'object_detail' object.name %}"></a></td>
-        <td>{{ object.category.name }}</td>
-        <td>{{ object.category.synset.name }}</td>
-        <td>{{ object.roomobject_set.count }}</td>
-        <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>
+      {% for category in category_list %}
+      <tr class="clickable-row" data-href="{% url 'category_detail' category.name %}">
+        <td>{{ category.name }}<a href="{% url 'category_detail' category.name %}"></a></td>
+        <td><a href="{% if category.synset.name %}{% url 'synset_detail' category.synset.name %}{% else %}#{% endif %}">{{ category.synset.name }}</a></td>
+        <td>{{ category.object_set.all | length }}</td>
       </tr>
       {% endfor %}
     </tbody>

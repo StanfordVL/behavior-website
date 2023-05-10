@@ -41,8 +41,9 @@ class Command(BaseCommand):
         site.domain = "localhost:8000"
         site.save()
 
-        # install wordnet
+        # install wordnet & words
         nltk.download('wordnet')
+        nltk.download('words')
         # generate legal synsets
         self.G = get_synset_graph()
         self.legal_synsets = set(self.G.nodes)

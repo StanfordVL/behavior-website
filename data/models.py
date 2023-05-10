@@ -4,6 +4,7 @@ from django.utils.functional import cached_property
 from typing import Dict, Set
 from django.db import models
 from data.utils import *
+from data.dictionary import is_word_legal
 from collections import defaultdict
 
 
@@ -114,6 +115,10 @@ class Category(models.Model):
         if not self.synset:
             return set()
         return set(self.synset.ancestors.values_list("name", flat=True)) | {self.synset.name}
+    
+    @cached_property
+    def is_misspelled(self) -> bool:
+        return any(not is_word_legal(word) for word in self.name.split("_"))
 
 
 class Object(models.Model):
@@ -170,6 +175,10 @@ class Synset(models.Model):
     
     class Meta:
         ordering = ["name"]
+
+    @cached_property
+    def is_misspelled(self) -> bool:
+        return any(not is_word_legal(word) for word in self.name.split(".n.")[0].split("_"))
 
     @cached_property
     def direct_matching_objects(self) -> Set[Object]:
