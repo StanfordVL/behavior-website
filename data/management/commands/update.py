@@ -11,7 +11,6 @@ import tqdm
 from data.utils import *
 from data.models import *
 from nltk.corpus import wordnet as wn
-from django.db import transaction
 from django.db.utils import IntegrityError
 from django.contrib.sites.models import Site
 from django.core.files import File
@@ -93,7 +92,11 @@ class Command(BaseCommand):
             writer.writerows(worksheet.get_all_values())
         # get all annotated substances
         with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/properties_to_synsets.json", "r") as f:
-            self.substances = json.load(f)["substance"]
+            data = json.load(f)
+            self.substances = data["substance"]
+            self.liquid = data["liquid"]
+            self.visual_substance = data["visualSubstance"]
+            self.physical_substance = data["physicalSubstance"]
         with open(f"{os.path.pardir}/category_mapping.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
@@ -103,6 +106,18 @@ class Command(BaseCommand):
                     print(f"Skipping problematic row: {row}")
                     continue
                 synset_name = canonicalize(synset_name)
+                
+                if synset_name in self.liquid:
+                    substance_type = "Liquid"
+                elif synset_name in self.visual_substance:
+                    substance_type = "Visual Substance"
+                elif synset_name in self.physical_substance:
+                    substance_type = "Physical Substance"
+                elif synset_name in self.substances:
+                    substance_type = "N/A"
+                else:
+                    substance_type = "Nonsubstance"
+
                 synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
                 synset, _ = Synset.objects.get_or_create(
                     name=synset_name, 
@@ -110,6 +125,7 @@ class Command(BaseCommand):
                         "definition": synset_definition, 
                         "legal": synset_name in legal_synsets,
                         "is_substance": synset_name in self.substances,
+                        "substance_type": substance_type
                     }
                 )
                 # safeguard to ensure every category only appears once in the csv file
@@ -251,10 +267,21 @@ class Command(BaseCommand):
                         "is_used_as_non_substance": is_used_as_non_substance
                     }
                 )
-                if not created:
+                if created:
+                    if synset_name in self.liquid:
+                        synset.substance_type = "Liquid"
+                    elif synset_name in self.visual_substance:
+                        synset.substance_type = "Visual Substance"
+                    elif synset_name in self.physical_substance:
+                        synset.substance_type = "Physical Substance"
+                    elif synset_name in self.substances:
+                        synset.substance_type = "N/A"
+                    else:
+                        synset.substance_type = "Nonsubstance"
+                else:
                     synset.is_used_as_substance = True if is_used_as_substance else synset.is_used_as_substance
                     synset.is_used_as_non_substance = True if is_used_as_non_substance else synset.is_used_as_non_substance
-                    synset.save()
+                synset.save()
                 task.synsets.add(synset)
             task.save()
 
@@ -284,14 +311,26 @@ class Command(BaseCommand):
             """Add all the hypernyms to G"""
             if G.has_node(synset.name):
                 for synset_hypernym_name in G.predecessors(synset.name):
-                    synset_hypernym, _ = Synset.objects.get_or_create(
+                    synset_hypernym, created = Synset.objects.get_or_create(
                         name=synset_hypernym_name, 
                         defaults={
                             "definition": wn.synset(synset_hypernym_name).definition() if wn_synset_exists(synset_hypernym_name) else "",
-                            "is_substance": False,  # we put False here because if it is a substance, it should have been added already
+                            "is_substance": synset_hypernym_name in self.substances,
                             "legal": True
                         }
                     )
+                    if created:
+                        if synset_hypernym_name in self.liquid:
+                            synset_hypernym.substance_type = "Liquid"
+                        elif synset_hypernym_name in self.visual_substance:
+                            synset_hypernym.substance_type = "Visual Substance"
+                        elif synset_hypernym_name in self.physical_substance:
+                            synset_hypernym.substance_type = "Physical Substance"
+                        elif synset_hypernym_name in self.substances:
+                            synset_hypernym.substance_type = "N/A"
+                        else:
+                            synset_hypernym.substance_type = "Nonsubstance"
+                        synset_hypernym.save()
                     _add_hypernyms_to_synset(G, synset_hypernym)
 
         for synset in Synset.objects.all():
