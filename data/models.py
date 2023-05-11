@@ -154,6 +154,8 @@ class Synset(models.Model):
     legal = models.BooleanField(default=False)
     # whether the synset represents a substance
     is_substance = models.BooleanField(default=False)
+    # substance type, if applicable
+    substance_type = models.CharField(max_length=32, default="Nonsubstance")
     # whether the synset is used as a substance in some task
     is_used_as_substance = models.BooleanField(default=False)
     # whether the synset is used as a non-substance in some task
@@ -200,9 +202,9 @@ class Synset(models.Model):
         return matched_objs
     
     @cached_property
-    def task_state(self):
+    def n_task_required(self):
         """Get whether the synset is required in any task, returns STATE METADATA"""
-        return STATE_MATCHED if self.task_set.count() > 0 else STATE_NONE
+        return self.task_set.count()
     
     @cached_property
     def subgraph(self):

@@ -43,21 +43,6 @@
               options: [
                 {
                   label: 'Matched',
-                  value: function(rowData, rowIdx) {return rowData[2] > 0;}
-                },
-                {
-                  label: 'Unmatched',
-                  value: function(rowData, rowIdx) {return rowData[2] == 0;}
-                },
-              ]
-            },
-            targets: [2]
-          },
-          {
-            searchPanes: {
-              options: [
-                {
-                  label: 'Matched',
                   value: function(rowData, rowIdx) {return rowData[3] > 0;}
                 },
                 {
@@ -67,6 +52,36 @@
               ]
             },
             targets: [3]
+          },
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[4] > 0;}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[4] == 0;}
+                },
+              ]
+            },
+            targets: [4]
+          },
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[5] > 0;}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[5] == 0;}
+                },
+              ]
+            },
+            targets: [5]
           },
         ],
       });
@@ -84,10 +99,10 @@
       <tr>
         <th>Name</th>
         <th>Synset State</th>
+        <th>Substance Type</th>
         <th>Direct Objects</th>
         <th>Total Objects</th>
-        <th>Used as Substance in BDDL?</th>
-        <th>Used as Rigid Body in BDDL?</th>
+        <th>Task required</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -102,10 +117,10 @@
           {% else %}Illegal
           {% endif %}
         </td>
+        <td>{{ synset.substance_type }}</td>
         <td>{{ synset.direct_matching_objects | length }}</td>
         <td>{{ synset.matching_objects | length }}</td>
-        <td>{{ synset.is_used_as_substance }}</td>
-        <td>{{ synset.is_used_as_non_substance }}</td>
+        <td>{{ synset.n_task_required }}</td>
       </tr>
       {% endfor %}
     </tbody>
