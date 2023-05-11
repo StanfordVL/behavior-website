@@ -29,11 +29,13 @@
   <script>
     $(document).ready(function() {
       var table = $('#datatable').DataTable({
-          paging: false,
-          searchPanes: {
-              viewTotal: true,
-              columns: [3]
-          },
+        dom: 'Bfrtip',
+        buttons: ['csv'],
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [3]
+        },
       });
       table.searchPanes.container().prependTo(table.table().container());
       table.searchPanes.resizePanes();

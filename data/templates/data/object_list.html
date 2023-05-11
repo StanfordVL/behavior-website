@@ -29,6 +29,8 @@
   <script>
     $(document).ready(function() {
       var table = $('#datatable').DataTable({
+        dom: 'Bfrtip',
+        buttons: ['csv'],
         paging: false,
         searchPanes: {
             viewTotal: true,
