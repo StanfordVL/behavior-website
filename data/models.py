@@ -165,6 +165,8 @@ class Synset(models.Model):
     is_used_as_substance = models.BooleanField(default=False)
     # whether the synset is used as a non-substance in some task
     is_used_as_non_substance = models.BooleanField(default=False)
+    # whether the synset is ever used as a fillable in any task
+    is_used_as_fillable = models.BooleanField(default=False)
     # all it's parents in the synset graph (NOTE: this does not include self)
     parents = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="children")
     # all ancestors (NOTE: this include self)

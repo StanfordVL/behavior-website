@@ -257,6 +257,7 @@ class Command(BaseCommand):
             # add any synset that is not currently in the database
             for synset_name in canonicalized_synsets:
                 is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
+                is_used_as_fillable = object_used_as_fillable(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
                 synset, created = Synset.objects.get_or_create(
                     name=synset_name, 
                     defaults={
@@ -264,7 +265,8 @@ class Command(BaseCommand):
                         "legal": synset_name in legal_synsets,
                         "is_substance": synset_name in self.substances,
                         "is_used_as_substance": is_used_as_substance,
-                        "is_used_as_non_substance": is_used_as_non_substance
+                        "is_used_as_non_substance": is_used_as_non_substance,
+                        "is_used_as_fillable": is_used_as_fillable
                     }
                 )
                 if created:
@@ -279,8 +281,9 @@ class Command(BaseCommand):
                     else:
                         synset.substance_type = "Nonsubstance"
                 else:
-                    synset.is_used_as_substance = True if is_used_as_substance else synset.is_used_as_substance
-                    synset.is_used_as_non_substance = True if is_used_as_non_substance else synset.is_used_as_non_substance
+                    synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
+                    synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
+                    synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
                 synset.save()
                 task.synsets.add(synset)
             task.save()

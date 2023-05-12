@@ -112,6 +112,11 @@ class MisspelledSynsetListView(SynsetListView):
         return [s for s in super().get_queryset().all() if s.is_misspelled]
 
 
+class FillableSynsetListView(SynsetListView):
+    page_title = "Synsets Used as Fillables"
+    queryset = Synset.objects.filter(is_used_as_fillable=True).all()
+
+
 class TaskDetailView(DetailView):
     model = Task
     context_object_name = "task"

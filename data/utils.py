@@ -21,6 +21,8 @@ NON_SUBSTANCE_PREDICATES = {
     "cooked", "frozen", "closed", "open", "folded", "unfolded", "toggled_on", "hot", "on_fire", "assembled",
     "broken", "ontop", "nextto", "under", "touching", "inside", "overlaid", "attached", "draped", "inroom"
 }
+# predicates that indicate the need for a fillable volume
+FILLABLE_PREDICATES = {"filled", "contains", "empty"}
 
 
 def get_synset_graph():
@@ -102,6 +104,21 @@ def object_substance_match(cond, synset) -> Tuple[bool, bool]:
     else:
         is_substance, is_non_substance = zip(*[object_substance_match(child, synset) for child in cond])   
     return any(is_substance), any(is_non_substance)
+
+
+def object_used_as_fillable(cond, synset) -> Tuple[bool, bool]:
+    """
+    Return a bool corresponding to whether the synset is used as a fillable at any point
+    """
+    if not isinstance(cond, list):
+        return False
+    elif not isinstance(cond[0], list):
+        if cond[0] in FILLABLE_PREDICATES:
+            return cond[1].split('?')[-1].rsplit('_', 1)[0] == synset
+        else:
+            return False
+    else:
+        return any([object_used_as_fillable(child, synset) for child in cond])   
 
 
 def leaf_inroom_conds(cond, synsets: Set[str], task_name: str) -> List[Tuple[str, str]]:

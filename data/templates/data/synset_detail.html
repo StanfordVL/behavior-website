@@ -9,7 +9,11 @@
   <div class="text-center">{{ Illegal }}</div>
   {% endif %}
 
-  <br>
+  <h2>Uses</h2>
+  <p>Is used as substance?: {{ synset.is_used_as_substance }}</p>
+  <p>Is used as non-substance?: {{ synset.is_used_as_non_substance }}</p>
+  <p>Is used as fillable?: {{ synset.is_used_as_fillable }}</p>
+
   <h2>Tasks</h2>
   <div class="container">
     <div class="row justify-content-md-center">
