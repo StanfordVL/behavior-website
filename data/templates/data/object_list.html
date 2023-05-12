@@ -8,23 +8,15 @@
     td, th {
       border: 0.3vh solid #dee2e6;
     }
-    .clickable-row:hover {
+    td a{
+      display: block;
+      color: black;
+    }
+    a:hover {
       cursor: pointer;
-      border-left: 0.5vh solid darkorange;
       color: darkorange;
     }
   </style>
-  <!-- Clickable row -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const rows = document.querySelectorAll(".clickable-row");
-      rows.forEach(row => {
-        row.addEventListener("click", () => {
-          window.location.href = row.dataset.href;
-        });
-      });
-    });
-  </script>
   <!-- datatable search -->
   <script>
     $(document).ready(function() {
@@ -75,8 +67,8 @@
     </thead>
     <tbody id="myTable">
       {% for object in object_list %}
-      <tr class="clickable-row" data-href="{% url 'object_detail' object.name %}">
-        <td>{{ object.name }}<a href="{% url 'object_detail' object.name %}"></a></td>
+      <tr>
+        <td><a href="{% url 'object_detail' object.name %}">{{ object.name }}</a></td>
         <td>{{ object.category.name }}</td>
         <td>{{ object.category.synset.name }}</td>
         <td>{{ object.roomobject_set.count }}</td>

@@ -8,23 +8,15 @@
     td, th {
       border: 0.3vh solid #dee2e6;
     }
-    .clickable-row:hover {
+    td a{
+      display: block;
+      color: black;
+    }
+    a:hover {
       cursor: pointer;
-      border-left: 0.5vh solid darkorange;
       color: darkorange;
     }
   </style>
-  <!-- Clickable row -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const rows = document.querySelectorAll(".clickable-row");
-      rows.forEach(row => {
-        row.addEventListener("click", () => {
-          window.location.href = row.dataset.href;
-        });
-      });
-    });
-  </script>
   <!-- datatable search -->
   <script>
     $(document).ready(function() {
@@ -57,8 +49,8 @@
     </thead>
     <tbody id="myTable">
       {% for scene in scene_list %}
-      <tr class="clickable-row" data-href="{% url 'scene_detail' scene.name %}">
-        <td>{{ scene.name }}<a href="{% url 'scene_detail' scene.name %}"></a></td>
+      <tr>
+        <td><a href="{% url 'scene_detail' scene.name %}">{{ scene.name }}</a></td>
         <td>{{ scene.room_count }}</td>
         <td>{{ scene.object_count }}</td>
         <td class="{% if scene.fully_ready %}bg-success{% elif scene.any_ready %}bg-warning{% else %}bg-danger{% endif %}">

@@ -8,29 +8,15 @@
     td, th {
       border: 0.3vh solid #dee2e6;
     }
-    td a {
+    td a{
+      display: block;
       color: black;
     }
-    td a:hover {
-      text-decoration: none;
-    }
-    .clickable-row:hover {
+    a:hover {
       cursor: pointer;
-      border-left: 0.5vh solid darkorange;
       color: darkorange;
     }
   </style>
-  <!-- Clickable row -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const rows = document.querySelectorAll(".clickable-row");
-      rows.forEach(row => {
-        row.addEventListener("click", () => {
-          window.location.href = row.dataset.href;
-        });
-      });
-    });
-  </script>
   <!-- datatable search -->
   <script>
     $(document).ready(function() {
@@ -95,8 +81,8 @@
     </thead>
     <tbody id="myTable">
       {% for task in task_list %}
-      <tr class="clickable-row" data-href="{% url 'task_detail' task.name %}">
-        <td>{{ task.name }}<a href="{% url 'task_detail' task.name %}"></a></td>
+      <tr>
+        <td><a href="{% url 'task_detail' task.name %}">{{ task.name }}</a></td>
         <td class="{{ 'bg-'|add:task.synset_state }}">
           {% for synset in task.problem_synsets %}
             {{ synset }}, 

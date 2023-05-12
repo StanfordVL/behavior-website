@@ -10,24 +10,13 @@
     }
     td a{
       display: block;
+      color: black;
     }
-    .clickable-row:hover {
+    a:hover {
       cursor: pointer;
-      border-left: 0.5vh solid darkorange;
       color: darkorange;
     }
   </style>
-  <!-- Clickable row -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const rows = document.querySelectorAll(".clickable-row");
-      rows.forEach(row => {
-        row.addEventListener("click", () => {
-          window.location.href = row.dataset.href;
-        });
-      });
-    });
-  </script>
   <!-- datatable search -->
   <script>
     $(document).ready(function() {
@@ -74,8 +63,8 @@
     </thead>
     <tbody id="myTable">
       {% for category in category_list %}
-      <tr class="clickable-row" data-href="{% url 'category_detail' category.name %}">
-        <td>{{ category.name }}<a href="{% url 'category_detail' category.name %}"></a></td>
+      <tr>
+        <td><a href="{% url 'category_detail' category.name %}">{{ category.name }}</a></td>
         <td><a href="{% if category.synset.name %}{% url 'synset_detail' category.synset.name %}{% else %}#{% endif %}">{{ category.synset.name }}</a></td>
         <td>{{ category.object_set.all | length }}</td>
       </tr>

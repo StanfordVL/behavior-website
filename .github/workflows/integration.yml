@@ -3,8 +3,6 @@ name: Update Integration
 on:
   schedule:
     - cron: "0 13 * * *"  # 6am PST
-  push:
-    branches: ["main"]
   workflow_dispatch:
 
 permissions:
