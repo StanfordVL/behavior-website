@@ -90,13 +90,9 @@ class Command(BaseCommand):
         with open(f"{os.path.pardir}/category_mapping.csv", 'w') as f:
             writer = csv.writer(f)
             writer.writerows(worksheet.get_all_values())
-        # get all annotated substances
-        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/properties_to_synsets.json", "r") as f:
-            data = json.load(f)
-            self.substances = data["substance"]
-            self.liquid = data["liquid"]
-            self.visual_substance = data["visualSubstance"]
-            self.physical_substance = data["physicalSubstance"]
+        # get all annotated properties
+        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/final_propagated.json", "r") as f:
+            self.properties_data = json.load(f)
         with open(f"{os.path.pardir}/category_mapping.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
@@ -106,28 +102,19 @@ class Command(BaseCommand):
                     print(f"Skipping problematic row: {row}")
                     continue
                 synset_name = canonicalize(synset_name)
-                
-                if synset_name in self.liquid:
-                    substance_type = "Liquid"
-                elif synset_name in self.visual_substance:
-                    substance_type = "Visual Substance"
-                elif synset_name in self.physical_substance:
-                    substance_type = "Physical Substance"
-                elif synset_name in self.substances:
-                    substance_type = "N/A"
-                else:
-                    substance_type = "Nonsubstance"
 
                 synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
-                synset, _ = Synset.objects.get_or_create(
+                synset, created = Synset.objects.get_or_create(
                     name=synset_name, 
                     defaults={
                         "definition": synset_definition, 
                         "legal": synset_name in legal_synsets,
-                        "is_substance": synset_name in self.substances,
-                        "substance_type": substance_type
                     }
                 )
+                if created and synset_name in self.properties_data:
+                    for property_name in self.properties_data[synset_name]:
+                        property_obj, _ = Property.objects.get_or_create(name=property_name)
+                        synset.properties.add(property_obj)
                 # safeguard to ensure every category only appears once in the csv file
                 try:
                     _ = Category.objects.get_or_create(name=category_name, synset=synset)
@@ -263,28 +250,20 @@ class Command(BaseCommand):
                     defaults={
                         "definition": wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else "",
                         "legal": synset_name in legal_synsets,
-                        "is_substance": synset_name in self.substances,
                         "is_used_as_substance": is_used_as_substance,
                         "is_used_as_non_substance": is_used_as_non_substance,
                         "is_used_as_fillable": is_used_as_fillable
                     }
                 )
-                if created:
-                    if synset_name in self.liquid:
-                        synset.substance_type = "Liquid"
-                    elif synset_name in self.visual_substance:
-                        synset.substance_type = "Visual Substance"
-                    elif synset_name in self.physical_substance:
-                        synset.substance_type = "Physical Substance"
-                    elif synset_name in self.substances:
-                        synset.substance_type = "N/A"
-                    else:
-                        synset.substance_type = "Nonsubstance"
+                if created and synset_name in self.properties_data:
+                    for property_name in self.properties_data[synset_name]:
+                        property_obj, _ = Property.objects.get_or_create(name=property_name)
+                        synset.properties.add(property_obj)
                 else:
                     synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
                     synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                     synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
-                synset.save()
+                    synset.save()
                 task.synsets.add(synset)
             task.save()
 
@@ -318,22 +297,13 @@ class Command(BaseCommand):
                         name=synset_hypernym_name, 
                         defaults={
                             "definition": wn.synset(synset_hypernym_name).definition() if wn_synset_exists(synset_hypernym_name) else "",
-                            "is_substance": synset_hypernym_name in self.substances,
                             "legal": True
                         }
                     )
-                    if created:
-                        if synset_hypernym_name in self.liquid:
-                            synset_hypernym.substance_type = "Liquid"
-                        elif synset_hypernym_name in self.visual_substance:
-                            synset_hypernym.substance_type = "Visual Substance"
-                        elif synset_hypernym_name in self.physical_substance:
-                            synset_hypernym.substance_type = "Physical Substance"
-                        elif synset_hypernym_name in self.substances:
-                            synset_hypernym.substance_type = "N/A"
-                        else:
-                            synset_hypernym.substance_type = "Nonsubstance"
-                        synset_hypernym.save()
+                    if created and synset_hypernym_name in self.properties_data:
+                        for property_name in self.properties_data[synset_hypernym_name]:
+                            property_obj, _ = Property.objects.get_or_create(name=property_name)
+                            synset.properties.add(property_obj)
                     _add_hypernyms_to_synset(G, synset_hypernym)
 
         for synset in Synset.objects.all():
@@ -349,8 +319,9 @@ class Command(BaseCommand):
 
     def generate_synset_state(self):
         synsets = []
+        substances = Property.objects.get(name="substance").synset_set.values_list("name", flat=True)
         for synset in Synset.objects.all():
-            if synset.is_substance:
+            if synset.name in substances:
                 synset.state = STATE_SUBSTANCE
             elif synset.legal:
                 if len(synset.matching_ready_objects) > 0:

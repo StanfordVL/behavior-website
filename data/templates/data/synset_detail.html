@@ -9,11 +9,23 @@
   <div class="text-center">{{ Illegal }}</div>
   {% endif %}
 
+  <br>
+  <h2>Properties</h2>
+  <div class="container">
+    <div class="row justify-content-md-center">
+      {% for property in synset.properties.all %}
+      <div class="col-md-auto my-1 py-2 border">{{ property.name }}</div>
+      {% empty %}
+      <p>None</p>
+      {% endfor %}
+    </div>
+  </div>
   <h2>Uses</h2>
-  <p>Is used as substance?: {{ synset.is_used_as_substance }}</p>
-  <p>Is used as non-substance?: {{ synset.is_used_as_non_substance }}</p>
-  <p>Is used as fillable?: {{ synset.is_used_as_fillable }}</p>
-
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto my-1 border py-2">{% if synset.is_used_as_substance %} IS {% else %} NOT {% endif %} used as substance</div>
+    <div class="col-md-auto my-1 border py-2">{% if synset.is_used_as_non_substance %} IS {% else %} NOT {% endif %} used as non-substance</div>
+    <div class="col-md-auto my-1 border py-2">{% if synset.is_used_as_fillable %} IS {% else %} NOT {% endif %} used as fillable</div>
+  </div>
   <h2>Tasks</h2>
   <div class="container">
     <div class="row justify-content-md-center">

@@ -1,6 +1,7 @@
 {% extends "data/base.html" %}
 {% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}{% endblock %}
 {% block customstyle %}
+  {{ properties|json_script:"properties" }}
   <style>
     table {
       border: 0.3vh solid #dee2e6;
@@ -30,6 +31,7 @@
   </script>
   <!-- datatable search -->
   <script>
+    const properties = JSON.parse(document.getElementById('properties').textContent);
     $(document).ready(function() {
       var table = $('#datatable').DataTable({
         dom: 'Bfrtip',
@@ -40,6 +42,15 @@
             columns: [1, 2, 3, 4, 5]
         },
         columnDefs: [
+          {
+            searchPanes: {
+              options: properties.map(property => ({
+                label: property,
+                value: function(rowData, rowIdx) {return rowData[2].includes(property);}
+              }))
+            },
+            targets: [2]
+          },
           {
             searchPanes: {
               options: [
@@ -101,7 +112,7 @@
       <tr>
         <th>Name</th>
         <th>Synset State</th>
-        <th>Substance Type</th>
+        <th>Properties</th>
         <th>Direct Objects</th>
         <th>Total Objects</th>
         <th>Task required</th>
@@ -119,7 +130,11 @@
           {% else %}Illegal
           {% endif %}
         </td>
-        <td>{{ synset.substance_type }}</td>
+        <td>
+          {% for property in synset.properties.all %}
+            {{ property.name }}, 
+          {% endfor %}
+        </td>
         <td>{{ synset.direct_matching_objects | length }}</td>
         <td>{{ synset.matching_objects | length }}</td>
         <td>{{ synset.n_task_required }}</td>

@@ -66,7 +66,13 @@ def get_caching_manager(prefetch):
 
     return _CachingManager
 
+
+class Property(models.Model):
+    name = models.CharField(max_length=32, primary_key=True)
+    def __str__(self):
+        return self.name
     
+
 class Scene(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     objects = get_caching_manager(["room_set__roomobject_set__object__category__synset"])()
@@ -157,10 +163,8 @@ class Synset(models.Model):
     definition = models.CharField(max_length=1000, default="")
     # whether the synset is legel (i.e. exists in the synset graph)
     legal = models.BooleanField(default=False)
-    # whether the synset represents a substance
-    is_substance = models.BooleanField(default=False)
-    # substance type, if applicable
-    substance_type = models.CharField(max_length=32, default="Nonsubstance")
+    # substance properties (whole list in utils.py)
+    properties = models.ManyToManyField(Property, blank=True)
     # whether the synset is used as a substance in some task
     is_used_as_substance = models.BooleanField(default=False)
     # whether the synset is used as a non-substance in some task
@@ -277,12 +281,12 @@ class Task(models.Model):
     @cached_property
     def illegal_synsets(self):
         """synsets that are not legal (in the synset graph)"""
-        return self.synsets.filter(legal=False, is_substance=False)
+        return self.synsets.filter(legal=False)
     
     @cached_property
     def substance_synsets(self):
         """synsets that represent a substance"""
-        return self.synsets.filter(is_substance=True)
+        return self.synsets.filter(state=STATE_SUBSTANCE)
     
     @cached_property
     def synset_state(self) -> str:

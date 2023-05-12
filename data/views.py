@@ -54,7 +54,7 @@ class ObjectListView(ListView):
 
 class SubstanceMappedObjectListView(ObjectListView):
     page_title = "Objects Incorrectly Mapped to Substance Synsets"
-    queryset = Object.objects.filter(category__synset__is_substance=True).all()
+    queryset = Object.objects.filter(category__synset__state=STATE_SUBSTANCE).all()
 
 
 class SceneListView(ListView):
@@ -66,6 +66,10 @@ class SynsetListView(ListView):
     model = Synset
     context_object_name = "synset_list"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["properties"] = list(Property.objects.values_list("name", flat=True))
+        return context
 
 class CategoryListView(ListView):
     model = Category
@@ -98,8 +102,8 @@ class SubstanceErrorSynsetListView(SynsetListView):
         return [
             s for s in super().get_queryset().annotate(num_objects=Count('category__object')).all()
             if (
-                (s.is_substance and s.is_used_as_non_substance) or 
-                (not s.is_substance and s.is_used_as_substance) or 
+                (s.state == STATE_SUBSTANCE and s.is_used_as_non_substance) or 
+                (not s.state == STATE_SUBSTANCE and s.is_used_as_substance) or 
                 (s.is_used_as_substance and s.is_used_as_non_substance)
             )]
     
