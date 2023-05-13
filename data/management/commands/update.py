@@ -303,7 +303,7 @@ class Command(BaseCommand):
                     if created and synset_hypernym_name in self.properties_data:
                         for property_name in self.properties_data[synset_hypernym_name]:
                             property_obj, _ = Property.objects.get_or_create(name=property_name)
-                            synset.properties.add(property_obj)
+                            synset_hypernym.properties.add(property_obj)
                     _add_hypernyms_to_synset(G, synset_hypernym)
 
         for synset in Synset.objects.all():
