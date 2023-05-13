@@ -129,6 +129,8 @@ class Category(models.Model):
 
 class Object(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
+    # the name of the object prior to getting renamed
+    original_name = models.CharField(max_length=64, unique=True)
     # whether the object is in the current dataset
     ready = models.BooleanField(default=False)
     # whether the object is planned 

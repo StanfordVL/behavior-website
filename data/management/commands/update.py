@@ -140,13 +140,14 @@ class Command(BaseCommand):
                 deletion_queue.add(row["Object"].strip())
         # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
-            for object_name in tqdm.tqdm(json.load(f)["providers"].keys()):
+            for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
+                object_name = orig_name
                 if object_name in self.object_rename_mapping:
                     object_name = self.object_rename_mapping[object_name]
                 if object_name not in deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.objects.get_or_create(name=category_name)
-                    object = Object.objects.create(name=object_name, ready=False, category=category)
+                    object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category)
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             objs = []
             for object_name in tqdm.tqdm(json.load(f)["providers"].keys()):
@@ -340,7 +341,7 @@ class Command(BaseCommand):
         print("Generating object images...")
         with ZipFS(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_images.zip", write=False) as image_fs:
             for obj in tqdm.tqdm(Object.objects.all()):
-                filename = f"{obj.name}.jpg"
+                filename = f"{obj.original_name}.jpg"
                 if not image_fs.exists(filename):
                     continue
                 bio = io.BytesIO(image_fs.getbytes(filename))
