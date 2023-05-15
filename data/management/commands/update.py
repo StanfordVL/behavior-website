@@ -141,7 +141,7 @@ class Command(BaseCommand):
         # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
             for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
-                object_name = self.object_rename_mapping[object_name] if object_name in self.object_rename_mapping else orig_name
+                object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                 if object_name not in deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.objects.get_or_create(name=category_name)
