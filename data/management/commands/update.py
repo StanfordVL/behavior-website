@@ -209,7 +209,7 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
                     for orig_name, count in current_scene_dict[scene_name][room_name].items():
-                        object_name = self.object_rename_mapping[object_name] if object_name in self.object_rename_mapping else orig_name
+                        object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "original_name": orig_name,
                             "ready": False,
