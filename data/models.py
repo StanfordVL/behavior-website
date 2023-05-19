@@ -1,4 +1,3 @@
-from django.db.models.query import QuerySet
 import networkx as nx
 from django.utils.functional import cached_property
 from typing import Dict, Set
@@ -163,8 +162,6 @@ class Synset(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     # wordnet definitions
     definition = models.CharField(max_length=1000, default="")
-    # whether the synset is legel (i.e. exists in the synset graph)
-    legal = models.BooleanField(default=False)
     # substance properties (whole list in utils.py)
     properties = models.ManyToManyField(Property, blank=True)
     # whether the synset is used as a substance in some task
@@ -178,7 +175,7 @@ class Synset(models.Model):
     # all ancestors (NOTE: this include self)
     ancestors = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="descendants")
     # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
-    state = models.CharField(max_length=64, default=STATE_NONE)
+    state = models.CharField(max_length=64, default=STATE_ILLEGAL)
 
     def __str__(self):
         return self.name
@@ -281,18 +278,13 @@ class Task(models.Model):
         return ret
     
     @cached_property
-    def illegal_synsets(self):
-        """synsets that are not legal (in the synset graph)"""
-        return self.synsets.filter(legal=False)
-    
-    @cached_property
     def substance_synsets(self):
         """synsets that represent a substance"""
         return self.synsets.filter(state=STATE_SUBSTANCE)
     
     @cached_property
     def synset_state(self) -> str:
-        if self.illegal_synsets.count() > 0:
+        if self.synsets.filter(state=STATE_ILLEGAL).count() > 0:
             return STATE_UNMATCHED
         elif self.synsets.filter(state=STATE_UNMATCHED).count() > 0:
             return STATE_UNMATCHED
@@ -303,7 +295,7 @@ class Task(models.Model):
         
     @cached_property
     def problem_synsets(self):
-        return self.illegal_synsets | self.synsets.filter(state=STATE_UNMATCHED)
+        return self.synsets.filter(state=STATE_ILLEGAL) | self.synsets.filter(state=STATE_UNMATCHED)
        
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:

@@ -1,6 +1,7 @@
 import nltk
 from nltk.corpus import words
 
+nltk.download('wordnet')
 nltk.download('words')
 
 DICTIONARY_WORDS = set(words.words())

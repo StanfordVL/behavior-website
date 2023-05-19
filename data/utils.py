@@ -1,6 +1,3 @@
-import csv
-import os
-import networkx as nx
 from nltk.corpus import wordnet as wn
 from typing import Tuple, List, Set
 from data.models import *
@@ -25,31 +22,6 @@ NON_SUBSTANCE_PREDICATES = {
 FILLABLE_PREDICATES = {"filled", "contains", "empty"}
 
 
-def get_synset_graph():
-    """
-    Build the synset graph that includes all wordnet and custom synsets
-    returns:
-        G: the synset graph
-    """
-    # Build the legit-synset graph
-    G = nx.DiGraph()
-    G.add_nodes_from(x.name() for x in wn.all_synsets())
-    for parent in wn.all_synsets():
-        for child in parent.hyponyms():
-            G.add_edge(parent.name(), child.name())
-            
-    # Add the illegit-synset (custom) graph
-    with open(f"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/custom_synsets.csv") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            child = row["custom_synset"].strip()
-            parent = wn.synset(row["hypernyms"].strip()).name()
-            assert parent in G.nodes, f"Could not find {parent}"
-            assert child not in G.nodes, f"Custom synset {child} already in wordnet!"
-            G.add_edge(parent, child)
-    return G
-
-
 def canonicalize(s):
     try:
         return wn.synset(s).name()
@@ -63,19 +35,6 @@ def wn_synset_exists(synset):
     return True
   except:
     return False
-
-
-def counts_for(G, child, parent):  
-    """Checks if child is a child of parent in the synset graph G"""
-    try:
-        if nx.has_path(G, parent, child):
-            return True
-        else:
-            c = wn.synset(child).name()
-            p = wn.synset(parent).name()
-            return nx.has_path(G, p, c)
-    except Exception as e:
-        return False
 
 
 def object_substance_match(cond, synset) -> Tuple[bool, bool]:

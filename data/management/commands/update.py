@@ -1,6 +1,5 @@
 import csv
 import io
-import nltk
 import os
 import json
 import glob
@@ -16,6 +15,7 @@ from django.contrib.sites.models import Site
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from fs.zipfs import ZipFS
+from typing import Set, Optional
 
 class Command(BaseCommand):
     help = "generates all the Django objects using data from ig_pipeline, B1K google sheets, and bddl"
@@ -23,10 +23,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.preparation()
-        self.create_synsets(self.legal_synsets)
+        self.create_synsets()
+        self.create_category()
         self.create_objects()
         self.create_scenes()
-        self.create_tasks(self.legal_synsets)
+        self.create_tasks()
         self.post_complete_operation()
     
 
@@ -35,17 +36,12 @@ class Command(BaseCommand):
         """
         put any preparation work (e.g. sanity check) here
         """
+        print("Running preparation work...")
         # Update the site
         site = Site.objects.first()
         site.domain = "localhost:8000"
         site.save()
 
-        # install wordnet & words
-        nltk.download('wordnet')
-        nltk.download('words')
-        # generate legal synsets
-        self.G = get_synset_graph()
-        self.legal_synsets = set(self.G.nodes)
         # sanity check room types are up to date
         room_types_from_model = set([room_type for _, room_type in ROOM_TYPE_CHOICES])
         with open(f'{os.path.pardir}/ig_pipeline/metadata/allowed_room_types.csv', newline='') as csvfile:
@@ -53,9 +49,9 @@ class Command(BaseCommand):
             room_types_from_csv = set([row[0] for row in reader][1:])
         assert room_types_from_model == room_types_from_csv, "room types are not up to date with allowed_room_types.csv"
 
-        # get object rename file
-        gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
-        worksheet = gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Renames")
+        # get object rename mapping
+        self.gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+        worksheet = self.gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Renames")
         with open(f"{os.path.pardir}/object_renames.csv", 'w') as f:
             writer = csv.writer(f)
             writer.writerows(worksheet.get_all_values())
@@ -75,52 +71,74 @@ class Command(BaseCommand):
         """
         put any post completion work (e.g. update stuff) here
         """
-        self.generate_synset_hierarchy(self.G)
+        print("Running post completion operations...")
         self.generate_synset_state()
         self.generate_object_images()
 
 
-    def create_synsets(self, legal_synsets):
+    def create_synsets(self):
         """
-        create categories and synsets (with category_mappings.csv)
+        create synsets with annotations from propagated_annots_canonical.json and hierarchy from output_hierarchy.json
         """
-        print("Creating synsets...")
-        gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
-        worksheet = gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Category Mapping")
+        def _generate_synset_hierarchy(synset_sub_hierarchy: Dict, parent: Optional[Synset], ancestors: Set[Synset], pbar):
+            """
+            helper function to generate synset hierarchy
+            """
+            synset_name = synset_sub_hierarchy["name"]
+            if synset_name != canonicalize(synset_name):
+                print(f"synset {synset_name} is not canonicalized!")
+            synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
+            synset, created = Synset.objects.get_or_create(name=synset_name, defaults={"definition": synset_definition})
+            if parent:
+                synset.parents.add(parent)
+            cur_ancestors = ancestors.copy()
+            for ancestor in cur_ancestors:
+                synset.ancestors.add(ancestor)
+            cur_ancestors.add(synset)
+            if created:
+                for property_name in self.properties_data[synset_name]:
+                    property_obj, _ = Property.objects.get_or_create(name=property_name)
+                    synset.properties.add(property_obj)
+                pbar.update()
+            if "children" in synset_sub_hierarchy:
+                for child_hierarchy in synset_sub_hierarchy["children"]:
+                    _generate_synset_hierarchy(child_hierarchy, synset, cur_ancestors, pbar)
+
+        print("Creating synsets...")   
+        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/propagated_annots_canonical.json", "r") as f:
+            self.properties_data = json.load(f)     
+        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/output_hierarchy.json", "r") as f:
+            synset_hierarchy = json.load(f)
+            with tqdm.tqdm(total=len(self.properties_data)) as pbar:
+                _generate_synset_hierarchy(synset_hierarchy, None, set(), pbar)
+
+
+    def create_category(self):
+        """
+        create categories from object category mapping sheet
+        """
+        print("Creating categories...")        
+        worksheet = self.gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Category Mapping")
         with open(f"{os.path.pardir}/category_mapping.csv", 'w') as f:
             writer = csv.writer(f)
             writer.writerows(worksheet.get_all_values())
-        # get all annotated properties
-        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/final_propagated.json", "r") as f:
-            self.properties_data = json.load(f)
         with open(f"{os.path.pardir}/category_mapping.csv", newline='') as csvfile:
+            n_categories = len(csvfile.readlines())
+            csvfile.seek(0)
             reader = csv.DictReader(csvfile)
-            for row in reader:
+            for row in tqdm.tqdm(reader, total=n_categories):
                 category_name = row["category"].strip()
                 synset_name = row["synset"].strip()
                 if not synset_name or not category_name:
                     print(f"Skipping problematic row: {row}")
                     continue
                 synset_name = canonicalize(synset_name)
-
-                synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
-                synset, created = Synset.objects.get_or_create(
-                    name=synset_name, 
-                    defaults={
-                        "definition": synset_definition, 
-                        "legal": synset_name in legal_synsets,
-                    }
-                )
-                if created and synset_name in self.properties_data:
-                    for property_name in self.properties_data[synset_name]:
-                        property_obj, _ = Property.objects.get_or_create(name=property_name)
-                        synset.properties.add(property_obj)
-                # safeguard to ensure every category only appears once in the csv file
+                synset, _ = Synset.objects.get_or_create(name=synset_name)
                 try:
-                    _ = Category.objects.get_or_create(name=category_name, synset=synset)
-                except IntegrityError:
-                    raise Exception(f"{category_name} mapped to multiple synsets in category_mapping.csv!")
-
+                    _ = Category.objects.create(name=category_name, synset=synset)
+                except IntegrityError: 
+                    raise Exception(f"uplicate entry {category_name} in object category mapping sheet!")
+        
 
     def create_objects(self):
         """
@@ -129,8 +147,7 @@ class Command(BaseCommand):
         print("Creating objects...")
         # first get Deletion Queue
         deletion_queue = set()
-        gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
-        worksheet = gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Deletion Queue")
+        worksheet = self.gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Deletion Queue")
         with open(f"{os.path.pardir}/deletion_queue.csv", 'w') as f:
             writer = csv.writer(f)
             writer.writerows(worksheet.get_all_values())
@@ -219,7 +236,7 @@ class Command(BaseCommand):
                         RoomObject.objects.create(room=room, object=object, count=count)
 
 
-    def create_tasks(self, legal_synsets):
+    def create_tasks(self):
         """
         create tasks and map to synsets
         """
@@ -244,25 +261,12 @@ class Command(BaseCommand):
             for synset_name in canonicalized_synsets:
                 is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
                 is_used_as_fillable = object_used_as_fillable(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
-                synset, created = Synset.objects.get_or_create(
-                    name=synset_name, 
-                    defaults={
-                        "definition": wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else "",
-                        "legal": synset_name in legal_synsets,
-                        "is_used_as_substance": is_used_as_substance,
-                        "is_used_as_non_substance": is_used_as_non_substance,
-                        "is_used_as_fillable": is_used_as_fillable
-                    }
-                )
-                if created and synset_name in self.properties_data:
-                    for property_name in self.properties_data[synset_name]:
-                        property_obj, _ = Property.objects.get_or_create(name=property_name)
-                        synset.properties.add(property_obj)
-                else:
-                    synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
-                    synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
-                    synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
-                    synset.save()
+                # all annotated synsets have been created before, so any newly created synset is illegal
+                synset, _ = Synset.objects.get_or_create(name=synset_name)
+                synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
+                synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
+                synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
+                synset.save()
                 task.synsets.add(synset)
             task.save()
 
@@ -283,46 +287,46 @@ class Command(BaseCommand):
                         room_synset_requirements.save()
 
 
-    def generate_synset_hierarchy(self, G):
+    def generate_synset_hierarchy(self):
         """
         generate the parent/child and ancestor/descendent relationship for synsets
         """
         print("Generating synset hierarchy...")
-        def _add_hypernyms_to_synset(G, synset: Synset):
+        def _add_hypernyms_to_synset(synset: Synset):
             """Add all the hypernyms to G"""
-            if G.has_node(synset.name):
-                for synset_hypernym_name in G.predecessors(synset.name):
+            if self.G.has_node(synset.name):
+                for synset_hypernym_name in self.G.predecessors(synset.name):
                     synset_hypernym, created = Synset.objects.get_or_create(
                         name=synset_hypernym_name, 
                         defaults={
                             "definition": wn.synset(synset_hypernym_name).definition() if wn_synset_exists(synset_hypernym_name) else "",
-                            "legal": True
                         }
                     )
                     if created and synset_hypernym_name in self.properties_data:
                         for property_name in self.properties_data[synset_hypernym_name]:
                             property_obj, _ = Property.objects.get_or_create(name=property_name)
                             synset_hypernym.properties.add(property_obj)
-                    _add_hypernyms_to_synset(G, synset_hypernym)
+                    _add_hypernyms_to_synset(self.G, synset_hypernym)
 
         for synset in Synset.objects.all():
-            _add_hypernyms_to_synset(G, synset)
+            _add_hypernyms_to_synset(synset)
 
         for synset_c in Synset.objects.all():
-            if G.has_node(synset_c.name):
-                for synset_p in Synset.objects.filter(name__in=G.predecessors(synset_c.name)):
+            if self.G.has_node(synset_c.name):
+                for synset_p in Synset.objects.filter(name__in=self.G.predecessors(synset_c.name)):
                     synset_c.parents.add(synset_p)
-                for synset_p in Synset.objects.filter(name__in=nx.ancestors(G, synset_c.name)):
+                for synset_p in Synset.objects.filter(name__in=nx.ancestors(self.G, synset_c.name)):
                     synset_c.ancestors.add(synset_p)
 
 
     def generate_synset_state(self):
         synsets = []
         substances = Property.objects.get(name="substance").synset_set.values_list("name", flat=True)
-        for synset in Synset.objects.all():
-            if synset.name in substances:
+        for synset in tqdm.tqdm(Synset.objects.all()):
+            if synset.name == "entity.n.01": synset.state = STATE_MATCHED   # root synset is always legal
+            elif synset.name in substances:
                 synset.state = STATE_SUBSTANCE
-            elif synset.legal:
+            elif synset.parents.count() > 0:
                 if len(synset.matching_ready_objects) > 0:
                     synset.state = STATE_MATCHED
                 elif len(synset.matching_objects) > 0:
@@ -336,7 +340,6 @@ class Command(BaseCommand):
 
 
     def generate_object_images(self):
-        print("Generating object images...")
         with ZipFS(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_images.zip", write=False) as image_fs:
             for obj in tqdm.tqdm(Object.objects.all()):
                 filename = f"{obj.original_name}.jpg"
