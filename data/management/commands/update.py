@@ -3,7 +3,6 @@ import io
 import os
 import json
 import glob
-import gspread
 import pathlib
 from bddl.activity import Conditions
 import tqdm
@@ -44,19 +43,14 @@ class Command(BaseCommand):
 
         # sanity check room types are up to date
         room_types_from_model = set([room_type for _, room_type in ROOM_TYPE_CHOICES])
-        with open(f'{os.path.pardir}/ig_pipeline/metadata/allowed_room_types.csv', newline='') as csvfile:
+        with open(f'{os.path.pardir}/bddl/bddl/generated_data/allowed_room_types.csv', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             room_types_from_csv = set([row[0] for row in reader][1:])
         assert room_types_from_model == room_types_from_csv, "room types are not up to date with allowed_room_types.csv"
 
         # get object rename mapping
-        self.gc = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
-        worksheet = self.gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Renames")
-        with open(f"{os.path.pardir}/object_renames.csv", 'w') as f:
-            writer = csv.writer(f)
-            writer.writerows(worksheet.get_all_values())
         self.object_rename_mapping = {}
-        with open(f"{os.path.pardir}/object_renames.csv", newline='') as csvfile:
+        with open(f"{os.path.pardir}/ig_pipeline/metadata/object_renames.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 new_cat = row["New Category"].strip()
@@ -105,9 +99,9 @@ class Command(BaseCommand):
                     _generate_synset_hierarchy(child_hierarchy, synset, cur_ancestors, pbar)
 
         print("Creating synsets...")   
-        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/propagated_annots_canonical.json", "r") as f:
+        with open(rf"{os.path.pardir}/bddl/bddl/generated_data/propagated_annots_canonical.json", "r") as f:
             self.properties_data = json.load(f)     
-        with open(rf"{os.path.pardir}/ObjectPropertyAnnotation/object_property_annots/output_hierarchy.json", "r") as f:
+        with open(rf"{os.path.pardir}/bddl/bddl/generated_data/output_hierarchy.json", "r") as f:
             synset_hierarchy = json.load(f)
             with tqdm.tqdm(total=len(self.properties_data)) as pbar:
                 _generate_synset_hierarchy(synset_hierarchy, None, set(), pbar)
@@ -118,11 +112,7 @@ class Command(BaseCommand):
         create categories from object category mapping sheet
         """
         print("Creating categories...")        
-        worksheet = self.gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Object Category Mapping")
-        with open(f"{os.path.pardir}/category_mapping.csv", 'w') as f:
-            writer = csv.writer(f)
-            writer.writerows(worksheet.get_all_values())
-        with open(f"{os.path.pardir}/category_mapping.csv", newline='') as csvfile:
+        with open(f"{os.path.pardir}/bddl/bddl/generated_data/category_mapping.csv", newline='') as csvfile:
             n_categories = len(csvfile.readlines())
             csvfile.seek(0)
             reader = csv.DictReader(csvfile)
@@ -137,7 +127,7 @@ class Command(BaseCommand):
                 try:
                     _ = Category.objects.create(name=category_name, synset=synset)
                 except IntegrityError: 
-                    raise Exception(f"uplicate entry {category_name} in object category mapping sheet!")
+                    raise Exception(f"duplicate entry {category_name} in object category mapping sheet!")
         
 
     def create_objects(self):
@@ -147,11 +137,7 @@ class Command(BaseCommand):
         print("Creating objects...")
         # first get Deletion Queue
         deletion_queue = set()
-        worksheet = self.gc.open_by_key("10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4").worksheet("Deletion Queue")
-        with open(f"{os.path.pardir}/deletion_queue.csv", 'w') as f:
-            writer = csv.writer(f)
-            writer.writerows(worksheet.get_all_values())
-        with open(f"{os.path.pardir}/deletion_queue.csv", newline='') as csvfile:
+        with open(f"{os.path.pardir}/ig_pipeline/metadata/deletion_queue.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 deletion_queue.add(row["Object"].strip())
@@ -241,9 +227,8 @@ class Command(BaseCommand):
         create tasks and map to synsets
         """
         print("Creating tasks...")
-        b1k_tasks = glob.glob(rf"{os.path.pardir}/ObjectPropertyAnnotation/init_goal_cond_annotations/problem_files_verified_b1k/*")
-        b100_tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
-        for filename in tqdm.tqdm(sorted(b1k_tasks + b100_tasks)):
+        tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
+        for filename in tqdm.tqdm(sorted(tasks)):
             task_filepath = pathlib.Path(filename)
             if not task_filepath.is_dir():
                 continue
@@ -252,7 +237,7 @@ class Command(BaseCommand):
             assert task_file.exists(), f"{task_name} file missing"
             with open(task_file, "r") as f:
                 predefined_problem = "".join(f.readlines())
-            dom = "omnigibson" if "ObjectPropertyAnnotation" in str(task_file) else "igibson"
+            dom = "omnigibson" if "(:domain omnigibson)" in predefined_problem else "igibson"
             conds = Conditions(task_name, "potato", dom, predefined_problem=predefined_problem)
             synsets = set(synset for synset in conds.parsed_objects if synset != "agent.n.01")
             canonicalized_synsets = set(canonicalize(synset) for synset in synsets)
@@ -285,38 +270,6 @@ class Command(BaseCommand):
                     if not created:
                         room_synset_requirements.count += 1
                         room_synset_requirements.save()
-
-
-    def generate_synset_hierarchy(self):
-        """
-        generate the parent/child and ancestor/descendent relationship for synsets
-        """
-        print("Generating synset hierarchy...")
-        def _add_hypernyms_to_synset(synset: Synset):
-            """Add all the hypernyms to G"""
-            if self.G.has_node(synset.name):
-                for synset_hypernym_name in self.G.predecessors(synset.name):
-                    synset_hypernym, created = Synset.objects.get_or_create(
-                        name=synset_hypernym_name, 
-                        defaults={
-                            "definition": wn.synset(synset_hypernym_name).definition() if wn_synset_exists(synset_hypernym_name) else "",
-                        }
-                    )
-                    if created and synset_hypernym_name in self.properties_data:
-                        for property_name in self.properties_data[synset_hypernym_name]:
-                            property_obj, _ = Property.objects.get_or_create(name=property_name)
-                            synset_hypernym.properties.add(property_obj)
-                    _add_hypernyms_to_synset(self.G, synset_hypernym)
-
-        for synset in Synset.objects.all():
-            _add_hypernyms_to_synset(synset)
-
-        for synset_c in Synset.objects.all():
-            if self.G.has_node(synset_c.name):
-                for synset_p in Synset.objects.filter(name__in=self.G.predecessors(synset_c.name)):
-                    synset_c.parents.add(synset_p)
-                for synset_p in Synset.objects.filter(name__in=nx.ancestors(self.G, synset_c.name)):
-                    synset_c.ancestors.add(synset_p)
 
 
     def generate_synset_state(self):
