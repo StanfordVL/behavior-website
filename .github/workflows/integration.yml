@@ -25,6 +25,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
+          cache: 'pip'
           python-version: "3.8"
           architecture: x64
 
@@ -53,7 +54,7 @@ jobs:
         id: cache-pipeline
         uses: actions/cache@v3
         with:
-          key: ig_pipeline-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json.dvc', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json.dvc', 'ig_pipeline/artifacts/pipeline/object_inventory.json.dvc', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json.dvc', 'ig_pipeline/artifacts/pipeline/object_images.zip.dvc') }}
+          key: ig_pipeline-${{ hashFiles('ig_pipeline/dvc.lock') }}
           path: |
             ig_pipeline/artifacts/pipeline/combined_room_object_list.json
             ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json
