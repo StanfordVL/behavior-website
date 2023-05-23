@@ -80,7 +80,7 @@ jobs:
       - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
         name: Unprotect images
         working-directory: ig_pipeline
-        run: dvc unprotect ig_pipeline/artifacts/pipeline/combined_room_object_list.json ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json ig_pipeline/artifacts/pipeline/object_inventory.json ig_pipeline/artifacts/pipeline/object_inventory_future.json artifacts/pipeline/object_images.zip
+        run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/combined_room_object_list_future.json artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory_future.json artifacts/pipeline/object_images.zip
 
       # See if we need to rebuild the whole thing
       - name: Check cache for overall data
