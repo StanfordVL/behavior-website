@@ -2,8 +2,9 @@ name: Update Integration
 
 on:
   schedule:
-    - cron: "0 13 * * *"  # 6am PST
+    - cron: "0 * * * *"  # Every hour
   workflow_dispatch:
+  push:
 
 permissions:
   contents: read
@@ -21,19 +22,24 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      # Fetch bddl data
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+          architecture: x64
+
+      # Checkout all repos
+      - name: Checkout integration repo
+        uses: actions/checkout@v3
+        with:
+          path: b1k-integration
+
       - name: Clone BDDL Repo
         uses: actions/checkout@v3
         with:
           repository: StanfordVL/bddl
           path: bddl
           ref: develop
-
-      - name: Setup python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-          architecture: x64
 
       - name: Clone ig pipeline Repo
         uses: actions/checkout@v3
@@ -42,58 +48,86 @@ jobs:
           path: ig_pipeline
           token: ${{ secrets.REPO_TOKEN }}
 
-      - name: Install dvc
+      # See if we need to re-pull any ig_pipeline data from DVC.
+      - name: Check cache for ig_pipeline data
+        id: cache-pipeline
+        uses: actions/cache@v3
+        with:
+          key: ig_pipeline-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json.dvc', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json.dvc', 'ig_pipeline/artifacts/pipeline/object_inventory.json.dvc', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json.dvc', 'ig_pipeline/artifacts/pipeline/object_images.zip.dvc') }}
+          path: |
+            ig_pipeline/artifacts/pipeline/combined_room_object_list.json
+            ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json
+            ig_pipeline/artifacts/pipeline/object_inventory.json
+            ig_pipeline/artifacts/pipeline/object_inventory_future.json
+            ig_pipeline/artifacts/pipeline/object_images.zip
+
+      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
+        name: Install dvc
         run: pip install dvc[gs]
 
-      - name: Authenticate on Google Cloud
+      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
+        name: Authenticate on Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: Pull dvc data
+      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
+        name: Pull dvc data
         working-directory: ig_pipeline
         run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future generate_object_images
 
-      - name: Unprotect images
+      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
+        name: Unprotect images
         working-directory: ig_pipeline
-        run: dvc unprotect artifacts/pipeline/object_images.zip
+        run: dvc unprotect ig_pipeline/artifacts/pipeline/combined_room_object_list.json ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json ig_pipeline/artifacts/pipeline/object_inventory.json ig_pipeline/artifacts/pipeline/object_inventory_future.json artifacts/pipeline/object_images.zip
 
-      # Build static content
-      - name: Checkout integration repo
-        uses: actions/checkout@v3
+      # See if we need to rebuild the whole thing
+      - name: Check cache for overall data
+        id: cache-integration
+        uses: actions/cache@v3
         with:
-          path: b1k-integration
+          key: integration-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json', 'ig_pipeline/artifacts/pipeline/object_inventory.json', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json', 'ig_pipeline/artifacts/pipeline/object_images.zip', 'b1k-integration', 'bddl') }}
+          path: b1k-integration/localhost:8000/b1k-integration
+          lookup-only: true
 
-      - name: Install dependencies
+      # Rebuild if necessary
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Install dependencies
         working-directory: b1k-integration
         run: pip install -r requirements.txt
 
-      - name: Build database
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Build database
         working-directory: b1k-integration
         run: python manage.py makemigrations data && python manage.py migrate && python manage.py update
 
-      - name: Start local server
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Start local server
         working-directory: b1k-integration
         run: python manage.py runserver &
 
-      - name: freeze static files
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: freeze static files
         working-directory: b1k-integration
         run: wget -mpEk http://localhost:8000/b1k-integration/
 
       - name: kill local server
-        if: success() || failure()
-        run: kill $(lsof -t -i:8000)
+        if: success() || failure() 
+        run: kill $(lsof -t -i:8000) || true
       
       # Deploy to github pages
-      - name: Setup Pages
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - name: Upload artifact
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: b1k-integration/localhost:8000/b1k-integration
-          
-      - name: Deploy to GitHub Pages
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
 

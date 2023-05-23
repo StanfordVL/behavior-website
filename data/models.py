@@ -160,6 +160,8 @@ class Object(models.Model):
 
 class Synset(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
+    # whether the synset is a custom synset or not
+    is_custom = models.BooleanField(default=False)
     # wordnet definitions
     definition = models.CharField(max_length=1000, default="")
     # substance properties (whole list in utils.py)
