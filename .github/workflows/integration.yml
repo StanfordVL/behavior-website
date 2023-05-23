@@ -22,13 +22,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Setup python
-        uses: actions/setup-python@v2
-        with:
-          cache: 'pip'
-          python-version: "3.8"
-          architecture: x64
-
       # Checkout all repos
       - name: Checkout integration repo
         uses: actions/checkout@v3
@@ -48,6 +41,13 @@ jobs:
           repository: StanfordVL/ig_pipeline
           path: ig_pipeline
           token: ${{ secrets.REPO_TOKEN }}
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          cache: 'pip'
+          python-version: "3.8"
+          architecture: x64
 
       # See if we need to re-pull any ig_pipeline data from DVC.
       - name: Check cache for ig_pipeline data
