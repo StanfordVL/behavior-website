@@ -83,11 +83,21 @@ jobs:
         run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/combined_room_object_list_future.json artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory_future.json artifacts/pipeline/object_images.zip
 
       # See if we need to rebuild the whole thing
+      - name: Get BDDL hash
+        id: bddl-hash
+        working-directory: bddl
+        run: echo hash=$(git rev-parse HEAD) >> "$GITHUB_OUTPUT"
+
+      - name: Get b1k-integration hash
+        id: b1k-integration-hash
+        working-directory: b1k-integration
+        run: echo hash=$(git rev-parse HEAD) >> "$GITHUB_OUTPUT"
+
       - name: Check cache for overall data
         id: cache-integration
         uses: actions/cache@v3
         with:
-          key: integration-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json', 'ig_pipeline/artifacts/pipeline/object_inventory.json', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json', 'ig_pipeline/artifacts/pipeline/object_images.zip', 'b1k-integration', 'bddl') }}
+          key: integration-${{b1k-integration-hash.hash}}-${{bddl-hash.hash}}-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json', 'ig_pipeline/artifacts/pipeline/object_inventory.json', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json', 'ig_pipeline/artifacts/pipeline/object_images.zip') }}
           path: b1k-integration/localhost:8000/b1k-integration
           lookup-only: true
 
