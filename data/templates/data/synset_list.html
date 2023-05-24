@@ -131,12 +131,12 @@
         <td>{{ synset.definition }}</td>
         <td>
           {% for parent in synset.parents.all %}
-            {{ parent.name }}, 
+            <a href="{% url 'synset_detail' parent.name %}">{{ parent.name }}, </a>
           {% endfor %}
         </td>
         <td>
           {% for child in synset.children.all %}
-            {{ child.name }}, 
+            <a href="{% url 'synset_detail' child.name %}">{{ child.name }}, </a>
           {% endfor %}
         </td>
         <!--<td>
@@ -146,13 +146,13 @@
         </td>-->
         <td>
           {% for task in synset.task_set.all|slice:":10" %}
-            {{ task.name }}, 
+            <a href="{% url 'task_detail' task.name %}">{{ task.name }}, </a>
           {% endfor %}
           {% if synset.task_set.count > 10 %}...{% endif %}
         </td>
         <td>
           {% for category in synset.category_set.all|slice:":10" %}
-            {{ category.name }}, 
+            <a href="{% url 'category_detail' category.name %}">{{ category.name }}, </a>
           {% endfor %}
           {% if synset.category_set.count > 10 %}...{% endif %}
         </td>
