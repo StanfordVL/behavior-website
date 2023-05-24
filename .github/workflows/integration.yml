@@ -17,10 +17,25 @@ concurrency:
 
 jobs:
   update:
+    runs-on: ubuntu-latest
+
+    # Configure database
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+
     steps:
       # Checkout all repos
       - name: Checkout integration repo
