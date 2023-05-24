@@ -24,6 +24,8 @@ jobs:
       postgres:
         image: postgres
         env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
         options: >-
