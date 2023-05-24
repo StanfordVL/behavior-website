@@ -4,7 +4,7 @@ import os
 import json
 import glob
 import pathlib
-from bddl.activity import Conditions
+from bddl.activity import Conditions, get_all_activities
 import tqdm
 from data.utils import *
 from data.models import *

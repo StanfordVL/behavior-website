@@ -103,7 +103,12 @@ jobs:
 
       # Rebuild if necessary
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
-        name: Install dependencies
+        name: Install BDDL
+        working-directory: bddl
+        run: pip install -e .
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Install other dependencies
         working-directory: b1k-integration
         run: pip install -r requirements.txt
 
