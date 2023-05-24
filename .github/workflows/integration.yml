@@ -150,7 +150,7 @@ jobs:
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: freeze static files
         working-directory: b1k-integration
-        run: httrack -v -w http://127.0.0.1:8000/b1k-integration/
+        run: httrack -v -w -c10 --timeout=300 http://127.0.0.1:8000/b1k-integration/
 
       - name: test
         run: ls
