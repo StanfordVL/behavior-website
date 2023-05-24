@@ -65,6 +65,7 @@ class SceneListView(ListView):
 class SynsetListView(ListView):
     model = Synset
     context_object_name = "synset_list"
+    wide = True
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

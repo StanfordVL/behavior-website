@@ -102,7 +102,7 @@
         </div>
       </div>
     </nav>
-    <div class="container mt-4">
+    <div class="{% if view.wide %}container-fluid{% else %}container{% endif %} mt-4">
       {% block content %}{% endblock %}
     </div>
     {% block customscript %}{% endblock %}

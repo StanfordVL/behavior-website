@@ -101,10 +101,16 @@
       <tr>
         <th>Name</th>
         <th>Synset State</th>
-        <th>Properties</th>
+        <th>Custom?</th>
+        <th>Definition</th>
+        <th>Parents</th>
+        <th>Children</th>
+        <!--<th>Properties</th>-->
+        <th>Tasks</th>
+        <th>Direct Categories</th>
         <th>Direct Objects</th>
         <th>Total Objects</th>
-        <th>Task required</th>
+        <th>Requiring Task Count</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -119,10 +125,34 @@
           {% else %}Illegal
           {% endif %}
         </td>
+        <td>{{ synset.is_custom }}</td>
+        <td>{{ synset.definition }}</td>
         <td>
+          {% for parent in synset.parents.all %}
+            {{ parent.name }}, 
+          {% endfor %}
+        </td>
+        <td>
+          {% for child in synset.children.all %}
+            {{ child.name }}, 
+          {% endfor %}
+        </td>
+        <!--<td>
           {% for property in synset.properties.all %}
             {{ property.name }}, 
           {% endfor %}
+        </td>-->
+        <td>
+          {% for task in synset.task_set.all|slice:":10" %}
+            {{ task.name }}, 
+          {% endfor %}
+          {% if synset.task_set.count > 10 %}...{% endif %}
+        </td>
+        <td>
+          {% for category in synset.category_set.all|slice:":10" %}
+            {{ category.name }}, 
+          {% endfor %}
+          {% if synset.category_set.count > 10 %}...{% endif %}
         </td>
         <td>{{ synset.direct_matching_objects | length }}</td>
         <td>{{ synset.matching_objects | length }}</td>
