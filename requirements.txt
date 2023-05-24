@@ -8,4 +8,3 @@ xmltodict
 beautifulsoup4
 html5lib
 fs
-psycopg~=3.1.9
