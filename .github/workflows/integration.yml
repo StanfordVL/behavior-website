@@ -131,7 +131,7 @@ jobs:
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: freeze static files
         working-directory: b1k-integration
-        run: httrack -v -w http://localhost:8000/b1k-integration/
+        run: httrack -v -w http://127.0.0.1:8000/b1k-integration/
 
       - name: test
         run: ls
@@ -149,7 +149,7 @@ jobs:
         name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: b1k-integration/localhost:8000/b1k-integration
+          path: b1k-integration/127.0.0.1_8000/b1k-integration
 
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: Deploy to GitHub Pages
