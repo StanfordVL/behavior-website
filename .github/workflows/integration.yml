@@ -108,10 +108,19 @@ jobs:
         run: python manage.py runserver &
 
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: install httrack
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: httrack
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: freeze static files
         working-directory: b1k-integration
-        run: wget -mpEk http://localhost:8000/b1k-integration/
+        run: httrack -v -w http://localhost:8000/b1k-integration/
 
+      - name: test
+        run: ls
+        
       - name: kill local server
         if: success() || failure() 
         run: kill $(lsof -t -i:8000) || true
