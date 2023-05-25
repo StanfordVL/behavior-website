@@ -79,7 +79,7 @@ class Command(BaseCommand):
             helper function to generate synset hierarchy
             """
             synset_name = synset_sub_hierarchy["name"]
-            synset_is_custom = wn_synset_exists(synset_name)  # TODO: use data from hierarchy. synset_sub_hierarchy["is_custom"] == "1"
+            synset_is_custom = not wn_synset_exists(synset_name)  # TODO: use data from hierarchy. synset_sub_hierarchy["is_custom"] == "1"
             if synset_name != canonicalize(synset_name):
                 print(f"synset {synset_name} is not canonicalized!")
             synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
