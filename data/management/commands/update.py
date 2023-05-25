@@ -231,12 +231,15 @@ class Command(BaseCommand):
         tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
         tasks = [(act, inst) for act in get_all_activities() for inst in range(get_instance_count(act))]
         for act, inst in tasks:
-            task_name = f"{act}-{inst}"
-            conds = Conditions(task_name, inst, "omnigibson")
+            # Load task definition
+            conds = Conditions(act, inst, "omnigibson")
             synsets = set(synset for synset in conds.parsed_objects if synset != "agent.n.01")
             canonicalized_synsets = set(canonicalize(synset) for synset in synsets)
             with open(get_definition_filename(act, inst), "r") as f:
                 raw_task_definition = "".join(f.readlines())
+
+            # Create task object
+            task_name = f"{act}-{inst}"
             task = Task.objects.create(name=task_name, definition=raw_task_definition)
 
             # add any synset that is not currently in the database
