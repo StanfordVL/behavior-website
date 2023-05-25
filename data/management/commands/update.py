@@ -3,8 +3,8 @@ import io
 import os
 import json
 import glob
-import pathlib
-from bddl.activity import Conditions, get_all_activities
+from bddl.activity import Conditions, get_all_activities, get_instance_count
+from bddl.config import get_definition_filename
 import tqdm
 from data.utils import *
 from data.models import *
@@ -229,20 +229,16 @@ class Command(BaseCommand):
         """
         print("Creating tasks...")
         tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
-        for filename in tqdm.tqdm(sorted(tasks)):
-            task_filepath = pathlib.Path(filename)
-            if not task_filepath.is_dir():
-                continue
-            task_file = task_filepath / "problem0.bddl"
-            task_name = task_filepath.name.replace(" ", "_").replace("-", "_").replace("'", "_")
-            assert task_file.exists(), f"{task_name} file missing"
-            with open(task_file, "r") as f:
-                predefined_problem = "".join(f.readlines())
-            dom = "omnigibson" if "(:domain omnigibson)" in predefined_problem else "igibson"
-            conds = Conditions(task_name, "potato", dom, predefined_problem=predefined_problem)
+        tasks = [(act, inst) for act in get_all_activities() for inst in range(get_instance_count(act))]
+        for act, inst in tasks:
+            task_name = f"{act}-{inst}"
+            conds = Conditions(task_name, inst, "omnigibson")
             synsets = set(synset for synset in conds.parsed_objects if synset != "agent.n.01")
             canonicalized_synsets = set(canonicalize(synset) for synset in synsets)
-            task = Task.objects.create(name=task_name, definition=predefined_problem)
+            with open(get_definition_filename(act, inst), "r") as f:
+                raw_task_definition = "".join(f.readlines())
+            task = Task.objects.create(name=task_name, definition=raw_task_definition)
+
             # add any synset that is not currently in the database
             for synset_name in canonicalized_synsets:
                 is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
