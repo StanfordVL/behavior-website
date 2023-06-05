@@ -239,6 +239,10 @@ class Synset(models.Model):
                     next_to_query.append((child, False, True))
         return G    
 
+    @cached_property
+    def task_relevant(self):
+        return self.task_set.exists() or self.ancestors.filter(task_set__isnull=False).exists()
+
 
 class Task(models.Model):
     objects = get_caching_manager(["synsets", "roomrequirement_set__roomsynsetrequirement_set__synset"])()

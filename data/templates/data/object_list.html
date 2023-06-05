@@ -61,6 +61,7 @@
         <th>Object</th>
         <th>Category</th>
         <th>Synset</th>
+        <th>Task Relevant</th>
         <th>Used Rooms</th>
         <th>Ready?</th>
       </tr>
@@ -71,6 +72,7 @@
         <td><a href="{% url 'object_detail' object.name %}">{{ object.name }}</a></td>
         <td>{{ object.category.name }}</td>
         <td>{{ object.category.synset.name }}</td>
+        <td>{{ object.category.synset.task_relevant }}</td>
         <td>{{ object.roomobject_set.count }}</td>
         <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>
       </tr>
