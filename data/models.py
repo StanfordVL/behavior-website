@@ -241,7 +241,7 @@ class Synset(models.Model):
 
     @cached_property
     def task_relevant(self):
-        return self.task_set.exists() or self.ancestors.filter(task_set__isnull=False).exists()
+        return self.task_set.exists() or self.ancestors.filter(task__isnull=False).exists()
 
 
 class Task(models.Model):

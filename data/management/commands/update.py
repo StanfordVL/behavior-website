@@ -230,7 +230,7 @@ class Command(BaseCommand):
         print("Creating tasks...")
         tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
         tasks = [(act, inst) for act in get_all_activities() for inst in range(get_instance_count(act))]
-        for act, inst in tasks:
+        for act, inst in tqdm.tqdm(tasks):
             # Load task definition
             conds = Conditions(act, inst, "omnigibson")
             synsets = set(synset for synset in conds.parsed_objects if synset != "agent.n.01")
