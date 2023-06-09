@@ -75,7 +75,8 @@
       <tr>
         <th>Task Name</th>
         <th>Synsets</th>
-        <th>Scenes</th>
+        <th>Matched Ready Scenes</th>
+        <th>Matched Planned Scenes</th>
         <th>Substances</th>
       </tr>
     </thead>
@@ -89,7 +90,18 @@
           {% endfor %}
         </td>
         <td class="{{ 'bg-'|add:task.scene_state }}">
-          {% if task.scene_state == 'success' %}Matched{% elif task.scene_state == 'warning' %}Planned{% else %}Unmatched{% endif %}
+          {% for scene, state in task.scene_matching_dict.items %}
+            {% if state.matched_ready %}
+              {{ scene.name }},
+            {% endif %}
+          {% endfor %}
+        </td>
+        <td class="{{ 'bg-'|add:task.scene_state }}">
+          {% for scene, state in task.scene_matching_dict.items %}
+            {% if state.matched_planned %}
+              {{ scene.name }},
+            {% endif %}
+          {% endfor %}
         </td>
         <td class="{{ 'bg-'|add:task.substance_required }}">
           {% for substance in task.substance_synsets %}
