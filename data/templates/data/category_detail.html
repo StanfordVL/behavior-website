@@ -19,9 +19,7 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for object in category.object_set.all|dictsort:"name" %}
-      {% if object.photo %}
-      <div class="col-md-3 my-1"><img class="img-fluid" src="{{ object.photo.url }}" alt="{{ object.name }} photo" /></div>
-      {% endif %}
+      <div class="col-md-3 my-1"><img class="img-fluid" src="https://cvgl.stanford.edu/b1k/object_images/{{ object.name }}.webp" alt="{{ object.name }} photo" /></div>
       {% empty %}
       <p>None</p>
       {% endfor %}

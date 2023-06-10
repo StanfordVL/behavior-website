@@ -60,7 +60,6 @@ jobs:
             ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json
             ig_pipeline/artifacts/pipeline/object_inventory.json
             ig_pipeline/artifacts/pipeline/object_inventory_future.json
-            ig_pipeline/artifacts/pipeline/object_images.zip
 
       - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
         name: Install dvc
@@ -75,12 +74,12 @@ jobs:
       - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
         name: Pull dvc data
         working-directory: ig_pipeline
-        run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future generate_object_images
+        run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future
 
       - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
         name: Unprotect images
         working-directory: ig_pipeline
-        run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/combined_room_object_list_future.json artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory_future.json artifacts/pipeline/object_images.zip
+        run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/combined_room_object_list_future.json artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory_future.json
 
       # See if we need to rebuild the whole thing
       - name: Get BDDL hash
@@ -97,7 +96,7 @@ jobs:
         id: cache-integration
         uses: actions/cache@v3
         with:
-          key: integration-${{ steps.b1k-integration-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json', 'ig_pipeline/artifacts/pipeline/object_inventory.json', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json', 'ig_pipeline/artifacts/pipeline/object_images.zip') }}
+          key: integration-${{ steps.b1k-integration-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json', 'ig_pipeline/artifacts/pipeline/object_inventory.json', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json') }}
           path: README.md
           lookup-only: true
 
