@@ -295,7 +295,7 @@ class Command(BaseCommand):
     def generate_object_images(self):
         with ZipFS(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_images.zip", write=False) as image_fs:
             for obj in tqdm.tqdm(Object.objects.all()):
-                filename = f"{obj.original_name}.jpg"
+                filename = f"{obj.original_name}.webp"
                 if not image_fs.exists(filename):
                     continue
                 bio = io.BytesIO(image_fs.getbytes(filename))

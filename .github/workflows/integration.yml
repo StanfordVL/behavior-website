@@ -98,7 +98,7 @@ jobs:
         uses: actions/cache@v3
         with:
           key: integration-${{ steps.b1k-integration-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json', 'ig_pipeline/artifacts/pipeline/object_inventory.json', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json', 'ig_pipeline/artifacts/pipeline/object_images.zip') }}
-          path: b1k-integration/localhost:8000/b1k-integration
+          path: README.md
           lookup-only: true
 
       # Rebuild if necessary

@@ -137,7 +137,7 @@ class Object(models.Model):
     # the category that the object belongs to
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     # the photo of the object
-    photo = models.ImageField("Object photo", blank=True, null=True)
+    photo = models.FileField("Object photo", blank=True, null=True)
 
     def __str__(self):
         return self.name
