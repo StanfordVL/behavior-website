@@ -157,6 +157,10 @@ class Object(models.Model):
             return STATE_PLANNED
         return STATE_UNMATCHED
     
+    @cached_property
+    def image_url(self):
+        model_id = self.name.split("-")[-1]
+        return f"https://cvgl.stanford.edu/b1k/object_images/{model_id}.webp"
 
 
 class Synset(models.Model):
