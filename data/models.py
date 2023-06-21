@@ -408,7 +408,7 @@ class Room(models.Model):
         # Now do a bipartite matching
         M = nx.bipartite.maximum_matching(G, top_nodes=synset_node_to_synset.keys())
         # Now check that all required objects are matched
-        if len(M) == len(synset_node_to_synset):
+        if set(synset_node_to_synset.keys()).issubset(M.keys()):
             return ""
         else: 
             missing_synsets = defaultdict(int)  # default value is 0
