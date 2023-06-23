@@ -258,18 +258,16 @@ class Command(BaseCommand):
             # generate room requirements for task
             for cond in leaf_inroom_conds(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synsets, task_name):
                 assert len(cond) == 2, f"{task_name}: {str(cond)} not in correct format"
-                # we don't check floor and wall because they are not in the room_object_list
-                if cond[0] not in {"floor.n.01", "wall.n.01"}:
-                    room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[1])
-                    room_synset_requirements, created = RoomSynsetRequirement.objects.get_or_create(
-                        room_requirement=room_requirement,
-                        synset=Synset.objects.get(name=cond[0]),
-                        defaults={"count": 1}
-                    )
-                    # if the requirement already occurred before, we increment the count by 1
-                    if not created:
-                        room_synset_requirements.count += 1
-                        room_synset_requirements.save()
+                room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[1])
+                room_synset_requirements, created = RoomSynsetRequirement.objects.get_or_create(
+                    room_requirement=room_requirement,
+                    synset=Synset.objects.get(name=cond[0]),
+                    defaults={"count": 1}
+                )
+                # if the requirement already occurred before, we increment the count by 1
+                if not created:
+                    room_synset_requirements.count += 1
+                    room_synset_requirements.save()
 
 
     def generate_synset_state(self):
