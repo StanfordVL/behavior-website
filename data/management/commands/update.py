@@ -58,7 +58,9 @@ class Command(BaseCommand):
                 # sanity checks
                 if obj_name != "":
                     assert len(obj_name.split('-')) == 2, f"{obj_name} should only have one \'-\'"
-                    self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_name.split('-')[1]}"
+                    obj_id = obj_name.split('-')[1]
+                    assert obj_id not in self.object_rename_mapping, f"duplicate id {obj_id} found in object rename mapping"
+                    self.object_rename_mapping[obj_id] = f"{new_cat}-{obj_id}"
 
 
     def post_complete_operation(self):
@@ -141,21 +143,22 @@ class Command(BaseCommand):
         with open(f"{os.path.pardir}/ig_pipeline/metadata/deletion_queue.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                deletion_queue.add(row["Object"].strip())
+                deletion_queue.add(row["Object"].strip().split("-")[1])
         # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
             for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
                 object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                if object_name not in deletion_queue:
+                if object_name.split("-")[1] not in deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.objects.get_or_create(name=category_name)
                     object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category)
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             objs = []
             for object_name in tqdm.tqdm(json.load(f)["providers"].keys()):
-                if object_name in self.object_rename_mapping:
-                    object_name = self.object_rename_mapping[object_name]
-                if object_name not in deletion_queue:
+                obj_id = object_name.split("-")[1]
+                if obj_id in self.object_rename_mapping:
+                    object_name = self.object_rename_mapping[obj_id]
+                if object_name.split("-")[1] not in deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.objects.get_or_create(name=category_name)
                     # safeguard to ensure currently available objects are also in future planned dataset
@@ -189,7 +192,8 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (not ready) already exists!")
                     for orig_name, count in planned_scene_dict[scene_name][room_name].items():
-                        object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
+                        obj_id = orig_name.split("-")[1]
+                        object_name = self.object_rename_mapping[obj_id] if obj_id in self.object_rename_mapping else orig_name
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "original_name": orig_name,
                             "ready": False,
@@ -213,7 +217,8 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
                     for orig_name, count in current_scene_dict[scene_name][room_name].items():
-                        object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
+                        obj_id = orig_name.split("-")[1]
+                        object_name = self.object_rename_mapping[obj_id] if obj_id in self.object_rename_mapping else orig_name
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "original_name": orig_name,
                             "ready": False,
