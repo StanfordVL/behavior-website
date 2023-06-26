@@ -70,6 +70,7 @@ class Command(BaseCommand):
         print("Running post completion operations...")
         self.generate_synset_state()
         # self.generate_object_images()
+        self.nuke_unused_synsets()
 
 
     def create_synsets(self):
@@ -293,6 +294,30 @@ class Command(BaseCommand):
                 synset.state = STATE_ILLEGAL
             synsets.append(synset)
         Synset.objects.bulk_update(synsets, ["state"])
+
+    def nuke_unused_synsets(self):
+        # Make repeated passes until we propagate far enough up
+        while True:
+            removal_names = set()
+            for synset in Synset.objects.all():
+                # In a given pass, only leaf nodes can be removed
+                if synset.children.count() != 0:
+                    continue
+
+                # If a synset has objects or task relevance, we can't remove it
+                if len(synset.matching_objects) != 0:
+                    continue
+                
+                if synset.n_task_required != 0:
+                    continue
+
+                # Otherwise queue it for removal
+                removal_names.add(synset.name)
+
+            if removal_names:
+                Synset.objects.filter(name__in=removal_names).delete()
+            else:
+                break
 
 
     # def generate_object_images(self):
