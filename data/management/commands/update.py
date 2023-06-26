@@ -50,6 +50,8 @@ class Command(BaseCommand):
 
         # get object rename mapping
         self.object_rename_mapping = {}
+        self.obj_rename_mapping_unique_set = set()
+        self.obj_rename_mapping_duplicate_set = set()
         with open(f"{os.path.pardir}/ig_pipeline/metadata/object_renames.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
@@ -59,9 +61,12 @@ class Command(BaseCommand):
                 if obj_name != "":
                     assert len(obj_name.split('-')) == 2, f"{obj_name} should only have one \'-\'"
                     obj_id = obj_name.split('-')[1]
-                    assert obj_id not in self.object_rename_mapping, f"duplicate id {obj_id} found in object rename mapping"
-                    self.object_rename_mapping[obj_id] = f"{new_cat}-{obj_id}"
-
+                    if obj_id not in self.obj_rename_mapping_unique_set:
+                        self.obj_rename_mapping_unique_set.add(obj_id)
+                    else:
+                        self.obj_rename_mapping_duplicate_set.add(obj_id)
+                    self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_id}"
+            assert len(self.obj_rename_mapping_duplicate_set) == 0, f"object rename mapping have duplicates: {self.obj_rename_mapping_duplicate_set}"
 
     def post_complete_operation(self):
         """
@@ -155,10 +160,8 @@ class Command(BaseCommand):
                     object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category)
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             objs = []
-            for object_name in tqdm.tqdm(json.load(f)["providers"].keys()):
-                obj_id = object_name.split("-")[1]
-                if obj_id in self.object_rename_mapping:
-                    object_name = self.object_rename_mapping[obj_id]
+            for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
+                object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                 if object_name.split("-")[1] not in deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.objects.get_or_create(name=category_name)
@@ -193,8 +196,7 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (not ready) already exists!")
                     for orig_name, count in planned_scene_dict[scene_name][room_name].items():
-                        obj_id = orig_name.split("-")[1]
-                        object_name = self.object_rename_mapping[obj_id] if obj_id in self.object_rename_mapping else orig_name
+                        object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "original_name": orig_name,
                             "ready": False,
@@ -218,8 +220,7 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
                     for orig_name, count in current_scene_dict[scene_name][room_name].items():
-                        obj_id = orig_name.split("-")[1]
-                        object_name = self.object_rename_mapping[obj_id] if obj_id in self.object_rename_mapping else orig_name
+                        object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                         object, _ = Object.objects.get_or_create(name=object_name, defaults={
                             "original_name": orig_name,
                             "ready": False,
