@@ -263,7 +263,7 @@ class Task(models.Model):
 
     @cached_property
     def state(self):
-        if self.synset_state == STATE_MATCHED and self.scene_state == STATE_MATCHED and self.substance_required == STATE_NONE:
+        if self.synset_state == STATE_MATCHED and self.scene_state == STATE_MATCHED:
             return STATE_MATCHED
         elif self.synset_state == STATE_UNMATCHED or self.scene_state == STATE_UNMATCHED:
             return STATE_UNMATCHED
