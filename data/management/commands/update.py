@@ -145,16 +145,16 @@ class Command(BaseCommand):
         """
         print("Creating objects...")
         # first get Deletion Queue
-        deletion_queue = set()
+        self.deletion_queue = set()
         with open(f"{os.path.pardir}/ig_pipeline/metadata/deletion_queue.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                deletion_queue.add(row["Object"].strip().split("-")[1])
+                self.deletion_queue.add(row["Object"].strip().split("-")[1])
         # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
             for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
                 object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                if object_name.split("-")[1] not in deletion_queue:
+                if object_name.split("-")[1] not in self.deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.objects.get_or_create(name=category_name)
                     object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category)
@@ -162,7 +162,7 @@ class Command(BaseCommand):
             objs = []
             for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
                 object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                if object_name.split("-")[1] not in deletion_queue:
+                if object_name.split("-")[1] not in self.deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.objects.get_or_create(name=category_name)
                     # safeguard to ensure currently available objects are also in future planned dataset
@@ -196,14 +196,15 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (not ready) already exists!")
                     for orig_name, count in planned_scene_dict[scene_name][room_name].items():
-                        object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                        object, _ = Object.objects.get_or_create(name=object_name, defaults={
-                            "original_name": orig_name,
-                            "ready": False,
-                            "planned": False, 
-                            "category": Category.objects.get(name=object_name.split("-")[0])
-                        })
-                        RoomObject.objects.create(room=room, object=object, count=count)
+                        if orig_name.split("-")[1] not in self.deletion_queue:
+                            object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
+                            object, _ = Object.objects.get_or_create(name=object_name, defaults={
+                                "original_name": orig_name,
+                                "ready": False,
+                                "planned": False, 
+                                "category": Category.objects.get(name=object_name.split("-")[0])
+                            })
+                            RoomObject.objects.create(room=room, object=object, count=count)
 
         with open(rf"{os.path.pardir}/ig_pipeline/artifacts/pipeline/combined_room_object_list.json", "r") as f:
             current_scene_dict = json.load(f)["scenes"]
@@ -220,14 +221,15 @@ class Command(BaseCommand):
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
                     for orig_name, count in current_scene_dict[scene_name][room_name].items():
-                        object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                        object, _ = Object.objects.get_or_create(name=object_name, defaults={
-                            "original_name": orig_name,
-                            "ready": False,
-                            "planned": False,
-                            "category": Category.objects.get(name=object_name.split("-")[0])
-                        })
-                        RoomObject.objects.create(room=room, object=object, count=count)
+                        if orig_name.split("-")[1] not in self.deletion_queue:
+                            object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
+                            object, _ = Object.objects.get_or_create(name=object_name, defaults={
+                                "original_name": orig_name,
+                                "ready": False,
+                                "planned": False,
+                                "category": Category.objects.get(name=object_name.split("-")[0])
+                            })
+                            RoomObject.objects.create(room=room, object=object, count=count)
 
 
     def create_tasks(self):
