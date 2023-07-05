@@ -117,6 +117,14 @@ jobs:
         run: python manage.py makemigrations data && python manage.py migrate && python manage.py update
 
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: install wget2
+        run: sudo apt-get install -y wget2
+
+      - name: kill anything over port 8000
+        if: success() || failure() 
+        run: kill $(lsof -t -i:8000) || true
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: Start local server
         working-directory: b1k-integration
         run: python manage.py runserver &
@@ -124,7 +132,7 @@ jobs:
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: freeze static files
         working-directory: b1k-integration
-        run: wget -mpEk http://localhost:8000/b1k-integration/
+        run: wget2 -mpEk http://localhost:8000/b1k-integration/ --max-threads 8
         
       - name: kill local server
         if: success() || failure() 
