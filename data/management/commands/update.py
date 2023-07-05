@@ -67,7 +67,7 @@ class Command(BaseCommand):
                     self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_id}"
             assert len(self.obj_rename_mapping_duplicate_set) == 0, f"object rename mapping have duplicates: {self.obj_rename_mapping_duplicate_set}"
 
-    @transaction.atomic
+
     def post_complete_operation(self):
         """
         put any post completion work (e.g. update stuff) here
@@ -305,6 +305,7 @@ class Command(BaseCommand):
         Synset.objects.bulk_update(synsets, ["state"])
 
 
+    @transaction.atomic
     def nuke_unused_synsets(self):
         # Make repeated passes until we propagate far enough up
         while True:
