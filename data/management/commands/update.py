@@ -10,10 +10,9 @@ from data.utils import *
 from data.models import *
 from nltk.corpus import wordnet as wn
 from django.db.utils import IntegrityError
+from django.db import transaction
 from django.contrib.sites.models import Site
-from django.core.files import File
 from django.core.management.base import BaseCommand
-from fs.zipfs import ZipFS
 from typing import Set, Optional
 
 class Command(BaseCommand):
@@ -68,6 +67,7 @@ class Command(BaseCommand):
                     self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_id}"
             assert len(self.obj_rename_mapping_duplicate_set) == 0, f"object rename mapping have duplicates: {self.obj_rename_mapping_duplicate_set}"
 
+    @transaction.atomic
     def post_complete_operation(self):
         """
         put any post completion work (e.g. update stuff) here
@@ -78,6 +78,7 @@ class Command(BaseCommand):
         self.nuke_unused_synsets()
 
 
+    @transaction.atomic
     def create_synsets(self):
         """
         create synsets with annotations from propagated_annots_canonical.json and hierarchy from output_hierarchy.json
@@ -95,7 +96,7 @@ class Command(BaseCommand):
             if parent:
                 synset.parents.add(parent)
             cur_ancestors = ancestors.copy()
-            for ancestor in cur_ancestors:
+            for ancestor in sorted(cur_ancestors, key=lambda x: x.name):
                 synset.ancestors.add(ancestor)
             cur_ancestors.add(synset)
             if created:
@@ -116,6 +117,7 @@ class Command(BaseCommand):
                 _generate_synset_hierarchy(synset_hierarchy, None, set(), pbar)
 
 
+    @transaction.atomic
     def create_category(self):
         """
         create categories from object category mapping sheet
@@ -139,6 +141,7 @@ class Command(BaseCommand):
                     raise Exception(f"duplicate entry {category_name} in object category mapping sheet!")
         
 
+    @transaction.atomic
     def create_objects(self):
         """
         Create objects and map to categories (with object inventory)
@@ -175,6 +178,7 @@ class Command(BaseCommand):
             Object.objects.bulk_update(objs, ["ready"])
 
 
+    @transaction.atomic
     def create_scenes(self):
         """
         create scene objects (which stores the room config)
@@ -232,6 +236,7 @@ class Command(BaseCommand):
                             RoomObject.objects.create(room=room, object=object, count=count)
 
 
+    @transaction.atomic
     def create_tasks(self):
         """
         create tasks and map to synsets
@@ -252,7 +257,7 @@ class Command(BaseCommand):
             task = Task.objects.create(name=task_name, definition=raw_task_definition)
 
             # add any synset that is not currently in the database
-            for synset_name in canonicalized_synsets:
+            for synset_name in sorted(canonicalized_synsets):
                 is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
                 is_used_as_fillable = object_used_as_fillable(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
                 # all annotated synsets have been created before, so any newly created synset is illegal
@@ -279,6 +284,7 @@ class Command(BaseCommand):
                     room_synset_requirements.save()
 
 
+    @transaction.atomic
     def generate_synset_state(self):
         synsets = []
         substances = Property.objects.get(name="substance").synset_set.values_list("name", flat=True)
@@ -297,6 +303,7 @@ class Command(BaseCommand):
                 synset.state = STATE_ILLEGAL
             synsets.append(synset)
         Synset.objects.bulk_update(synsets, ["state"])
+
 
     def nuke_unused_synsets(self):
         # Make repeated passes until we propagate far enough up
