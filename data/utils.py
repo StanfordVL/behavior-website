@@ -123,7 +123,9 @@ def compute_object_properties(object_name, inventory):
         supported_properties.add("toggleable")
 
     if "heatsource" in meta_links:
-        supported_properties.add("fireSource")
+        supported_properties.add("heatSource")
+        supported_properties.add("coldSource")
+        supported_properties.add("flammable")
 
     if "slicer" in meta_links:
         supported_properties.add("slicer")
@@ -137,10 +139,10 @@ def compute_object_properties(object_name, inventory):
     if "fluidsource" in meta_links:
         supported_properties.add("particleSource")
 
-    if "fluiddrain" in meta_links:
+    if "fluidsink" in meta_links:
         supported_properties.add("particleSink")
 
     if "attachment" in meta_links:
-        supported_properties.add("attachment")
+        supported_properties.add("attachable")
 
     return sorted(supported_properties)
