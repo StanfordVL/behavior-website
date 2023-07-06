@@ -21,6 +21,18 @@ NON_SUBSTANCE_PREDICATES = {
 # predicates that indicate the need for a fillable volume
 FILLABLE_PREDICATES = {"filled", "contains", "empty"}
 
+ANNOTATION_REQUIRED_PROPERTIES = {
+    "fillable",
+    "toggleable",
+    "fireSource",
+    # "sliceable",
+    "slicer",
+    "particleRemover",
+    "particleApplier",
+    "particleSource",
+    "particleSink",
+}
+
 
 def canonicalize(s):
     try:
@@ -93,3 +105,42 @@ def leaf_inroom_conds(cond, synsets: Set[str], task_name: str) -> List[Tuple[str
             assert synset in synsets, f"{task_name}: {synset} not in valid format"
             ret.append((canonicalize(synset), cond[2]))
     return ret    
+
+
+def compute_object_properties(object_name, inventory):
+    if object_name not in inventory["meta_links"]:
+        return []
+
+    # Get the meta links the object has
+    meta_links = inventory["meta_links"][object_name]
+
+    # Get the supported properties
+    supported_properties = set()
+    if "fillable" in meta_links:
+        supported_properties.add("fillable")
+
+    if "togglebutton" in meta_links:
+        supported_properties.add("toggleable")
+
+    if "heatsource" in meta_links:
+        supported_properties.add("fireSource")
+
+    if "slicer" in meta_links:
+        supported_properties.add("slicer")
+
+    if "particleremover" in meta_links:
+        supported_properties.add("particleRemover")
+
+    if "particleapplier" in meta_links:
+        supported_properties.add("particleApplier")
+
+    if "fluidsource" in meta_links:
+        supported_properties.add("particleSource")
+
+    if "fluiddrain" in meta_links:
+        supported_properties.add("particleSink")
+
+    if "attachment" in meta_links:
+        supported_properties.add("attachment")
+
+    return sorted(supported_properties)

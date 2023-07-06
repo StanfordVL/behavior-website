@@ -136,6 +136,8 @@ class Object(models.Model):
     planned = models.BooleanField(default=True)
     # the category that the object belongs to
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    # properties that are currently supported by the object. this is computed via meta link presence
+    properties = models.ManyToManyField(Property, blank=True)
     # the photo of the object
     # this is currently hosted on stanford's www to avoid quota issues
     # photo = models.FileField("Object photo", blank=True, null=True)
@@ -161,6 +163,14 @@ class Object(models.Model):
     def image_url(self):
         model_id = self.name.split("-")[-1]
         return f"https://cvgl.stanford.edu/b1k/object_images/{model_id}.webp"
+    
+    def fully_supports_synset(self, synset) -> bool:       
+        annotation_required_synset_properties = {
+            prop.name
+            for prop in synset.properties.filter(pk__in=ANNOTATION_REQUIRED_PROPERTIES).all()
+        }
+        this_properties = {prop.name for prop in self.properties.all()}
+        return annotation_required_synset_properties.issubset(this_properties)
 
 
 class Synset(models.Model):
@@ -221,6 +231,16 @@ class Synset(models.Model):
         for synset in self.descendants.all():
             matched_objs.update(synset.direct_matching_ready_objects)
         return matched_objs
+    
+    @cached_property
+    def has_fully_supporting_object(self) -> bool:
+        if self.state == STATE_SUBSTANCE:
+            return True
+
+        for obj in self.matching_objects:
+            if obj.fully_supports_synset(self):
+                return True
+        return False
     
     @cached_property
     def n_task_required(self):

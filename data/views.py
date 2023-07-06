@@ -122,6 +122,17 @@ class FillableSynsetListView(SynsetListView):
     queryset = Synset.objects.filter(is_used_as_fillable=True).all()
 
 
+class UnsupportedPropertySynsetListView(SynsetListView):
+    page_title = "Synsets without at least one object supporting all properties"
+    template_name = "data/synset_list.html"
+
+    def get_queryset(self) -> List[Task]:
+        return [
+            s for s in super().get_queryset().all()
+            if not s.has_fully_supporting_object
+        ]
+
+
 class TaskDetailView(DetailView):
     model = Task
     context_object_name = "task"

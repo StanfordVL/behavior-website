@@ -10,6 +10,17 @@
 
   <img class="img-fluid" src="{{ object.image_url }}" alt="{{ object.name }} photo" />
 
+  <h2>Properties</h2>
+  <div class="container">
+    <div class="row justify-content-md-center">
+      {% for property in object.properties.all %}
+      <div class="col-md-auto my-1 py-2 border">{{ property.name }}</div>
+      {% empty %}
+      <p>None</p>
+      {% endfor %}
+    </div>
+  </div>
+
   <h2>Scene / Rooms</h2>
   <ul>
       {% for roomobject in object.roomobject_set.all %}

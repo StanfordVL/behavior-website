@@ -155,12 +155,22 @@ class Command(BaseCommand):
                 self.deletion_queue.add(row["Object"].strip().split("-")[1])
         # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
-            for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
+            inventory = json.load(f)
+            for orig_name in tqdm.tqdm(inventory["providers"].keys()):
                 object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                if object_name.split("-")[1] not in self.deletion_queue:
-                    category_name = object_name.split("-")[0]
-                    category, _ = Category.objects.get_or_create(name=category_name)
-                    object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category)
+                if object_name.split("-")[1] in self.deletion_queue:
+                    continue
+
+                # Create the object
+                category_name = object_name.split("-")[0]
+                category, _ = Category.objects.get_or_create(name=category_name)
+                object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category)
+
+                # Add the necessary properties
+                for property_name in compute_object_properties(object_name, inventory):
+                    property_obj, _ = Property.objects.get_or_create(name=property_name)
+                    object.properties.add(property_obj)
+                    
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             objs = []
             for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):

@@ -17,6 +17,7 @@ urlpatterns = [
     path("substanceerrorsynsets/", SubstanceErrorSynsetListView.as_view(), name="substance_error_synset_list"),
     path("misspelledsynsets/", MisspelledSynsetListView.as_view(), name="misspelled_synset_list"),
     path("fillablesynsets/", FillableSynsetListView.as_view(), name="fillable_synset_list"),
+    path("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView.as_view(), name="unsupported_property_synset_list"),
     path("tasks/<task_name>/", TaskDetailView.as_view(), name="task_detail"),
     path("synsets/<synset_name>/", SynsetDetailView.as_view(), name="synset_detail"),
     path("categories/<category_name>/", CategoryDetailView.as_view(), name="category_detail"),
