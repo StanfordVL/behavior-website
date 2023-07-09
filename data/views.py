@@ -69,8 +69,9 @@ class SynsetListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["properties"] = list(Property.objects.values_list("name", flat=True))
+        context["properties"] = sorted(set(Property.objects.values_list("name", flat=True)))
         return context
+
 
 class CategoryListView(ListView):
     model = Category
@@ -123,7 +124,7 @@ class FillableSynsetListView(SynsetListView):
 
 
 class UnsupportedPropertySynsetListView(SynsetListView):
-    page_title = "Synsets without at least one object supporting all properties"
+    page_title = "Task-Relevant Synsets with Object-Unsupported Properties"
     template_name = "data/synset_list.html"
 
     def get_queryset(self) -> List[Task]:

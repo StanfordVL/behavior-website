@@ -89,7 +89,23 @@ def object_used_as_fillable(cond, synset) -> Tuple[bool, bool]:
         else:
             return False
     else:
-        return any([object_used_as_fillable(child, synset) for child in cond])   
+        return any([object_used_as_fillable(child, synset) for child in cond])
+    
+
+def object_used_predicates(cond, synset) -> Tuple[bool, bool]:
+    try:
+        if not isinstance(cond, list) or len(cond) < 2:
+            return set()
+        elif not isinstance(cond[0], list) and not isinstance(cond[1], list):
+            if cond[1].split('?')[-1].rsplit('_', 1)[0] == synset:
+                return {cond[0]}
+            else:
+                return set()
+        else:
+            return set().union(*[object_used_predicates(child, synset) for child in cond])
+    except:
+        print(cond)
+        raise
 
 
 def leaf_inroom_conds(cond, synsets: Set[str], task_name: str) -> List[Tuple[str, str]]:
@@ -105,44 +121,3 @@ def leaf_inroom_conds(cond, synsets: Set[str], task_name: str) -> List[Tuple[str
             assert synset in synsets, f"{task_name}: {synset} not in valid format"
             ret.append((canonicalize(synset), cond[2]))
     return ret    
-
-
-def compute_object_properties(object_name, inventory):
-    if object_name not in inventory["meta_links"]:
-        return []
-
-    # Get the meta links the object has
-    meta_links = inventory["meta_links"][object_name]
-
-    # Get the supported properties
-    supported_properties = set()
-    if "fillable" in meta_links:
-        supported_properties.add("fillable")
-
-    if "togglebutton" in meta_links:
-        supported_properties.add("toggleable")
-
-    if "heatsource" in meta_links:
-        supported_properties.add("heatSource")
-        supported_properties.add("coldSource")
-        supported_properties.add("flammable")
-
-    if "slicer" in meta_links:
-        supported_properties.add("slicer")
-
-    if "particleremover" in meta_links:
-        supported_properties.add("particleRemover")
-
-    if "particleapplier" in meta_links:
-        supported_properties.add("particleApplier")
-
-    if "fluidsource" in meta_links:
-        supported_properties.add("particleSource")
-
-    if "fluidsink" in meta_links:
-        supported_properties.add("particleSink")
-
-    if "attachment" in meta_links:
-        supported_properties.add("attachable")
-
-    return sorted(supported_properties)

@@ -106,7 +106,8 @@
         <th>Definition</th>
         <th>Parents</th>
         <th>Children</th>
-        <!--<th>Properties</th>-->
+        <th>Properties</th>
+        <th>Used as Predicates</th>
         <th>Tasks</th>
         <th>Direct Categories</th>
         <th>Direct Objects</th>
@@ -139,11 +140,16 @@
             <a href="{% url 'synset_detail' child.name %}">{{ child.name }}, </a>
           {% endfor %}
         </td>
-        <!--<td>
-          {% for property in synset.properties.all %}
+        <td>
+          {% for property in synset.property_set.all %}
             {{ property.name }}, 
           {% endfor %}
-        </td>-->
+        </td>
+        <td>
+          {% for predicate in synset.used_in_predicates.all %}
+            {{ predicate.name }},
+          {% endfor %}
+        </td>
         <td>
           {% for task in synset.task_set.all|slice:":10" %}
             <a href="{% url 'task_detail' task.name %}">{{ task.name }}, </a>

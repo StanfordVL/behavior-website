@@ -3,6 +3,7 @@ import io
 import os
 import json
 import glob
+from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.activity import Conditions, get_all_activities, get_instance_count
 from bddl.config import get_definition_filename
 import tqdm
@@ -22,7 +23,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.preparation()
         self.create_synsets()
-        self.create_category()
         self.create_objects()
         self.create_scenes()
         self.create_tasks()
@@ -39,6 +39,8 @@ class Command(BaseCommand):
         site = Site.objects.first()
         site.domain = "localhost:8000"
         site.save()
+
+        self.object_taxonomy = ObjectTaxonomy()
 
         # sanity check room types are up to date
         room_types_from_model = set([room_type for _, room_type in ROOM_TYPE_CHOICES])
@@ -83,62 +85,30 @@ class Command(BaseCommand):
         """
         create synsets with annotations from propagated_annots_canonical.json and hierarchy from output_hierarchy.json
         """
-        def _generate_synset_hierarchy(synset_sub_hierarchy: Dict, parent: Optional[Synset], ancestors: Set[Synset], pbar):
-            """
-            helper function to generate synset hierarchy
-            """
-            synset_name = synset_sub_hierarchy["name"]
+        for synset_name in self.object_taxonomy.get_all_synsets():
             synset_is_custom = not wn_synset_exists(synset_name)  # TODO: use data from hierarchy. synset_sub_hierarchy["is_custom"] == "1"
             if synset_name != canonicalize(synset_name):
                 print(f"synset {synset_name} is not canonicalized!")
             synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
             synset, created = Synset.objects.get_or_create(name=synset_name, defaults={"definition": synset_definition, "is_custom": synset_is_custom})
-            if parent:
-                synset.parents.add(parent)
-            cur_ancestors = ancestors.copy()
-            for ancestor in sorted(cur_ancestors, key=lambda x: x.name):
-                synset.ancestors.add(ancestor)
-            cur_ancestors.add(synset)
+            parents = self.object_taxonomy.get_parents(synset_name)
+            for parent in parents:
+                parent_obj = Synset.objects.get(name=parent)
+                synset.parents.add(parent_obj)
+            cur_ancestors = self.object_taxonomy.get_ancestors(synset_name)
+            for ancestor in sorted(cur_ancestors):
+                ancestor_obj = Synset.objects.get(name=ancestor)
+                synset.ancestors.add(ancestor_obj)
+
+            # Add any categories
+            for category in self.object_taxonomy.get_categories(synset_name):
+                assert not Category.objects.filter(name=category).exists(), f"Category {category} of {synset_name} already exists!"
+                Category.objects.get_or_create(name=category, synset=synset)
+
+            # Add any properties
             if created:
-                for property_name in self.properties_data[synset_name]:
-                    property_obj, _ = Property.objects.get_or_create(name=property_name)
-                    synset.properties.add(property_obj)
-                pbar.update()
-            if "children" in synset_sub_hierarchy:
-                for child_hierarchy in synset_sub_hierarchy["children"]:
-                    _generate_synset_hierarchy(child_hierarchy, synset, cur_ancestors, pbar)
-
-        print("Creating synsets...")   
-        with open(rf"{os.path.pardir}/bddl/bddl/generated_data/propagated_annots_canonical.json", "r") as f:
-            self.properties_data = json.load(f)     
-        with open(rf"{os.path.pardir}/bddl/bddl/generated_data/output_hierarchy.json", "r") as f:
-            synset_hierarchy = json.load(f)
-            with tqdm.tqdm(total=len(self.properties_data)) as pbar:
-                _generate_synset_hierarchy(synset_hierarchy, None, set(), pbar)
-
-
-    @transaction.atomic
-    def create_category(self):
-        """
-        create categories from object category mapping sheet
-        """
-        print("Creating categories...")        
-        with open(f"{os.path.pardir}/bddl/bddl/generated_data/category_mapping.csv", newline='') as csvfile:
-            n_categories = len(csvfile.readlines())
-            csvfile.seek(0)
-            reader = csv.DictReader(csvfile)
-            for row in tqdm.tqdm(reader, total=n_categories):
-                category_name = row["category"].strip()
-                synset_name = row["synset"].strip()
-                if not synset_name or not category_name:
-                    print(f"Skipping problematic row: {row}")
-                    continue
-                synset_name = canonicalize(synset_name)
-                synset, _ = Synset.objects.get_or_create(name=synset_name)
-                try:
-                    _ = Category.objects.create(name=category_name, synset=synset)
-                except IntegrityError: 
-                    raise Exception(f"duplicate entry {category_name} in object category mapping sheet!")
+                for property_name, params in self.object_taxonomy.get_abilities(synset_name).items():
+                    Property.objects.create(synset=synset, name=property_name, parameters=json.dumps(params))
         
 
     @transaction.atomic
@@ -156,7 +126,7 @@ class Command(BaseCommand):
         # then create objects
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
             inventory = json.load(f)
-            for orig_name in tqdm.tqdm(inventory["providers"].keys()):
+            for orig_name, provider in tqdm.tqdm(inventory["providers"].items()):
                 object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                 if object_name.split("-")[1] in self.deletion_queue:
                     continue
@@ -164,13 +134,13 @@ class Command(BaseCommand):
                 # Create the object
                 category_name = object_name.split("-")[0]
                 category, _ = Category.objects.get_or_create(name=category_name)
-                object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category)
+                object = Object.objects.create(name=object_name, original_name=orig_name, ready=False, category=category, provider=provider)
+                if orig_name in inventory["meta_links"]:
+                    for meta_link in inventory["meta_links"][orig_name]:
+                        meta_link_obj, _ = MetaLink.objects.get_or_create(name=meta_link)
+                        object.meta_links.add(meta_link_obj)
+                    object.save()
 
-                # Add the necessary properties
-                for property_name in compute_object_properties(object_name, inventory):
-                    property_obj, _ = Property.objects.get_or_create(name=property_name)
-                    object.properties.add(property_obj)
-                    
         with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
             objs = []
             for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
@@ -275,6 +245,9 @@ class Command(BaseCommand):
                 synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
                 synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
+                for predicate in object_used_predicates(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name):
+                    pred_obj, _ = Predicate.objects.get_or_create(name=predicate)
+                    synset.used_in_predicates.add(pred_obj)
                 synset.save()
                 task.synsets.add(synset)
             task.save()
@@ -297,7 +270,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def generate_synset_state(self):
         synsets = []
-        substances = Property.objects.get(name="substance").synset_set.values_list("name", flat=True)
+        substances = Synset.objects.filter(property__name="substance").values_list("name", flat=True)
         for synset in tqdm.tqdm(Synset.objects.all()):
             if synset.name == "entity.n.01": synset.state = STATE_MATCHED   # root synset is always legal
             elif synset.name in substances:

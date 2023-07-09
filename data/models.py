@@ -1,3 +1,4 @@
+import json
 import networkx as nx
 from django.utils.functional import cached_property
 from typing import Dict, Set
@@ -67,10 +68,31 @@ def get_caching_manager(prefetch):
 
 
 class Property(models.Model):
+    synset = models.ForeignKey("Synset", on_delete=models.CASCADE)
+    name = models.CharField(max_length=32)
+    parameters = models.TextField(default="{}", blank=False, null=False)
+
+    class Meta:
+        unique_together = ('synset', 'name')
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.synset.name + "-" + self.name
+    
+
+class MetaLink(models.Model):
     name = models.CharField(max_length=32, primary_key=True)
+
     def __str__(self):
         return self.name
     
+
+class Predicate(models.Model):
+    name = models.CharField(max_length=32, primary_key=True)
+    
+    def __str__(self):
+        return self.name
+
 
 class Scene(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
@@ -130,14 +152,16 @@ class Object(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     # the name of the object prior to getting renamed
     original_name = models.CharField(max_length=64, unique=True, default="")
+    # providing target
+    provider = models.CharField(max_length=128, blank=False)
     # whether the object is in the current dataset
     ready = models.BooleanField(default=False)
     # whether the object is planned 
     planned = models.BooleanField(default=True)
     # the category that the object belongs to
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    # properties that are currently supported by the object. this is computed via meta link presence
-    properties = models.ManyToManyField(Property, blank=True)
+    # meta links owned by the object
+    meta_links = models.ManyToManyField(MetaLink, blank=True, related_name="on_objects")
     # the photo of the object
     # this is currently hosted on stanford's www to avoid quota issues
     # photo = models.FileField("Object photo", blank=True, null=True)
@@ -165,12 +189,7 @@ class Object(models.Model):
         return f"https://cvgl.stanford.edu/b1k/object_images/{model_id}.webp"
     
     def fully_supports_synset(self, synset) -> bool:       
-        annotation_required_synset_properties = {
-            prop.name
-            for prop in synset.properties.filter(pk__in=ANNOTATION_REQUIRED_PROPERTIES).all()
-        }
-        this_properties = {prop.name for prop in self.properties.all()}
-        return annotation_required_synset_properties.issubset(this_properties)
+        return synset.required_meta_links.issubset(self.meta_links.values_list("name", flat=True))
 
 
 class Synset(models.Model):
@@ -179,14 +198,14 @@ class Synset(models.Model):
     is_custom = models.BooleanField(default=False)
     # wordnet definitions
     definition = models.CharField(max_length=1000, default="")
-    # substance properties (whole list in utils.py)
-    properties = models.ManyToManyField(Property, blank=True)
     # whether the synset is used as a substance in some task
     is_used_as_substance = models.BooleanField(default=False)
     # whether the synset is used as a non-substance in some task
     is_used_as_non_substance = models.BooleanField(default=False)
     # whether the synset is ever used as a fillable in any task
     is_used_as_fillable = models.BooleanField(default=False)
+    # predicates the synset was used in as the first argument
+    used_in_predicates = models.ManyToManyField(Predicate, blank=True, related_name="synsets")
     # all it's parents in the synset graph (NOTE: this does not include self)
     parents = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="children")
     # all ancestors (NOTE: this include self)
@@ -231,6 +250,51 @@ class Synset(models.Model):
         for synset in self.descendants.all():
             matched_objs.update(synset.direct_matching_ready_objects)
         return matched_objs
+    
+    @cached_property
+    def required_meta_links(self) -> Set[str]:
+        properties = {prop.name: json.loads(prop.parameters) for prop in self.property_set.all()}
+        predicates = {pred.name.lower() for pred in self.used_in_predicates.all()}
+
+        if "substance" in properties:
+            return set()  # substances don't need any meta links
+        
+        # TODO: Remove this
+        # If we are not task relevant, we don't need any meta links
+        if not self.n_task_required:
+            return set()
+
+        required_links = set()
+
+        # If we are a heatSource or togglesource, we need to have certain links
+        for property in ["heatSource", "coldSource"]:
+            if property in properties:
+                if "requires_toggled_on" in properties[property] and properties[property]["requires_toggled_on"]:
+                    required_links.add("togglebutton")
+
+                if "requires_inside" not in properties[property] or not properties[property]["requires_inside"]:
+                    required_links.add("heatSource")
+
+        if self.is_used_as_fillable and "fillable" in properties:
+            required_links.add("fillable")
+
+        if "toggledon" in predicates and "toggleable" in properties:
+            required_links.add("togglebutton")
+
+        # TODO: Enable this.
+        # if "particleSink" in properties:
+        #     required_links.add("fluidSink")
+
+        particle_pairs = [
+            ("particleSource", "fluidsource"),
+            ("particleApplier", "particleapplier"),
+            ("particleRemover", "particleremover"),
+        ]
+        for property, meta_link in particle_pairs:
+            if property in properties and "method" in properties[property] and properties[property]["method"] == 1:  # only the projection method (1) needs this
+                required_links.add(meta_link)
+
+        return required_links
     
     @cached_property
     def has_fully_supporting_object(self) -> bool:
