@@ -338,7 +338,8 @@ class Task(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     definition = models.TextField()
     synsets = models.ManyToManyField(Synset) # the synsets required by this task
-    
+    uses_predicates = models.ManyToManyField(Predicate, blank=True, related_name="tasks")
+
     def __str__(self):
         return self.name
     
@@ -372,6 +373,21 @@ class Task(models.Model):
                 ret += scene_ret[:-2] + "."
         return ret
     
+    def uses_transitions(self):
+        return self.uses_predicates.filter(name="future").exists()
+    
+    def uses_visual_substance(self):
+        return self.synsets.filter(property__name=["visualSubstance"]).exists()
+
+    def uses_physical_substance(self):
+        return self.synsets.filter(property__name=["physicalSubstance"]).exists()
+
+    def uses_attachment(self):
+        return self.uses_predicates.filter(name__in=["assembled", "attached"]).exists()
+
+    def uses_cloth(self):
+        return self.synsets.filter(property__name="cloth").exists()
+
     @cached_property
     def substance_synsets(self):
         """synsets that represent a substance"""

@@ -75,9 +75,13 @@
       <tr>
         <th>Task Name</th>
         <th>Synsets</th>
-        <th>Matched Ready Scenes</th>
-        <th>Matched Planned Scenes</th>
-        <th>Substances</th>
+        <th>Matched Scenes</th>
+        <th>Predicates</th>
+        <th>Uses Transition?</th>
+        <th>Uses Visual Substance?</th>
+        <th>Uses Physical Substance?</th>
+        <th>Uses Attachment?</th>
+        <th>Uses Cloth?</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -85,29 +89,29 @@
       <tr>
         <td><a href="{% url 'task_detail' task.name %}">{{ task.name }}</a></td>
         <td class="{{ 'bg-'|add:task.synset_state }}">
-          {% for synset in task.problem_synsets %}
+          {% for synset in task.synsets.all %}
             {{ synset }}, 
           {% endfor %}
         </td>
-        <td class="{{ 'bg-'|add:task.scene_state }}">
+        <td>
           {% for scene, state in task.scene_matching_dict.items %}
             {% if state.matched_ready %}
-              {{ scene.name }},
+              <span class="text-success">{{ scene.name }},</span>
+            {% elif state.matched_planned %}
+              <span class="text-warning">{{ scene.name }},</span>
             {% endif %}
           {% endfor %}
         </td>
-        <td class="{{ 'bg-'|add:task.scene_state }}">
-          {% for scene, state in task.scene_matching_dict.items %}
-            {% if state.matched_planned %}
-              {{ scene.name }},
-            {% endif %}
+        <td>
+          {% for predicate in task.uses_predicates.all %}
+            {{ predicate.name }}, 
           {% endfor %}
         </td>
-        <td class="{{ 'bg-'|add:task.substance_required }}">
-          {% for substance in task.substance_synsets %}
-            {{ substance }}, 
-          {% endfor %}
-        </td>
+        <td>{{ task.uses_transition }}</td>
+        <td>{{ task.uses_visual_substance }}</td>
+        <td>{{ task.uses_physical_substance }}</td>
+        <td>{{ task.uses_attachment }}</td>
+        <td>{{ task.uses_cloth }}</td>
       </tr>
       {% endfor %}
     </tbody>

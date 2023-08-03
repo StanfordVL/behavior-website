@@ -108,6 +108,23 @@ def object_used_predicates(cond, synset) -> Tuple[bool, bool]:
         raise
 
 
+def all_task_predicates(cond) -> Set[str]:
+    assert isinstance(cond, list), cond
+    
+    results = set()
+    # The first element, if not a list, is the predicate
+    if not isinstance(cond[0], list):
+        results.add(cond[0])
+    else:
+        # But also we recurse on all children.
+        for child in cond:
+            if not isinstance(child, list):
+                continue
+            results.update(all_task_predicates(child))
+
+    return results
+
+
 def leaf_inroom_conds(cond, synsets: Set[str], task_name: str) -> List[Tuple[str, str]]:
     """
     Return a list of all inroom conditions in the subtree of cond

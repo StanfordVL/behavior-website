@@ -232,20 +232,25 @@ class Command(BaseCommand):
             with open(get_definition_filename(act, inst), "r") as f:
                 raw_task_definition = "".join(f.readlines())
 
+            combined_conds = conds.parsed_initial_conditions + conds.parsed_goal_conditions
+
             # Create task object
             task_name = f"{act}-{inst}"
             task = Task.objects.create(name=task_name, definition=raw_task_definition)
+            for predicate in all_task_predicates(combined_conds):
+                pred_obj, _ = Predicate.objects.get_or_create(name=predicate)
+                task.uses_predicates.add(pred_obj)
 
             # add any synset that is not currently in the database
             for synset_name in sorted(canonicalized_synsets):
-                is_used_as_non_substance, is_used_as_substance = object_substance_match(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
-                is_used_as_fillable = object_used_as_fillable(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name)
+                is_used_as_non_substance, is_used_as_substance = object_substance_match(combined_conds, synset_name)
+                is_used_as_fillable = object_used_as_fillable(combined_conds, synset_name)
                 # all annotated synsets have been created before, so any newly created synset is illegal
                 synset, _ = Synset.objects.get_or_create(name=synset_name)
                 synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
                 synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
-                for predicate in object_used_predicates(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synset_name):
+                for predicate in object_used_predicates(combined_conds, synset_name):
                     pred_obj, _ = Predicate.objects.get_or_create(name=predicate)
                     synset.used_in_predicates.add(pred_obj)
                 synset.save()
@@ -253,7 +258,7 @@ class Command(BaseCommand):
             task.save()
 
             # generate room requirements for task
-            for cond in leaf_inroom_conds(conds.parsed_initial_conditions + conds.parsed_goal_conditions, synsets, task_name):
+            for cond in leaf_inroom_conds(combined_conds, synsets, task_name):
                 assert len(cond) == 2, f"{task_name}: {str(cond)} not in correct format"
                 room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[1])
                 room_synset_requirements, created = RoomSynsetRequirement.objects.get_or_create(
