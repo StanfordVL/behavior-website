@@ -373,20 +373,21 @@ class Task(models.Model):
                 ret += scene_ret[:-2] + "."
         return ret
     
-    def uses_transitions(self):
+    def uses_transition(self):
         return self.uses_predicates.filter(name="future").exists()
     
     def uses_visual_substance(self):
-        return self.synsets.filter(property__name=["visualSubstance"]).exists()
+        return self.synsets.filter(property__name="visualSubstance").exists()
 
     def uses_physical_substance(self):
-        return self.synsets.filter(property__name=["physicalSubstance"]).exists()
+        return self.synsets.filter(property__name="physicalSubstance").exists()
 
     def uses_attachment(self):
         return self.uses_predicates.filter(name__in=["assembled", "attached"]).exists()
 
     def uses_cloth(self):
-        return self.synsets.filter(property__name="cloth").exists()
+        return self.uses_predicates.filter(name__in=["folded", "draped", "unfolded"]).exists()
+
 
     @cached_property
     def substance_synsets(self):
