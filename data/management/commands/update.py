@@ -77,7 +77,7 @@ class Command(BaseCommand):
         print("Running post completion operations...")
         self.generate_synset_state()
         # self.generate_object_images()
-        self.nuke_unused_synsets()
+        # self.nuke_unused_synsets()
 
 
     @transaction.atomic
