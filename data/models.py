@@ -1,3 +1,4 @@
+import itertools
 import json
 import networkx as nx
 from django.utils.functional import cached_property
@@ -332,6 +333,20 @@ class Synset(models.Model):
     def task_relevant(self):
         return self.task_set.exists() or self.ancestors.filter(task__isnull=False).exists()
     
+    @cached_property
+    def transition_subgraph(self):
+        producing_recipes = self.produced_by_transition_rules.all()
+        consuming_recipes = self.used_by_transition_rules.all()
+        transitions = set(itertools.chain(producing_recipes, consuming_recipes))
+        G = nx.DiGraph()
+        for transition in transitions:
+            G.add_node(transition)
+            for input_synset in transition.input_synsets.all():
+                G.add_edge(input_synset, transition)
+            for output_synset in transition.output_synsets.all():
+                G.add_edge(transition, output_synset)
+        return nx.relabel_nodes(G, lambda x: (x.name if isinstance(x, Synset) else f"recipe: {x.name}"), copy=True)
+
     def is_produceable_from(self, synsets):
         # If it's already available, then we're good.
         if self in synsets:
@@ -357,6 +372,27 @@ class TransitionRule(models.Model):
     input_synsets = models.ManyToManyField(Synset, related_name="used_by_transition_rules")
     output_synsets = models.ManyToManyField(Synset, related_name="produced_by_transition_rules")
 
+    @cached_property
+    def subgraph(self):
+        G = nx.DiGraph()
+        G.add_node(self)
+        for input_synset in self.input_synsets.all():
+            G.add_edge(input_synset, self)
+        for output_synset in self.output_synsets.all():
+            G.add_edge(self, output_synset)
+        return nx.relabel_nodes(G, lambda x: (x.name if isinstance(x, Synset) else f"recipe: {x.name}"), copy=True)
+
+    @staticmethod
+    def get_graph():
+        transitions = TransitionRule.objects.all()
+        G = nx.DiGraph()
+        for transition in transitions:
+            G.add_node(transition)
+            for input_synset in transition.input_synsets.all():
+                G.add_edge(input_synset, transition)
+            for output_synset in transition.output_synsets.all():
+                G.add_edge(transition, output_synset)
+        return G
 
 
 class Task(models.Model):
@@ -512,6 +548,45 @@ class Task(models.Model):
         subgraph = G.subgraph(future_node_tree_nodes)
 
         return subgraph
+    
+    @cached_property
+    def partial_transition_graph(self):
+        future_synsets = set(self.future_synsets.all())
+        starting_synsets = set(self.synsets.all()) - future_synsets
+
+        def human_readable_name(s):
+            if isinstance(s, Synset):
+                if s in starting_synsets:
+                    return f"initial: {s.name}"
+                elif s in future_synsets:
+                    return f"future: {s.name}"
+                else:
+                    return f"missing: {s.name}"
+            elif isinstance(s, TransitionRule):
+                return f"recipe: {s.name}"
+            else:
+                raise ValueError("Unexpected node.")
+            
+        # Build a graph from all the transitions
+        G = TransitionRule.get_graph()
+            
+        # Show all the nodes that show up in some path from the initial to the future synsets.
+        all_nodes_on_path = set()
+        for f, t in itertools.product(starting_synsets, future_synsets):
+            if f not in G or t not in G:
+                continue
+            for p in nx.all_simple_paths(G, f, t):
+                all_nodes_on_path.update(p)
+
+        # Also add all ingredients of each recipe
+        all_recipes = [x for x in all_nodes_on_path if isinstance(x, TransitionRule)]
+        all_ingredients = {inp for recipe in all_recipes for inp in recipe.input_synsets.all()}
+        all_nodes_to_keep = all_nodes_on_path | all_ingredients
+
+        # Get the subgraph, convert that to a text graph.
+        subgraph = G.subgraph(all_nodes_to_keep)
+        print(list(subgraph.nodes))
+        return nx.relabel_nodes(subgraph, human_readable_name, copy=True)
     
     @cached_property
     def unreachable_goal_synsets(self) -> List[str]:

@@ -18,11 +18,13 @@ urlpatterns = [
     path("misspelledsynsets/", MisspelledSynsetListView.as_view(), name="misspelled_synset_list"),
     path("fillablesynsets/", FillableSynsetListView.as_view(), name="fillable_synset_list"),
     path("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView.as_view(), name="unsupported_property_synset_list"),
+    path("transitions/", TransitionListView.as_view(), name="transition_list"),
     path("tasks/<task_name>/", TaskDetailView.as_view(), name="task_detail"),
     path("synsets/<synset_name>/", SynsetDetailView.as_view(), name="synset_detail"),
     path("categories/<category_name>/", CategoryDetailView.as_view(), name="category_detail"),
     path("scenes/<scene_name>/", SceneDetailView.as_view(), name="scene_detail"),
     path("objects/<object_name>/", ObjectDetailView.as_view(), name="object_detail"),
+    path("transitions/<transition_name>/", TransitionDetailView.as_view(), name="transition_detail"),
     path(
         "sitemap.xml",
         sitemap,

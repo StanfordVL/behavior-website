@@ -68,6 +68,17 @@
   </div>
   <br>
 
+  <h2>Transitions that produce or use this object</h2>
+  <div class="mermaid">
+    graph TD;
+      {% for node in synset.transition_subgraph.nodes %}
+        {{ node|slugify }}({{ node }});
+      {% endfor %}
+      {% for edge in synset.transition_subgraph.edges %}
+        {{ edge.0|slugify }} --> {{ edge.1|slugify }};
+      {% endfor %}
+  </div>
+
   <h2>Related Synsets</h2>
   {% include "data/synset_graph_module.html" with G=synset.subgraph center_node=synset %}
   <br>

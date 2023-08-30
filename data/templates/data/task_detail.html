@@ -13,7 +13,7 @@
       {% endfor %}
     </div>
   </div>
-  <h2>Transitions</h2>
+  <h2>Transition Paths By Task Scope Objects</h2>
   <div class="mermaid">
     graph TD;
       {% for node in task.transition_graph.nodes %}
@@ -67,4 +67,14 @@
   <pre>
 {{ task.definition | safe }}
   </pre>
+  <h2>Debugging: All Possible Recipes Resulting in Future Synsets</h2>
+  <div class="mermaid">
+    graph TD;
+      {% for node in task.partial_transition_graph.nodes %}
+        {{ node|slugify }}({{ node }});
+      {% endfor %}
+      {% for edge in task.partial_transition_graph.edges %}
+        {{ edge.0|slugify }} --> {{ edge.1|slugify }};
+      {% endfor %}
+  </div>
 {% endblock %}

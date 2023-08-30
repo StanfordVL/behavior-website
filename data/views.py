@@ -113,6 +113,12 @@ class UnsupportedPropertySynsetListView(SynsetListView):
         ]
 
 
+class TransitionListView(ListView):
+    model = TransitionRule
+    context_object_name = "transition_list"
+    template_name = "data/transition_list.html"
+
+
 class TaskDetailView(DetailView):
     model = Task
     context_object_name = "task"
@@ -146,6 +152,14 @@ class SceneDetailView(DetailView):
     context_object_name = "scene"
     slug_field = "name"
     slug_url_kwarg = "scene_name"
+
+
+class TransitionDetailView(DetailView):
+    model = TransitionRule
+    context_object_name = "transition"
+    slug_field = "name"
+    slug_url_kwarg = "transition_name"
+    template_name = "data/transition_detail.html"
 
 
 class IndexView(TemplateView):
