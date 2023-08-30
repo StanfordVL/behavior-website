@@ -97,7 +97,7 @@ def object_used_predicates(cond, synset) -> Tuple[bool, bool]:
         if not isinstance(cond, list) or len(cond) < 2:
             return set()
         elif not isinstance(cond[0], list) and not isinstance(cond[1], list):
-            if cond[1].split('?')[-1].rsplit('_', 1)[0] == synset:
+            if any(arg.split('?')[-1].rsplit('_', 1)[0] == synset for arg in cond[1:]):
                 return {cond[0]}
             else:
                 return set()
