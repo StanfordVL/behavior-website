@@ -26,6 +26,7 @@ class Command(BaseCommand):
         self.create_objects()
         self.create_scenes()
         self.create_tasks()
+        self.create_transitions()
         self.post_complete_operation()
     
 
@@ -250,11 +251,27 @@ class Command(BaseCommand):
                 synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
                 synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
-                for predicate in object_used_predicates(combined_conds, synset_name):
+                synset_used_predicates = object_used_predicates(combined_conds, synset_name)
+                assert synset_used_predicates, f"Synset {synset_name} is not used in any predicate in {task_name}"
+                for predicate in synset_used_predicates:
                     pred_obj, _ = Predicate.objects.get_or_create(name=predicate)
                     synset.used_in_predicates.add(pred_obj)
                 synset.save()
                 task.synsets.add(synset)
+
+                # If the synset ever shows up as future or real, check validity
+                used_as_future_or_real = "future" in synset_used_predicates or "real" in synset_used_predicates
+                if used_as_future_or_real:
+                    # Assert that it's used as future in initial and as real in goal
+                    initial_preds = object_used_predicates(conds.parsed_initial_conditions, synset_name)
+                    assert "future" in initial_preds, f"Synset {synset_name} is not used as future in initial in {task_name}"
+                    assert "real" not in initial_preds, f"Synset {synset_name} is used as real in initial in {task_name}"
+
+                    goal_preds = object_used_predicates(conds.parsed_goal_conditions, synset_name)
+                    assert "real" in goal_preds, f"Synset {synset_name} is not used as real in goal in {task_name}"
+                    assert "future" not in goal_preds, f"Synset {synset_name} is used as future in goal in {task_name}"
+
+                    task.future_synsets.add(synset)
             task.save()
 
             # generate room requirements for task
@@ -271,6 +288,25 @@ class Command(BaseCommand):
                     room_synset_requirements.count += 1
                     room_synset_requirements.save()
 
+
+    @transaction.atomic
+    def create_transitions():
+        # Load the transition data
+        json_paths = glob.glob(f"{os.path.pardir}/bddl/bddl/generated_data/transition_map/tm_jsons/*.json")
+        transitions = []
+        for jp in json_paths:
+            with open(jp) as f:
+                transitions.extend(json.load(f))
+
+        # Create the transition objects
+        for transition_data in tqdm.tqdm(transitions):
+            transition = Predicate.objects.get_or_create(name=transition_data["rule_name"])
+            for synset_name in transition_data["input_objects"].keys():
+                synset = Synset.objects.get(name=synset_name)
+                transition.input_synsets.add(synset)
+            for synset_name in transition_data["output_objects"].keys():
+                synset = Synset.objects.get(name=synset_name)
+                transition.output_synsets.add(synset)
 
     @transaction.atomic
     def generate_synset_state(self):
@@ -308,6 +344,12 @@ class Command(BaseCommand):
                     continue
                 
                 if synset.n_task_required != 0:
+                    continue
+
+                if synset.used_by_transition_rules.count() != 0:
+                    continue
+
+                if synset.produced_by_transition_rules.count() != 0:
                     continue
 
                 # Otherwise queue it for removal

@@ -5,38 +5,17 @@ from django.db.models import Count
 from django.views.generic import DetailView, ListView, TemplateView
 
 
-B20 = {
-    "attach_a_camera_to_a_tripod",
-    "boil_water",
-    "chop_an_onion",
-    "clean_up_broken_glass",
-    "cleaning_bathtub",
-    "fill_a_bucket_in_a_small_sink",
-    "folding_piece_of_cloth",
-    "freeze_pies",
-    "hanging_up_bedsheets",
-    "make_a_steak",
-    "make_a_strawberry_slushie",
-    "melt_white_chocolate",
-    "mixing_drinks",
-    "mowing_the_lawn",
-    "putting_away_Halloween_decorations",
-    "putting_away_toys",
-    "putting_up_shelves",
-    "setting_the_fire",
-    "spraying_for_bugs",
-    "thawing_frozen_food",
-}
-
-
 class TaskListView(ListView):
     model = Task
     context_object_name = "task_list"
 
 
-class B20TaskListView(TaskListView):
-    page_title = "B-20 Tasks"
-    queryset = Task.objects.order_by("name").filter(name__in=B20)
+class TransitionFailureTaskListView(TaskListView):
+    template_name = "data/task_list.html"
+    page_title = "Transition Failure Tasks"
+
+    def get_queryset(self) -> List[Task]:
+        return [x for x in super().get_queryset().all() if not x.goal_is_reachable]
     
 
 class NonSceneMatchedTaskListView(TaskListView):

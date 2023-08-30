@@ -331,6 +331,25 @@ class Synset(models.Model):
     @cached_property
     def task_relevant(self):
         return self.task_set.exists() or self.ancestors.filter(task__isnull=False).exists()
+    
+    def is_produceable_from(self, synsets):
+        # If it's already available, then we're good.
+        if self in synsets:
+            return True
+
+        # Otherwise, are there any recipes that I can use to obtain it?
+        for recipe in self.produced_by_transition_rules.all():
+            if all(ingredient.is_produceable_from(synsets) for ingredient in recipe.output_synsets.all()):
+                return True
+            
+        return False
+
+
+class TransitionRule(models.Model):
+    name = models.CharField(max_length=256, primary_key=True)
+    input_synsets = models.ManyToManyField(Synset, related_name="used_by_transition_rules")
+    output_synsets = models.ManyToManyField(Synset, related_name="produced_by_transition_rules")
+
 
 
 class Task(models.Model):
@@ -338,6 +357,7 @@ class Task(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
     definition = models.TextField()
     synsets = models.ManyToManyField(Synset) # the synsets required by this task
+    future_synsets = models.ManyToManyField(Synset, related_name="tasks_using_as_future") # the synsets that show up as future synsets in this task (e.g. don't exist in initial)
     uses_predicates = models.ManyToManyField(Predicate, blank=True, related_name="tasks")
 
     def __str__(self):
@@ -442,6 +462,17 @@ class Task(models.Model):
             return STATE_SUBSTANCE
         else:
             return STATE_NONE
+        
+    @cached_property
+    def unreachable_goal_synsets(self) -> List[str]:
+        """Get a list of synsets that are in the goal but cannot be reached from the initial state"""
+        starting_synsets = set(self.synsets.all()) - set(self.future_synsets.all())
+        return [s for s in self.future_synsets.all() if not s.is_produceable_from(starting_synsets)]
+
+    @cached_property
+    def goal_is_reachable(self) -> bool:
+        """Get whether the goal is reachable from the initial state"""
+        return len(self.unreachable_goal_synsets) == 0
 
 
 class RoomRequirement(models.Model):
