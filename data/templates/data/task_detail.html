@@ -13,6 +13,16 @@
       {% endfor %}
     </div>
   </div>
+  <h2>Transitions</h2>
+  <div class="mermaid">
+    graph TD;
+      {% for node in task.transition_graph.nodes %}
+        {{ node|slugify }}({{ node }});
+      {% endfor %}
+      {% for edge in task.transition_graph.edges %}
+        {{ edge.0|slugify }} --> {{ edge.1|slugify }};
+      {% endfor %}
+  </div>
   <h2>Scenes</h2>
   <ul>
     <li>Matched:

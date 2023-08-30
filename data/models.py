@@ -335,14 +335,21 @@ class Synset(models.Model):
     def is_produceable_from(self, synsets):
         # If it's already available, then we're good.
         if self in synsets:
-            return True
+            return True, set()
 
         # Otherwise, are there any recipes that I can use to obtain it?
+        recipe_alternatives = set()
         for recipe in self.produced_by_transition_rules.all():
-            if all(ingredient.is_produceable_from(synsets) for ingredient in recipe.output_synsets.all()):
-                return True
+            producabilities_and_recipe_sets = [ingredient.is_produceable_from(synsets) for ingredient in recipe.input_synsets.all()]
+            producabilities, recipe_sets = zip(*producabilities_and_recipe_sets)
+            if all(producabilities):
+                recipe_alternatives.add(recipe)
+                recipe_alternatives.update(ingredient_recipe for recipe_set in recipe_sets for ingredient_recipe in recipe_set)
             
-        return False
+        if not recipe_alternatives:
+            return False, set()
+        
+        return True, recipe_alternatives
 
 
 class TransitionRule(models.Model):
@@ -464,10 +471,52 @@ class Task(models.Model):
             return STATE_NONE
         
     @cached_property
+    def producability_data(self) -> Dict[Synset, Tuple[bool, Set[TransitionRule]]]:
+        """Map each synset to a tuple of whether it is produceable and the transition rules that can be used to produce it"""
+        starting_synsets = set(self.synsets.all()) - set(self.future_synsets.all())
+        return {synset: synset.is_produceable_from(starting_synsets) for synset in self.synsets.all()}
+    
+    @cached_property
+    def relevant_transitions(self):
+        return [rule for synset, (producability, rules) in self.producability_data.items() for rule in rules]
+    
+    @cached_property
+    def transition_graph(self):
+        G  = nx.DiGraph()
+        future_synsets = set(self.future_synsets.all())
+        starting_synsets = set(self.synsets.all()) - future_synsets
+        
+        def human_readable_name(s):
+            if s in starting_synsets:
+                return f"initial: {s.name}"
+            elif s in future_synsets:
+                return f"future: {s.name}"
+            else:
+                return s.name
+
+        for synset in self.synsets.all():
+            G.add_node(human_readable_name(synset), type="obj")
+        for transition in self.relevant_transitions:
+            transition_name = f"recipe: {transition.name}"
+            G.add_node(transition_name, type="transition", text=transition.name)
+            for input_synset in transition.input_synsets.all():
+                G.add_edge(human_readable_name(input_synset), transition_name)
+            for output_synset in transition.output_synsets.all():
+                G.add_edge(transition_name, human_readable_name(output_synset))
+
+        # Prune the graph so that it only contains all the future nodes and everything that can be used
+        # to transition into them.
+        future_nodes = {human_readable_name(s) for s in future_synsets}
+        future_node_trees = [nx.bfs_tree(G.reverse(), node) for node in future_nodes]
+        future_node_tree_nodes = [node for tree in future_node_trees for node in tree.nodes]
+        subgraph = G.subgraph(future_node_tree_nodes)
+
+        return subgraph
+    
+    @cached_property
     def unreachable_goal_synsets(self) -> List[str]:
         """Get a list of synsets that are in the goal but cannot be reached from the initial state"""
-        starting_synsets = set(self.synsets.all()) - set(self.future_synsets.all())
-        return [s for s in self.future_synsets.all() if not s.is_produceable_from(starting_synsets)]
+        return [s for s in self.future_synsets.all() if not self.producability_data[s][0]]
 
     @cached_property
     def goal_is_reachable(self) -> bool:
