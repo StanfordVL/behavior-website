@@ -23,6 +23,16 @@
         {{ edge.0|slugify }} --> {{ edge.1|slugify }};
       {% endfor %}
   </div>
+  {% if not task.goal_is_reachable %}
+  <h2>Unreachable Goal Synsets</h2>
+  <ul>
+    {% for synset in task.unreachable_goal_synsets %}
+      <li><a class="font-weight-bold" href="{% url 'synset_detail' synset.name %}">{{ synset.name }}</a></li>
+    {% empty %}
+    <li>None</li>
+    {% endfor %}
+  {% endif %}
+  </ul>
   <h2>Scenes</h2>
   <ul>
     <li>Matched:
