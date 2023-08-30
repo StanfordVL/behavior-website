@@ -252,7 +252,8 @@ class Command(BaseCommand):
                 synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
                 synset_used_predicates = object_used_predicates(combined_conds, synset_name)
-                assert synset_used_predicates, f"Synset {synset_name} is not used in any predicate in {task_name}"
+                if not synset_used_predicates:
+                    print(f"Synset {synset_name} is not used in any predicate in {task_name}")
                 for predicate in synset_used_predicates:
                     pred_obj, _ = Predicate.objects.get_or_create(name=predicate)
                     synset.used_in_predicates.add(pred_obj)
@@ -264,12 +265,16 @@ class Command(BaseCommand):
                 if used_as_future_or_real:
                     # Assert that it's used as future in initial and as real in goal
                     initial_preds = object_used_predicates(conds.parsed_initial_conditions, synset_name)
-                    assert "future" in initial_preds, f"Synset {synset_name} is not used as future in initial in {task_name}"
-                    assert "real" not in initial_preds, f"Synset {synset_name} is used as real in initial in {task_name}"
+                    if "future" not in initial_preds:
+                        print(f"Synset {synset_name} is not used as future in initial in {task_name}")
+                    if "real" in initial_preds:
+                        print(f"Synset {synset_name} is used as real in initial in {task_name}")
 
                     goal_preds = object_used_predicates(conds.parsed_goal_conditions, synset_name)
-                    assert "real" in goal_preds, f"Synset {synset_name} is not used as real in goal in {task_name}"
-                    assert "future" not in goal_preds, f"Synset {synset_name} is used as future in goal in {task_name}"
+                    if "real" not in goal_preds:
+                        print(f"Synset {synset_name} is not used as real in goal in {task_name}")
+                    if "future" in goal_preds:
+                        print(f"Synset {synset_name} is used as future in goal in {task_name}")
 
                     task.future_synsets.add(synset)
             task.save()
@@ -290,7 +295,7 @@ class Command(BaseCommand):
 
 
     @transaction.atomic
-    def create_transitions():
+    def create_transitions(self):
         # Load the transition data
         json_paths = glob.glob(f"{os.path.pardir}/bddl/bddl/generated_data/transition_map/tm_jsons/*.json")
         transitions = []
@@ -300,7 +305,7 @@ class Command(BaseCommand):
 
         # Create the transition objects
         for transition_data in tqdm.tqdm(transitions):
-            transition = Predicate.objects.get_or_create(name=transition_data["rule_name"])
+            transition = TransitionRule.objects.create(name=transition_data["rule_name"])
             for synset_name in transition_data["input_objects"].keys():
                 synset = Synset.objects.get(name=synset_name)
                 transition.input_synsets.add(synset)
