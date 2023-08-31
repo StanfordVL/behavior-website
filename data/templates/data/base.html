@@ -73,7 +73,6 @@
                 <a class="dropdown-item" href="{% url 'synset_list' %}">All Synsets</a>
                 <a class="dropdown-item" href="{% url 'non-leaf_synset_list' %}">Object-Assigned Non-Leaf Synsets</a>
                 <a class="dropdown-item" href="{% url 'substance_error_synset_list' %}">Substanceness Mismatch Synsets</a>
-                <a class="dropdown-item" href="{% url 'misspelled_synset_list' %}">Misspelled Synsets</a>
                 <a class="dropdown-item" href="{% url 'fillable_synset_list' %}">Synsets Used as Fillable</a>
                 <a class="dropdown-item" href="{% url 'unsupported_property_synset_list' %}">Task-Relevant Synsets with Object-Unsupported Properties</a>
               </div>
@@ -87,14 +86,8 @@
                 <a class="dropdown-item" href="{% url 'substance_mapped_object_list' %}">Objects Assigned to Substance Synsets</a>
               </div>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" id="navbarDropdownCategories" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Categories
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownCategories">
-                <a class="dropdown-item" href="{% url 'category_list' %}">All Categories</a>
-                <a class="dropdown-item" href="{% url 'misspelled_category_list' %}">Misspelled Categories</a>
-              </div>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'category_list' %}">Categories</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'scene_list' %}">Scenes</a>

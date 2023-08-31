@@ -57,14 +57,6 @@ class CategoryListView(ListView):
     context_object_name = "category_list"
 
 
-class MisspelledCategoryListView(CategoryListView):
-    page_title = "Misspelled Categories"
-    template_name = "data/category_list.html"
-
-    def get_queryset(self) -> List[Task]:
-        return [x for x in super().get_queryset().all() if x.is_misspelled]
-
-
 class NonLeafSynsetListView(SynsetListView):
     page_title = "Non-Leaf Object-Assigned Synsets"
     queryset = (Synset.objects
@@ -88,14 +80,6 @@ class SubstanceErrorSynsetListView(SynsetListView):
                 (s.is_used_as_substance and s.is_used_as_non_substance)
             )]
     
-
-class MisspelledSynsetListView(SynsetListView):
-    page_title = "Misspelled Synsets"
-    template_name = "data/synset_list.html"
-
-    def get_queryset(self) -> List[Task]:
-        return [s for s in super().get_queryset().all() if s.is_misspelled]
-
 
 class FillableSynsetListView(SynsetListView):
     page_title = "Synsets Used as Fillables"
