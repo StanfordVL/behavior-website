@@ -1,6 +1,11 @@
+import re
 from nltk.corpus import wordnet as wn
 from typing import Tuple, List, Set
 from data.models import *
+from bddl.activity import get_initial_conditions, get_goal_conditions, get_object_scope
+from bddl.logic_base import UnaryAtomicFormula, BinaryAtomicFormula, Expression
+from bddl.backend_abc import BDDLBackend
+from bddl.parsing import parse_domain
 
 # STATE METADATA
 STATE_MATCHED = "success"
@@ -13,11 +18,7 @@ STATE_NONE = "light"
 
 # predicates that can only be used for substances
 SUBSTANCE_PREDICATES = {"filled", "insource", "empty", "saturated", "contains", "covered"}
-# predicates that can only be used for non-substances
-NON_SUBSTANCE_PREDICATES = {
-    "cooked", "frozen", "closed", "open", "folded", "unfolded", "toggled_on", "hot", "on_fire", "assembled",
-    "broken", "ontop", "nextto", "under", "touching", "inside", "overlaid", "attached", "draped", "inroom"
-}
+
 # predicates that indicate the need for a fillable volume
 FILLABLE_PREDICATES = {"filled", "contains", "empty"}
 
@@ -47,94 +48,140 @@ def wn_synset_exists(synset):
     return True
   except:
     return False
+  
+
+*__, domain_predicates = parse_domain("omnigibson")
+UNARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 1]
+BINARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 2]
+
+class DebugUnaryFormula(UnaryAtomicFormula):
+    def _evaluate():
+        return True 
+    def _sample():
+        return True
+    
+
+class DebugBinaryFormula(BinaryAtomicFormula):
+    def _evaluate():
+        return True 
+    def _sample():
+        return True
+
+
+def gen_unary_token(predicate_name, generate_ground_options=True):
+    return type(f"{predicate_name}StateUnaryPredicate", (DebugUnaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
+
+
+def gen_binary_token(predicate_name, generate_ground_options=True):
+    return type(f"{predicate_name}StateBinaryPredicate", (DebugBinaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
+
+
+class DebugBackend(BDDLBackend):
+    def get_predicate_class(self, predicate_name):
+        if predicate_name in UNARIES: 
+            return gen_unary_token(predicate_name)
+        elif predicate_name in BINARIES:
+            return gen_binary_token(predicate_name)
+        else: 
+            raise KeyError(predicate_name)
+
+
+class DebugGenericObject(object): 
+    def __init__(self, name):
+        self.name = name
+
+
+def get_initial_and_goal_conditions(conds) -> Tuple[List, List]:
+    scope = get_object_scope(conds)
+    # Pretend scope has been filled 
+    for name in scope: 
+        scope[name] = DebugGenericObject(name)
+    initial_conds = get_initial_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
+    goal_conds = get_goal_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
+    return initial_conds, goal_conds
+
+def get_leaf_conditions(cond) -> List:
+    if isinstance(cond, list):
+        return [leaf_cond for child in cond for leaf_cond in get_leaf_conditions(child)]
+    elif isinstance(cond, (UnaryAtomicFormula, BinaryAtomicFormula)):
+        if cond.children:
+            return [leaf_cond for child in cond.children for leaf_cond in get_leaf_conditions(child)]
+        else:
+            return [cond]
+    elif isinstance(cond, Expression):
+        if not cond.children:
+            raise ValueError(f"Found empty expression {cond} in tree.")
+        
+        return [leaf_cond for child in cond.children for leaf_cond in get_leaf_conditions(child)]
+    else:
+        raise ValueError(f"Found unexpected item {cond} in tree.")
+    
+def get_synsets(cond):
+    def get_synset_from_scope_name(scope_name):
+        synset = scope_name.rsplit('_', 1)[0]
+        assert re.fullmatch(r'^[A-Za-z-_]+\.n\.[0-9]+$', synset), f"Invalid synset name: {synset}"
+        return synset
+    assert isinstance(cond, (UnaryAtomicFormula, BinaryAtomicFormula)), "This only works with atomic formulae"
+    if isinstance(cond, UnaryAtomicFormula):
+        return [get_synset_from_scope_name(cond.input)]
+    else:
+        return [get_synset_from_scope_name(cond.input1), get_synset_from_scope_name(cond.input2)]
 
 
 def object_substance_match(cond, synset) -> Tuple[bool, bool]:
     """
     Return two bools corresponding to whether synset is used as a non-substance and as a substance, respectively, in this condition subtree
     """
-    if not isinstance(cond, list):
-        if cond.split('?')[-1].rsplit('_', 1)[0] == synset:
-            return True, False
-        else:
-            return False, False
-    elif not isinstance(cond[0], list):
-        if cond[0] in SUBSTANCE_PREDICATES:
-            if cond[1].split('?')[-1].rsplit('_', 1)[0] == synset:  # non-substance
-                return True, False
-            elif cond[2].split('?')[-1].rsplit('_', 1)[0] == synset: # substance
-                return False, True
-            else:
-                return False, False
-        # if the predicate is universal, it can be used for both substance and non-substance, so we return False for both
-        elif cond[0] in NON_SUBSTANCE_PREDICATES and \
-            (cond[1].split('?')[-1].rsplit('_', 1)[0] == synset or (len(cond) == 3 and cond[2].split('?')[-1].rsplit('_', 1)[0] == synset)):
-            return True, False
-        else:
-            return False, False
-    else:
-        is_substance, is_non_substance = zip(*[object_substance_match(child, synset) for child in cond])   
-    return any(is_substance), any(is_non_substance)
+    leafs = get_leaf_conditions(cond)
+
+    # It's used as a substance if it shows up as the last argument of any substance predicate
+    is_used_as_substance = any(synset in get_synsets(leaf)[-1] for leaf in leafs if leaf.STATE_NAME in SUBSTANCE_PREDICATES)
+
+    # It's used as a non-substance if it shows up as any argument of a non-substance predicate
+    is_used_as_non_substance_in_non_substance_predicate = any(
+        synset in synset_list
+        for leaf in leafs
+        for synset_list in get_synsets(leaf)
+        if leaf.STATE_NAME not in SUBSTANCE_PREDICATES)
+    # or the first argument of a two-argument substance predicate
+    is_used_as_non_substance_in_substance_predicate = any(
+        synset in get_synsets(leaf)[0]
+        for leaf in leafs
+        if leaf.STATE_NAME in SUBSTANCE_PREDICATES and isinstance(leaf, BinaryAtomicFormula))
+    is_used_as_non_substance = is_used_as_non_substance_in_non_substance_predicate or is_used_as_non_substance_in_substance_predicate
+    return is_used_as_non_substance, is_used_as_substance
+
 
 
 def object_used_as_fillable(cond, synset) -> Tuple[bool, bool]:
     """
     Return a bool corresponding to whether the synset is used as a fillable at any point
     """
-    if not isinstance(cond, list):
-        return False
-    elif not isinstance(cond[0], list):
-        if cond[0] in FILLABLE_PREDICATES:
-            return cond[1].split('?')[-1].rsplit('_', 1)[0] == synset
-        else:
-            return False
-    else:
-        return any([object_used_as_fillable(child, synset) for child in cond])
+    
+    # Looking for the first argument of one of the fillable predicates.
+    leafs = get_leaf_conditions(cond)
+    return any(synset in get_synsets(leaf)[0] for leaf in leafs if leaf.STATE_NAME in FILLABLE_PREDICATES)
     
 
 def object_used_predicates(cond, synset) -> Tuple[bool, bool]:
-    try:
-        if not isinstance(cond, list) or len(cond) < 2:
-            return set()
-        elif not isinstance(cond[0], list) and not isinstance(cond[1], list):
-            if any(arg.split('?')[-1].rsplit('_', 1)[0] == synset for arg in cond[1:]):
-                return {cond[0]}
-            else:
-                return set()
-        else:
-            return set().union(*[object_used_predicates(child, synset) for child in cond])
-    except:
-        print(cond)
-        raise
+    leafs = get_leaf_conditions(cond)
+    return {leaf.STATE_NAME for leaf in leafs if any(synset in synsets for synsets in get_synsets(leaf))}
 
 
 def all_task_predicates(cond) -> Set[str]:
-    assert isinstance(cond, list), cond
-    
-    results = set()
-    # The first element, if not a list, is the predicate
-    if not isinstance(cond[0], list):
-        results.add(cond[0])
-    else:
-        # But also we recurse on all children.
-        for child in cond:
-            if not isinstance(child, list):
-                continue
-            results.update(all_task_predicates(child))
-
-    return results
+    return {leaf.STATE_NAME for leaf in get_leaf_conditions(cond)}
 
 
-def leaf_inroom_conds(cond, synsets: Set[str], task_name: str) -> List[Tuple[str, str]]:
+def leaf_inroom_conds(raw_cond, synsets: Set[str]) -> List[Tuple[str, str]]:
     """
-    Return a list of all inroom conditions in the subtree of cond
+    Return a list of all inroom conditions in the subtree of raw_cond
     """
     ret = []
-    if isinstance(cond, list):
-        for child in cond:
-            ret.extend(leaf_inroom_conds(child, synsets, task_name))
-        if cond[0] == "inroom":
-            synset = cond[1].split('?')[-1].rsplit("_", 1)[0]
-            assert synset in synsets, f"{task_name}: {synset} not in valid format"
-            ret.append((canonicalize(synset), cond[2]))
+    if isinstance(raw_cond, list):
+        for child in raw_cond:
+            ret.extend(leaf_inroom_conds(child, synsets))
+        if raw_cond[0] == "inroom":
+            synset = raw_cond[1].split('?')[-1].rsplit("_", 1)[0]
+            assert synset in synsets, f"{synset} not in valid format"
+            ret.append((canonicalize(synset), raw_cond[2]))
     return ret    

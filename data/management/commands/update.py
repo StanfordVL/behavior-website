@@ -3,13 +3,13 @@ import io
 import os
 import json
 import glob
+import nltk
 from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.activity import Conditions, get_all_activities, get_instance_count
 from bddl.config import get_definition_filename
 import tqdm
 from data.utils import *
 from data.models import *
-from nltk.corpus import wordnet as wn
 from django.db.utils import IntegrityError
 from django.db import transaction
 from django.contrib.sites.models import Site
@@ -36,6 +36,9 @@ class Command(BaseCommand):
         put any preparation work (e.g. sanity check) here
         """
         print("Running preparation work...")
+
+        nltk.download('wordnet')
+
         # Update the site
         site = Site.objects.first()
         site.domain = "localhost:8000"
@@ -86,6 +89,8 @@ class Command(BaseCommand):
         """
         create synsets with annotations from propagated_annots_canonical.json and hierarchy from output_hierarchy.json
         """
+        from nltk.corpus import wordnet as wn
+
         for synset_name in self.object_taxonomy.get_all_synsets():
             synset_is_custom = not wn_synset_exists(synset_name)  # TODO: use data from hierarchy. synset_sub_hierarchy["is_custom"] == "1"
             if synset_name != canonicalize(synset_name):
@@ -233,7 +238,8 @@ class Command(BaseCommand):
             with open(get_definition_filename(act, inst), "r") as f:
                 raw_task_definition = "".join(f.readlines())
 
-            combined_conds = conds.parsed_initial_conditions + conds.parsed_goal_conditions
+            initial_conds, goal_conds = get_initial_and_goal_conditions(conds)
+            combined_conds = initial_conds + goal_conds
 
             # Create task object
             task_name = f"{act}-{inst}"
@@ -264,13 +270,13 @@ class Command(BaseCommand):
                 used_as_future_or_real = "future" in synset_used_predicates or "real" in synset_used_predicates
                 if used_as_future_or_real:
                     # Assert that it's used as future in initial and as real in goal
-                    initial_preds = object_used_predicates(conds.parsed_initial_conditions, synset_name)
+                    initial_preds = object_used_predicates(initial_conds, synset_name)
                     if "future" not in initial_preds:
                         print(f"Synset {synset_name} is not used as future in initial in {task_name}")
                     if "real" in initial_preds:
                         print(f"Synset {synset_name} is used as real in initial in {task_name}")
 
-                    goal_preds = object_used_predicates(conds.parsed_goal_conditions, synset_name)
+                    goal_preds = object_used_predicates(goal_conds, synset_name)
                     if "real" not in goal_preds:
                         print(f"Synset {synset_name} is not used as real in goal in {task_name}")
                     if "future" in goal_preds:
@@ -280,7 +286,7 @@ class Command(BaseCommand):
             task.save()
 
             # generate room requirements for task
-            for cond in leaf_inroom_conds(combined_conds, synsets, task_name):
+            for cond in leaf_inroom_conds(conds.parsed_initial_conditions, synsets):
                 assert len(cond) == 2, f"{task_name}: {str(cond)} not in correct format"
                 room_requirement, _ = RoomRequirement.objects.get_or_create(task=task, type=cond[1])
                 room_synset_requirements, created = RoomSynsetRequirement.objects.get_or_create(
