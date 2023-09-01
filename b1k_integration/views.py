@@ -1,8 +1,10 @@
-from typing import List
-from data.models import *
-from data.utils import *
-from django.db.models import Count
-from django.views.generic import DetailView, ListView, TemplateView
+from flask import View, render_template
+from bddl.knowledge_base import *
+
+class ListView(View)
+    def dispatch_request(self):
+        items = self.model.query.all()
+        return render_template(self.template, items=items)
 
 
 class TaskListView(ListView):
