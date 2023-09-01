@@ -1,10 +1,59 @@
-from flask import View, render_template
+import re
+from flask.views import View
+from flask import render_template
 from bddl.knowledge_base import *
 
-class ListView(View)
-    def dispatch_request(self):
-        items = self.model.query.all()
-        return render_template(self.template, items=items)
+
+def camel_to_snake(name: str) -> str:
+    """Converts a CamelCase string to snake_case."""
+    return re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
+
+
+class TemplateView(View):
+    def get_context_data(self):
+        return {"view": self}
+
+    def get_template_name(self):
+        return self.template_name
+
+    def dispatch_request(self, **kwargs):
+        return render_template(self.get_template_name(), **self.get_context_data(**kwargs))
+
+
+class ListView(TemplateView):
+    def get_template_name(self):
+        try:
+            return super().get_template_name()
+        except AttributeError:
+            return f"{camel_to_snake(self.model.__name__)}_list.html"
+
+    def get_queryset(self):
+        return list(self.model.all_objects())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[self.context_object_name] = self.get_queryset()
+        return context
+
+
+class DetailView(TemplateView):
+    model = Category
+    context_object_name = "category"
+    slug_field = "name"
+    slug_url_kwarg = "category_name"
+
+    def get_template_name(self):
+        try:
+            super().get_template_name()
+        except AttributeError:
+            return f"{camel_to_snake(self.model.__name__)}_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        assert len(kwargs) == 1 and self.slug_url_kwarg in kwargs
+        lookup_kwargs = {self.slug_field: kwargs[self.slug_url_kwarg]}
+        context[self.context_object_name] = self.model.get(**lookup_kwargs)
+        return context
 
 
 class TaskListView(ListView):
@@ -13,19 +62,17 @@ class TaskListView(ListView):
 
 
 class TransitionFailureTaskListView(TaskListView):
-    template_name = "data/task_list.html"
     page_title = "Transition Failure Tasks"
 
-    def get_queryset(self) -> List[Task]:
-        return [x for x in super().get_queryset().all() if not x.goal_is_reachable]
+    def get_queryset(self):
+        return [x for x in super().get_queryset() if not x.goal_is_reachable]
     
 
 class NonSceneMatchedTaskListView(TaskListView):
-    template_name = "data/task_list.html"
     page_title = "Non-Scene-Matched Tasks"
 
-    def get_queryset(self) -> List[Task]:
-        return [x for x in super().get_queryset().all() if x.scene_state == STATE_UNMATCHED]
+    def get_queryset(self):
+        return [x for x in super().get_queryset() if x.scene_state == STATE_UNMATCHED]
 
 
 class ObjectListView(ListView):
@@ -35,7 +82,9 @@ class ObjectListView(ListView):
 
 class SubstanceMappedObjectListView(ObjectListView):
     page_title = "Objects Incorrectly Mapped to Substance Synsets"
-    queryset = Object.objects.filter(category__synset__state=STATE_SUBSTANCE).all()
+
+    def get_queryset(self):
+        return [x for x in super().get_queryset() if x.category.synset.state == STATE_SUBSTANCE]
 
 
 class SceneListView(ListView):
@@ -50,7 +99,7 @@ class SynsetListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["properties"] = sorted(set(Property.objects.values_list("name", flat=True)))
+        context["properties"] = sorted({p.name for p in Property.all_objects()})
         return context
 
 
@@ -61,21 +110,20 @@ class CategoryListView(ListView):
 
 class NonLeafSynsetListView(SynsetListView):
     page_title = "Non-Leaf Object-Assigned Synsets"
-    queryset = (Synset.objects
-                .annotate(
-                    num_objects=Count('category__object'),
-                    num_child_synsets=Count('children'))
-                .filter(num_objects__gt=0, num_child_synsets__gt=0)
-                .order_by("name"))
+
+    def get_queryset(self):
+        return [
+            s for s in super().get_queryset()
+            if sum([len(c.objects) for c in s.categories]) > 0 and len(s.children) > 0
+        ]
     
 
 class SubstanceErrorSynsetListView(SynsetListView):
     page_title = "Synsets Used in Wrong (Substance/Rigid) Predicates"
-    template_name = "data/synset_list.html"
 
-    def get_queryset(self) -> List[Task]:
+    def get_queryset(self):
         return [
-            s for s in super().get_queryset().annotate(num_objects=Count('category__object')).all()
+            s for s in super().get_queryset()
             if (
                 (s.state == STATE_SUBSTANCE and s.is_used_as_non_substance) or 
                 (not s.state == STATE_SUBSTANCE and s.is_used_as_substance) or 
@@ -85,16 +133,17 @@ class SubstanceErrorSynsetListView(SynsetListView):
 
 class FillableSynsetListView(SynsetListView):
     page_title = "Synsets Used as Fillables"
-    queryset = Synset.objects.filter(is_used_as_fillable=True).all()
+
+    def get_queryset(self):
+        return [s for s in super().get_queryset() if s.is_used_as_fillable]
 
 
 class UnsupportedPropertySynsetListView(SynsetListView):
     page_title = "Task-Relevant Synsets with Object-Unsupported Properties"
-    template_name = "data/synset_list.html"
 
-    def get_queryset(self) -> List[Task]:
+    def get_queryset(self):
         return [
-            s for s in super().get_queryset().all()
+            s for s in super().get_queryset()
             if not s.has_fully_supporting_object
         ]
 
@@ -102,7 +151,6 @@ class UnsupportedPropertySynsetListView(SynsetListView):
 class TransitionListView(ListView):
     model = TransitionRule
     context_object_name = "transition_list"
-    template_name = "data/transition_list.html"
 
 
 class TaskDetailView(DetailView):
@@ -145,41 +193,40 @@ class TransitionDetailView(DetailView):
     context_object_name = "transition"
     slug_field = "name"
     slug_url_kwarg = "transition_name"
-    template_name = "data/transition_detail.html"
 
 
 class IndexView(TemplateView):
-    template_name = "data/index.html"
+    template_name = "index.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # task metadata
-        tasks_state = [task.state for task in Task.objects.all()]
+        tasks_state = [task.state for task in Task.all_objects()]
         context["task_metadata"] = [
             sum([1 for state in tasks_state if state == STATE_MATCHED]),
             sum([1 for state in tasks_state if state == STATE_PLANNED]),
             sum([1 for state in tasks_state if state == STATE_UNMATCHED]),
-            sum([1 for x in Task.objects.all() if x.scene_state == STATE_UNMATCHED]),
+            sum([1 for x in Task.all_objects() if x.scene_state == STATE_UNMATCHED]),
             len(tasks_state)
         ]
-        # sysnet metadata
+        # synset metadata
         context["synset_metadata"] = [
-            Synset.objects.filter(state=STATE_MATCHED).count(), 
-            Synset.objects.filter(state=STATE_PLANNED).count(),
-            Synset.objects.filter(state=STATE_SUBSTANCE).count(),
-            Synset.objects.filter(state=STATE_UNMATCHED).count(),
-            Synset.objects.filter(state=STATE_ILLEGAL).count(),
-            Synset.objects.count(),
+            sum(1 for x in Synset.all_objects() if x.state == STATE_MATCHED),
+            sum(1 for x in Synset.all_objects() if x.state == STATE_PLANNED),
+            sum(1 for x in Synset.all_objects() if x.state == STATE_SUBSTANCE),
+            sum(1 for x in Synset.all_objects() if x.state == STATE_UNMATCHED),
+            sum(1 for x in Synset.all_objects() if x.state == STATE_ILLEGAL),
+            sum(1 for x in Synset.all_objects()),
         ]
         # object metadata
         context["object_metadata"] = [
-            Object.objects.filter(ready=True).count(), 
-            Object.objects.filter(ready=False, planned=True).count(),
-            Object.objects.filter(planned=False).count(),
+            sum(1 for x in Object.all_objects() if x.ready),
+            sum(1 for x in Object.all_objects() if not x.ready and x.planned),
+            sum(1 for x in Object.all_objects() if not x.planned),
         ]
         # scene metadata
-        num_ready_scenes = sum([scene.any_ready for scene in Scene.objects.all()])
-        num_planned_scenes = Scene.objects.count() - num_ready_scenes
+        num_ready_scenes = sum([scene.any_ready for scene in Scene.all_objects()])
+        num_planned_scenes = sum(1 for scene in Scene.all_objects()) - num_ready_scenes
         context["scene_metadata"] = [num_ready_scenes, num_planned_scenes]
         return context
     

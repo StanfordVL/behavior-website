@@ -49,7 +49,7 @@
   <body>
     <nav class="navbar navbar-static-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">BEHAVIOR-1K</a>
+        <a class="navbar-brand" href="{{ url_for('index') }}">BEHAVIOR-1K</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -60,9 +60,9 @@
                 Tasks
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownTasks">
-                <a class="dropdown-item" href="{% url 'task_list' %}">All Tasks</a>
-                <a class="dropdown-item" href="{% url 'non-scene-matched_task_list' %}">Non-Scene-Matched Tasks</a>
-                <a class="dropdown-item" href="{% url 'transition_failure_task_list' %}">Transition Failure Tasks</a>
+                <a class="dropdown-item" href="{{ url_for('task_list') }}">All Tasks</a>
+                <a class="dropdown-item" href="{{ url_for('non-scene-matched_task_list') }}">Non-Scene-Matched Tasks</a>
+                <a class="dropdown-item" href="{{ url_for('transition_failure_task_list') }}">Transition Failure Tasks</a>
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -70,11 +70,11 @@
                 Synsets
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownSynsets">
-                <a class="dropdown-item" href="{% url 'synset_list' %}">All Synsets</a>
-                <a class="dropdown-item" href="{% url 'non-leaf_synset_list' %}">Object-Assigned Non-Leaf Synsets</a>
-                <a class="dropdown-item" href="{% url 'substance_error_synset_list' %}">Substanceness Mismatch Synsets</a>
-                <a class="dropdown-item" href="{% url 'fillable_synset_list' %}">Synsets Used as Fillable</a>
-                <a class="dropdown-item" href="{% url 'unsupported_property_synset_list' %}">Task-Relevant Synsets with Object-Unsupported Properties</a>
+                <a class="dropdown-item" href="{{ url_for('synset_list') }}">All Synsets</a>
+                <a class="dropdown-item" href="{{ url_for('non-leaf_synset_list') }}">Object-Assigned Non-Leaf Synsets</a>
+                <a class="dropdown-item" href="{{ url_for('substance_error_synset_list') }}">Substanceness Mismatch Synsets</a>
+                <a class="dropdown-item" href="{{ url_for('fillable_synset_list') }}">Synsets Used as Fillable</a>
+                <a class="dropdown-item" href="{{ url_for('unsupported_property_synset_list') }}">Task-Relevant Synsets with Object-Unsupported Properties</a>
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -82,18 +82,18 @@
                 Objects
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownObjects">
-                <a class="dropdown-item" href="{% url 'object_list' %}">All Objects</a>
-                <a class="dropdown-item" href="{% url 'substance_mapped_object_list' %}">Objects Assigned to Substance Synsets</a>
+                <a class="dropdown-item" href="{{ url_for('object_list') }}">All Objects</a>
+                <a class="dropdown-item" href="{{ url_for('substance_mapped_object_list') }}">Objects Assigned to Substance Synsets</a>
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'category_list' %}">Categories</a>
+              <a class="nav-link" href="{{ url_for('category_list') }}">Categories</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'scene_list' %}">Scenes</a>
+              <a class="nav-link" href="{{ url_for('scene_list') }}">Scenes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'transition_list' %}">Transition Rules</a>
+              <a class="nav-link" href="{{ url_for('transition_list') }}">Transition Rules</a>
             </li>
           </ul>
         </div>

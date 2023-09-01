@@ -1,10 +1,10 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% block title %}Synset {{ synset.name }} Details{% endblock %}
 {% block content %}
   <h1 class="text-center">{{ synset.name }}</h1>
   <hr/>
   {% if synset.legal %} 
-  <div class="text-center">{{ synset.definition|capfirst }}</div>
+  <div class="text-center">{{ synset.definition }}</div>
   {% else %}
   <div class="text-center">{{ Illegal }}</div>
   {% endif %}
@@ -14,7 +14,7 @@
   <div class="container">
     <div class="row justify-content-md-center">
       <!-- TODO: Add parameters -->
-      {% for property in synset.property_set.all %}
+      {% for property in synset.properties %}
       <div class="col-md-auto my-1 py-2 border">{{ property.name }}</div>
       {% empty %}
       <p>None</p>
@@ -28,15 +28,15 @@
     <div class="col-md-auto my-1 border py-2">{% if synset.is_used_as_fillable %} IS {% else %} NOT {% endif %} used as fillable</div>
   </div>
   <div class="row justify-content-md-center">
-    {% for predicate in synset.used_in_predicates.all %}
+    {% for predicate in synset.used_in_predicates %}
     <div class="col-md-3 my-1 border py-2">{{ predicate.name }}</div>
     {% endfor %}
   </div>
   <h2>Tasks</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for task in synset.task_set.all %}
-      <div class="col-md-auto my-1"><a href="{% url 'task_detail' task.name %}" class="{{ 'btn btn-'|add:task.state }}">{{ task.name }}</a></div>
+      {% for task in synset.tasks %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('task_detail', task.name) }}" class="btn btn-{{- task.state -}}">{{ task.name }}</a></div>
       {% empty %}
       <div>None</div>
       {% endfor %}
@@ -47,8 +47,8 @@
   <h2>Directly Mapped Objects</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for object in synset.direct_matching_objects|dictsort:"name" %}
-      <div class="col-md-auto my-1"><a href="{% url 'object_detail' object.name %}" class="{{ 'btn btn-'|add:object.state }}">{{ object.name }}</a></div>
+      {% for object in synset.direct_matching_objects%}
+      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
       {% empty %}
       <p>None</p>
       {% endfor %}
@@ -59,8 +59,8 @@
   <h2>All Descendant Objects (including Direct)</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for object in synset.matching_objects|dictsort:"name" %}
-      <div class="col-md-auto my-1"><a href="{% url 'object_detail' object.name %}" class="{{ 'btn btn-'|add:object.state }}">{{ object.name }}</a></div>
+      {% for object in synset.matching_objects%}
+      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
       {% empty %}
       <p>None</p>
       {% endfor %}
@@ -80,14 +80,14 @@
   </div>
 
   <h2>Related Synsets</h2>
-  {% include "data/synset_graph_module.html" with G=synset.subgraph center_node=synset %}
+  {% include "synset_graph_module.html" with G=synset.subgraph center_node=synset %}
   <br>
   
   <h2>Ancestor Synsets</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for ancestor in synset.ancestors.all|dictsort:"name" %}
-      <div class="col-md-auto my-1"><a href="{% url 'synset_detail' ancestor.name %}" class="{{ 'btn btn-'|add:ancestor.state }}">{{ ancestor.name }}</a></div>
+      {% for ancestor in synset.ancestors%}
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', ancestor.name) }}" class="btn btn-{{- ancestor.state -}}">{{ ancestor.name }}</a></div>
       {% empty %}
       <p>None</p>
       {% endfor %}
@@ -98,8 +98,8 @@
   <h2>Parents Synsets</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for parent in synset.parents.all|dictsort:"name" %}
-      <div class="col-md-auto my-1"><a href="{% url 'synset_detail' parent.name %}" class="{{ 'btn btn-'|add:parent.state }}">{{ parent.name }}</a></div>
+      {% for parent in synset.parents%}
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', parent.name) }}" class="btn btn-{{- parent.state -}}">{{ parent.name }}</a></div>
       {% empty %}
       <p>None</p>
       {% endfor %}
@@ -110,8 +110,8 @@
   <h2>Children Synsets</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for child in synset.children.all|dictsort:"name"  %}
-      <div class="col-md-auto my-1"><a href="{% url 'synset_detail' child.name %}" class="{{ 'btn btn-'|add:child.state }}">{{ child.name }}</a></div>
+      {% for child in synset.children %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', child.name) }}" class="btn btn-{{- child.state -}}">{{ child.name }}</a></div>
       {% empty %}
       <p>None</p>
       {% endfor %}

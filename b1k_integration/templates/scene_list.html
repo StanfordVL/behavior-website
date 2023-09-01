@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Scenes{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
@@ -50,7 +50,7 @@
     <tbody id="myTable">
       {% for scene in scene_list %}
       <tr>
-        <td><a href="{% url 'scene_detail' scene.name %}">{{ scene.name }}</a></td>
+        <td><a href="{{ url_for('scene_detail', scene.name) }}">{{ scene.name }}</a></td>
         <td>{{ scene.room_count }}</td>
         <td>{{ scene.object_count }}</td>
         <td class="{% if scene.fully_ready %}bg-success{% elif scene.any_ready %}bg-warning{% else %}bg-danger{% endif %}">

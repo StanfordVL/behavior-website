@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}BEHAVIOR-1K Integration{% endblock %}
 
@@ -16,7 +16,6 @@
 {% block content %}
   <div class="container mt-5">
     <h1 class="text-center">B1K Integration Dashboard</h1>
-    <h4 class="text-center">Last updated {% now "SHORT_DATETIME_FORMAT" %}</h4>
     <br>
     <div class="row mt-4">
       <div class="col-md-6">
@@ -44,7 +43,7 @@
               <strong>{{ task_metadata.4 }}</strong>
             </div>
           </div>
-          <a href="{% url 'task_list' %}" class="stretched-link"></a>
+          <a href="{{ url_for('task_list') }}" class="stretched-link"></a>
         </div>
       </div>
       <div class="col-md-6">
@@ -76,7 +75,7 @@
               <strong>{{ synset_metadata.5 }}</strong>
             </div>
           </div>
-          <a href="{% url 'synset_list' %}" class="stretched-link"></a>
+          <a href="{{ url_for('synset_list') }}" class="stretched-link"></a>
         </div>
       </div>
       <div class="col-md-6">
@@ -97,7 +96,7 @@
               <strong>{{ object_metadata.2 }}</strong>
             </div>
           </div>
-          <a href="{% url 'object_list' %}" class="stretched-link"></a>
+          <a href="{{ url_for('object_list') }}" class="stretched-link"></a>
         </div>
       </div>
       <div class="col-md-6">
@@ -113,7 +112,7 @@
               <strong>{{ scene_metadata.1 }}</strong>
             </div>
           </div>
-          <a href="{% url 'scene_list' %}" class="stretched-link"></a>
+          <a href="{{ url_for('scene_list') }}" class="stretched-link"></a>
         </div>
       </div>
     </div>

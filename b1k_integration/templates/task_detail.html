@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% block title %}Task {{ task.name }} Details{% endblock %}
 {% block content %}
   <h1 class="text-center">{{ task.name }}</h1>
@@ -6,8 +6,8 @@
   <h2>Synsets</h2>
   <div class="container">
       <div class="row justify-content-md-center">
-      {% for synset in task.synsets.all %}
-      <div class="col-md-auto my-1"><a href="{% url 'synset_detail' synset.name %}" class="{{ 'btn btn-'|add:synset.state }}"> {{ synset.name }}</a></div>
+      {% for synset in task.synsets %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', synset.name) }}" class="btn btn-{{- synset.state -}}"> {{ synset.name }}</a></div>
       {% empty %}
       <div>None</div>
       {% endfor %}
@@ -27,7 +27,7 @@
   <h2>Unreachable Goal Synsets</h2>
   <ul>
     {% for synset in task.unreachable_goal_synsets %}
-      <li><a class="font-weight-bold" href="{% url 'synset_detail' synset.name %}">{{ synset.name }}</a></li>
+      <li><a class="font-weight-bold" href="{{ url_for('synset_detail', synset.name) }}">{{ synset.name }}</a></li>
     {% empty %}
     <li>None</li>
     {% endfor %}
@@ -39,7 +39,7 @@
       <ul>
         {% for scene, info in task.scene_matching_dict.items %}
           {% if info.matched_ready %}
-            <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a></li>
+            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', scene) }}">{{ scene }}</a></li>
           {% endif %}
         {% empty %}
         <li>None</li>
@@ -51,7 +51,7 @@
       <ul>
         {% for scene, info in task.scene_matching_dict.items %}
           {% if not info.matched_ready and info.matched_planned %}
-            <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: <ul>
+            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', scene) }}">{{ scene }}</a>: <ul>
               <li>This scene will match in its planned form. In its currently ready form it does not match, because: {{ info.reason_ready }}</li>
             </ul></li>
           {% endif %}
@@ -65,7 +65,7 @@
       <ul>
         {% for scene, info in task.scene_matching_dict.items %}
           {% if not info.matched_ready and not info.matched_planned %}
-            <li><a class="font-weight-bold" href="{% url 'scene_detail' scene %}">{{ scene }}</a>: {{ info.reason_planned }}</li>
+            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', scene) }}">{{ scene }}</a>: {{ info.reason_planned }}</li>
           {% endif %}
         {% empty %}
         <li>None</li>

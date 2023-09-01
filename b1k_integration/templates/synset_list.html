@@ -1,7 +1,9 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Synsets{% endif %}{% endblock %}
 {% block customstyle %}
-  {{ properties|json_script:"properties" }}
+  <script id="properties" type="application/json">
+  {{ properties|tojson }}
+  </script>
   <style>
     table {
       border: 0.3vh solid #dee2e6;
@@ -118,8 +120,8 @@
     <tbody id="myTable">
       {% for synset in synset_list %}
       <tr>
-        <td><a href="{% url 'synset_detail' synset.name %}">{{ synset.name }}</a></td>
-        <td class="{{ 'bg-'|add:synset.state }}">
+        <td><a href="{{ url_for('synset_detail', synset.name) }}">{{ synset.name }}</a></td>
+        <td class="bg-{{- synset.state -}}">
           {% if synset.state == 'success' %}Ready
           {% elif synset.state == 'warning' %}Planned
           {% elif synset.state == 'danger' %}Not Ready
@@ -128,39 +130,39 @@
           {% endif %}
         </td>
         <td>{{ synset.is_custom }}</td>
-        <td>{% if synset.children.count == 0 %}True{% else %}False{% endif %}</td>
+        <td>{% if len(synset.children) == 0 %}True{% else %}False{% endif %}</td>
         <td>{{ synset.definition }}</td>
         <td>
-          {% for parent in synset.parents.all %}
-            <a href="{% url 'synset_detail' parent.name %}">{{ parent.name }}, </a>
+          {% for parent in synset.parents %}
+            <a href="{{ url_for('synset_detail', parent.name) }}">{{ parent.name }}, </a>
           {% endfor %}
         </td>
         <td>
-          {% for child in synset.children.all %}
-            <a href="{% url 'synset_detail' child.name %}">{{ child.name }}, </a>
+          {% for child in synset.children %}
+            <a href="{{ url_for('synset_detail', child.name) }}">{{ child.name }}, </a>
           {% endfor %}
         </td>
         <td>
-          {% for property in synset.property_set.all %}
+          {% for property in synset.properties %}
             {{ property.name }}, 
           {% endfor %}
         </td>
         <td>
-          {% for predicate in synset.used_in_predicates.all %}
+          {% for predicate in synset.used_in_predicates %}
             {{ predicate.name }},
           {% endfor %}
         </td>
         <td>
-          {% for task in synset.task_set.all|slice:":10" %}
-            <a href="{% url 'task_detail' task.name %}">{{ task.name }}, </a>
+          {% for task in synset.tasks[:10] %}
+            <a href="{{ url_for('task_detail', task.name) }}">{{ task.name }}, </a>
           {% endfor %}
-          {% if synset.task_set.count > 10 %}...{% endif %}
+          {% if len(synset.task_set) > 10 %}...{% endif %}
         </td>
         <td>
-          {% for category in synset.category_set.all|slice:":10" %}
-            <a href="{% url 'category_detail' category.name %}">{{ category.name }}, </a>
+          {% for category in synset.categories[:10] %}
+            <a href="{{ url_for('category_detail', category.name) }}">{{ category.name }}, </a>
           {% endfor %}
-          {% if synset.category_set.count > 10 %}...{% endif %}
+          {% if len(synset.category_set) > 10 %}...{% endif %}
         </td>
         <td>{{ synset.direct_matching_objects | length }}</td>
         <td>{{ synset.matching_objects | length }}</td>
