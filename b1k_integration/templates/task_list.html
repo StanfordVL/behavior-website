@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Tasks{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
@@ -83,14 +83,14 @@
     <tbody id="myTable">
       {% for task in task_list %}
       <tr>
-        <td><a href="{% url 'task_detail' task.name %}">{{ task.name }}</a></td>
-        <td class="{{ 'bg-'|add:task.synset_state }}">
-          {% for synset in task.synsets.all %}
-            {{ synset }}, 
+        <td><a href="{{ url_for('task_detail', name=task.name) }}">{{ task.name }}</a></td>
+        <td class="bg-{{- task.synset_state -}}">
+          {% for synset in task.synsets %}
+            {{ synset.name }}, 
           {% endfor %}
         </td>
         <td>
-          {% for scene, state in task.scene_matching_dict.items %}
+          {% for scene, state in task.scene_matching_dict.items() %}
             {% if state.matched_ready %}
               <span class="text-success">{{ scene.name }},</span>
             {% elif state.matched_planned %}
@@ -99,7 +99,7 @@
           {% endfor %}
         </td>
         <td>
-          {% for predicate in task.uses_predicates.all %}
+          {% for predicate in task.uses_predicates %}
             {{ predicate.name }}, 
           {% endfor %}
         </td>

@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Transitions{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
@@ -34,14 +34,14 @@
     <tbody id="myTable">
       {% for transition in transition_list %}
       <tr>
-        <td><a href="{% url 'transition_detail' transition.name %}">{{ transition.name }}</a></td>
+        <td><a href="{{ url_for('transition_detail', name=transition.name) }}">{{ transition.name }}</a></td>
         <td>
-          {% for synset in transition.input_synsets.all %}
+          {% for synset in transition.input_synsets %}
             {{ synset.name }}, 
           {% endfor %}
         </td>
         <td>
-          {% for synset in transition.output_synsets.all %}
+          {% for synset in transition.output_synsets %}
             {{ synset.name }}, 
           {% endfor %}
         </td>

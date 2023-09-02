@@ -7,7 +7,7 @@ graph TD;
     {{ edge.0.name }} --> {{ edge.1.name }};
   {% endfor %}
   {% for synset in G.nodes %}
-    click {{synset.name}} "{% url 'synset_detail' synset.name %}" "Synset details page";
+    click {{synset.name}} "{{ url_for('synset_detail', name=synset.name) }}" "Synset details page";
     class {{synset.name}} {{synset.state}};
   {% endfor %}
   {% if center_node %}

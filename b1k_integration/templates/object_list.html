@@ -1,4 +1,4 @@
-{% extends "data/base.html" %}
+{% extends "base.html" %}
 {% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}{% endblock %}
 {% block customstyle %}
   <style>
@@ -69,11 +69,11 @@
     <tbody id="myTable">
       {% for object in object_list %}
       <tr>
-        <td><a href="{% url 'object_detail' object.name %}">{{ object.name }}</a></td>
+        <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
         <td>{{ object.category.name }}</td>
         <td>{{ object.category.synset.name }}</td>
         <td>{{ object.category.synset.task_relevant }}</td>
-        <td>{{ object.roomobject_set.count }}</td>
+        <td>{{ object.roomobjects|length }}</td>
         <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>
       </tr>
       {% endfor %}

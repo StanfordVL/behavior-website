@@ -1,10 +1,1 @@
-django
-networkx
-nltk
-IPython
-pillow
-future
-xmltodict
-beautifulsoup4
-html5lib
-fs
+flask==2.3.3
