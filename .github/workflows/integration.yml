@@ -41,7 +41,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.10"
           architecture: x64
 
       # See if we need to rebuild the whole thing
