@@ -40,7 +40,7 @@ def slugify_filter(value):
 
 @app.route("/", methods=["GET"])
 def redirect_index():
-  return redirect("/b1k_pipeline", code=302)
+  return redirect("/b1k-integration", code=302)
 
 for urlpattern, view in urlpatterns:
-  app.add_url_rule("/b1k_pipeline/" + urlpattern, view_func=view)
+  app.add_url_rule("/b1k-integration/" + urlpattern, view_func=view)
