@@ -4,7 +4,9 @@ on:
   schedule:
     - cron: "0 * * * *"  # Every hour
   workflow_dispatch:
-  push: 
+  push:
+    branches:
+      - master
 
 permissions:
   contents: read
@@ -36,50 +38,11 @@ jobs:
           path: bddl
           ref: develop
 
-      - name: Clone ig pipeline Repo
-        uses: actions/checkout@v3
-        with:
-          repository: StanfordVL/ig_pipeline
-          path: ig_pipeline
-          token: ${{ secrets.REPO_TOKEN }}
-
       - name: Setup python
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
           architecture: x64
-
-      # See if we need to re-pull any ig_pipeline data from DVC.
-      - name: Check cache for ig_pipeline data
-        id: cache-pipeline
-        uses: actions/cache@v3
-        with:
-          key: ig_pipeline-${{ hashFiles('ig_pipeline/dvc.lock') }}
-          path: |
-            ig_pipeline/artifacts/pipeline/combined_room_object_list.json
-            ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json
-            ig_pipeline/artifacts/pipeline/object_inventory.json
-            ig_pipeline/artifacts/pipeline/object_inventory_future.json
-
-      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
-        name: Install dvc
-        run: pip install dvc[gs]
-
-      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
-        name: Authenticate on Google Cloud
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
-        name: Pull dvc data
-        working-directory: ig_pipeline
-        run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future
-
-      - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
-        name: Unprotect images
-        working-directory: ig_pipeline
-        run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/combined_room_object_list_future.json artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory_future.json
 
       # See if we need to rebuild the whole thing
       - name: Get BDDL hash
@@ -96,7 +59,7 @@ jobs:
         id: cache-integration
         uses: actions/cache@v3
         with:
-          key: integration-${{ steps.b1k-integration-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}-${{ hashFiles('ig_pipeline/artifacts/pipeline/combined_room_object_list.json', 'ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json', 'ig_pipeline/artifacts/pipeline/object_inventory.json', 'ig_pipeline/artifacts/pipeline/object_inventory_future.json') }}
+          key: integration-${{ steps.b1k-integration-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}
           path: README.md
           lookup-only: true
 
@@ -112,23 +75,18 @@ jobs:
         run: pip install -r requirements.txt
 
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
-        name: Build database
-        working-directory: b1k-integration
-        run: python manage.py makemigrations data && python manage.py migrate && python manage.py update
-
-      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: Start local server
         working-directory: b1k-integration
-        run: python manage.py runserver &
+        run: flask --app b1k_integration.app run &
 
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: freeze static files
         working-directory: b1k-integration
-        run: wget -mpEk http://localhost:8000/b1k-integration/
+        run: wget -mpEk http://localhost:5000/b1k-integration/
         
       - name: kill local server
         if: success() || failure() 
-        run: kill $(lsof -t -i:8000) || true
+        run: kill $(lsof -t -i:5000) || true
       
       # Deploy to github pages
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
@@ -139,7 +97,7 @@ jobs:
         name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: b1k-integration/localhost:8000/b1k-integration
+          path: b1k-integration/localhost:5000/b1k-integration
 
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: Deploy to GitHub Pages
