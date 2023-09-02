@@ -39,7 +39,7 @@
       <ul>
         {% for scene, info in task.scene_matching_dict.items() %}
           {% if info.matched_ready %}
-            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene) }}">{{ scene }}</a></li>
+            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene }}</a></li>
           {% endif %}
         {% else %}
         <li>None</li>
@@ -51,7 +51,7 @@
       <ul>
         {% for scene, info in task.scene_matching_dict.items() %}
           {% if not info.matched_ready and info.matched_planned %}
-            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene) }}">{{ scene }}</a>: <ul>
+            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene }}</a>: <ul>
               <li>This scene will match in its planned form. In its currently ready form it does not match, because: {{ info.reason_ready }}</li>
             </ul></li>
           {% endif %}
@@ -65,7 +65,7 @@
       <ul>
         {% for scene, info in task.scene_matching_dict.items() %}
           {% if not info.matched_ready and not info.matched_planned %}
-            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene) }}">{{ scene }}</a>: {{ info.reason_planned }}</li>
+            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene }}</a>: {{ info.reason_planned }}</li>
           {% endif %}
         {% else %}
         <li>None</li>
