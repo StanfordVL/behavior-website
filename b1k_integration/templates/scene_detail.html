@@ -15,8 +15,8 @@
   <h3>{{ room.name }}</h3>
   <ul>
     {% for roomobject in room.roomobjects %}
-    <li><a href="{{ url_for('object_detail', roomobject.object.name) }}">{{ roomobject.object.name }}</a>: {{ roomobject.count }}</li>
-    {% empty %}
+    <li><a href="{{ url_for('object_detail', name=roomobject.object.name) }}">{{ roomobject.object.name }}</a>: {{ roomobject.count }}</li>
+    {% else %}
     <li>None</li>
     {% endfor %}
   </ul>

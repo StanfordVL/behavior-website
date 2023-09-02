@@ -1,3 +1,4 @@
+import unicodedata, re
 from flask import Flask, redirect
 from b1k_integration.views import *
 
@@ -16,15 +17,26 @@ urlpatterns = [
   ("fillablesynsets/", FillableSynsetListView.as_view("fillable_synset_list")),
   ("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView.as_view("unsupported_property_synset_list")),
   ("transitions/", TransitionListView.as_view("transition_list")),
-  ("tasks/<task_name>/", TaskDetailView.as_view("task_detail")),
-  ("synsets/<synset_name>/", SynsetDetailView.as_view("synset_detail")),
-  ("categories/<category_name>/", CategoryDetailView.as_view("category_detail")),
-  ("scenes/<scene_name>/", SceneDetailView.as_view("scene_detail")),
-  ("objects/<object_name>/", ObjectDetailView.as_view("object_detail")),
-  ("transitions/<transition_name>/", TransitionDetailView.as_view("transition_detail")),
+  ("tasks/<name>/", TaskDetailView.as_view("task_detail")),
+  ("synsets/<name>/", SynsetDetailView.as_view("synset_detail")),
+  ("categories/<name>/", CategoryDetailView.as_view("category_detail")),
+  ("scenes/<name>/", SceneDetailView.as_view("scene_detail")),
+  ("objects/<name>/", ObjectDetailView.as_view("object_detail")),
+  ("transitions/<name>/", TransitionDetailView.as_view("transition_detail")),
 ]
 
 app = Flask(__name__)
+
+@app.template_filter('slugify')
+def slugify_filter(value):
+  value = str(value)
+  value = (
+    unicodedata.normalize("NFKD", value)
+    .encode("ascii", "ignore")
+    .decode("ascii")
+  )
+  value = re.sub(r"[^\w\s-]", "", value.lower())
+  return re.sub(r"[-\s]+", "-", value).strip("-_")
 
 @app.route("/", methods=["GET"])
 def redirect_index():

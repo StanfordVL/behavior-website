@@ -30,8 +30,8 @@ class ListView(TemplateView):
     def get_queryset(self):
         return list(self.model.all_objects())
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self):
+        context = super().get_context_data()
         context[self.context_object_name] = self.get_queryset()
         return context
 
@@ -49,7 +49,7 @@ class DetailView(TemplateView):
             return f"{camel_to_snake(self.model.__name__)}_detail.html"
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data()
         assert len(kwargs) == 1 and self.slug_url_kwarg in kwargs
         lookup_kwargs = {self.slug_field: kwargs[self.slug_url_kwarg]}
         context[self.context_object_name] = self.model.get(**lookup_kwargs)
@@ -157,42 +157,42 @@ class TaskDetailView(DetailView):
     model = Task
     context_object_name = "task"
     slug_field = "name"
-    slug_url_kwarg = "task_name"
+    slug_url_kwarg = "name"
     
 
 class SynsetDetailView(DetailView):
     model = Synset
     context_object_name = "synset"
     slug_field = "name"
-    slug_url_kwarg = "synset_name"
+    slug_url_kwarg = "name"
 
 
 class CategoryDetailView(DetailView):
     model = Category
     context_object_name = "category"
     slug_field = "name"
-    slug_url_kwarg = "category_name"
+    slug_url_kwarg = "name"
         
 
 class ObjectDetailView(DetailView):
     model = Object
     context_object_name = "object"
     slug_field = "name"
-    slug_url_kwarg = "object_name" 
+    slug_url_kwarg = "name" 
     
 
 class SceneDetailView(DetailView):
     model = Scene
     context_object_name = "scene"
     slug_field = "name"
-    slug_url_kwarg = "scene_name"
+    slug_url_kwarg = "name"
 
 
 class TransitionDetailView(DetailView):
     model = TransitionRule
     context_object_name = "transition"
     slug_field = "name"
-    slug_url_kwarg = "transition_name"
+    slug_url_kwarg = "name"
 
 
 class IndexView(TemplateView):

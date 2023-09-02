@@ -16,7 +16,7 @@
       <!-- TODO: Add parameters -->
       {% for property in synset.properties %}
       <div class="col-md-auto my-1 py-2 border">{{ property.name }}</div>
-      {% empty %}
+      {% else %}
       <p>None</p>
       {% endfor %}
     </div>
@@ -36,8 +36,8 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for task in synset.tasks %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('task_detail', task.name) }}" class="btn btn-{{- task.state -}}">{{ task.name }}</a></div>
-      {% empty %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('task_detail', name=task.name) }}" class="btn btn-{{- task.state -}}">{{ task.name }}</a></div>
+      {% else %}
       <div>None</div>
       {% endfor %}
     </div>
@@ -48,8 +48,8 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for object in synset.direct_matching_objects%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
-      {% empty %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
+      {% else %}
       <p>None</p>
       {% endfor %}
     </div>
@@ -60,8 +60,8 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for object in synset.matching_objects%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
-      {% empty %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
+      {% else %}
       <p>None</p>
       {% endfor %}
     </div>
@@ -80,15 +80,17 @@
   </div>
 
   <h2>Related Synsets</h2>
-  {% include "synset_graph_module.html" with G=synset.subgraph center_node=synset %}
+  {% with G=synset.subgraph, center_node=synset %}
+    {% include "synset_graph_module.html" %}
+  {% endwith %}
   <br>
   
   <h2>Ancestor Synsets</h2>
   <div class="container">
     <div class="row justify-content-md-center">
       {% for ancestor in synset.ancestors%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', ancestor.name) }}" class="btn btn-{{- ancestor.state -}}">{{ ancestor.name }}</a></div>
-      {% empty %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=ancestor.name) }}" class="btn btn-{{- ancestor.state -}}">{{ ancestor.name }}</a></div>
+      {% else %}
       <p>None</p>
       {% endfor %}
     </div>
@@ -99,8 +101,8 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for parent in synset.parents%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', parent.name) }}" class="btn btn-{{- parent.state -}}">{{ parent.name }}</a></div>
-      {% empty %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=parent.name) }}" class="btn btn-{{- parent.state -}}">{{ parent.name }}</a></div>
+      {% else %}
       <p>None</p>
       {% endfor %}
     </div>
@@ -111,8 +113,8 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for child in synset.children %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', child.name) }}" class="btn btn-{{- child.state -}}">{{ child.name }}</a></div>
-      {% empty %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=child.name) }}" class="btn btn-{{- child.state -}}">{{ child.name }}</a></div>
+      {% else %}
       <p>None</p>
       {% endfor %}
     </div>
