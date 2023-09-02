@@ -82,7 +82,7 @@ jobs:
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: freeze static files
         working-directory: b1k-integration
-        run: sleep 30s && wget -mpEk http://127.0.0.1:5000/b1k-integration/
+        run: sleep 30s && wget -mpEk http://localhost:5000/b1k-integration/
         
       - name: kill local server
         if: success() || failure() 
@@ -97,7 +97,7 @@ jobs:
         name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: b1k-integration/127.0.0.1:5000/b1k-integration
+          path: b1k-integration/localhost:5000/b1k-integration
 
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: Deploy to GitHub Pages
