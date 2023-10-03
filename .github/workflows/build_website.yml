@@ -69,7 +69,7 @@ jobs:
 
       - name: Zip artifact for deployment
         working-directory: omnigibson-src/site
-        run: zip -r omnigibson-docs.zip *
+        run: apt install -y zip && zip -r omnigibson-docs.zip *
 
       - name: Deploy artifact
         uses: actions/upload-artifact@v3
