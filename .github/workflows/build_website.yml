@@ -199,17 +199,17 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: jekyll
-          path: jekyll.zip
+          path: .
       - name: Pull docs
         uses: actions/download-artifact@v3
         with:
           name: omnigibson-docs
-          path: omnigibson-docs.zip
+          path: .
       - name: Pull knowledgebase
         uses: actions/download-artifact@v3
         with:
           name: knowledgebase
-          path: knowledgebase.zip
+          path: .
       - name: Unpack everything
         run: >
           unzip jekyll.zip -d _site &&
