@@ -1,6 +1,6 @@
 import unicodedata, re
 from flask import Flask, redirect
-from b1k_integration.views import *
+from knowledgebase.views import *
 
 urlpatterns = [
   ("", IndexView.as_view("index")),
@@ -40,7 +40,7 @@ def slugify_filter(value):
 
 @app.route("/", methods=["GET"])
 def redirect_index():
-  return redirect("/b1k-integration", code=302)
+  return redirect("/knowledgebase", code=302)
 
 for urlpattern, view in urlpatterns:
-  app.add_url_rule("/b1k-integration/" + urlpattern, view_func=view)
+  app.add_url_rule("/knowledgebase/" + urlpattern, view_func=view)
