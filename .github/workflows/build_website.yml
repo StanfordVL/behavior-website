@@ -67,11 +67,15 @@ jobs:
         working-directory: omnigibson-src
         run: source scripts/build_docs.sh
 
+      - name: Zip artifact for deployment
+        working-directory: omnigibson-src/site
+        run: zip -r omnigibson-docs.zip *
+
       - name: Deploy artifact
         uses: actions/upload-artifact@v3
         with:
           name: omnigibson-docs
-          path: omnigibson-src/site
+          path: omnigibson-docs.zip
 
   build-knowledgebase:
     runs-on: [self-hosted, linux]
@@ -148,13 +152,17 @@ jobs:
       - name: Kill local server
         if: success() || failure() 
         run: kill $(lsof -t -i:5000) || true
-      
+
+      - name: Zip artifact for deployment
+        working-directory: website/knowledgebase/localhost:5000/knowledgebase
+        run: zip -r knowledgebase.zip *
+
       - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
         name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: knowledgebase
-          path: website/knowledgebase/localhost:5000/knowledgebase
+          path: knowledgebase.zip
 
   build-jekyll:
     runs-on: [self-hosted, linux]
@@ -177,11 +185,14 @@ jobs:
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+      - name: Zip artifact for deployment
+        working-directory: jekyll/_site
+        run: zip -r jekyll.zip *
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: jekyll
-          path: jekyll/_site
+          path: jekyll.zip
 
   # Combine different artifacts into a single github pages artifact
   combine-artifacts:
@@ -192,17 +203,22 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: jekyll
-          path: _site
+          path: jekyll.zip
       - name: Pull docs
         uses: actions/download-artifact@v3
         with:
           name: omnigibson-docs
-          path: _site/omnigibson
+          path: omnigibson-docs.zip
       - name: Pull knowledgebase
         uses: actions/download-artifact@v3
         with:
           name: knowledgebase
-          path: _site/knowledgebase
+          path: knowledgebase.zip
+      - name: Unpack everything
+        run: |
+          unzip jekyll.zip -d _site
+          unzip omnigibson-docs.zip -d _site/omnigibson
+          unzip knowledgebase.zip -d _site/knowledgebase
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
 
