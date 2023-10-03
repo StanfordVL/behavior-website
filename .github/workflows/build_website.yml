@@ -1,17 +1,25 @@
 name: Build and deploy BEHAVIOR website
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
+  schedule:
+    - cron: "0 * * * *"  # Every hour
   workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
 
 
 jobs:
   build-omnigibson-docs:
-    runs-on: [linux, gpu-enabled]
+    runs-on: [self-hosted, linux, gpu-enabled]
     container:
       image: stanfordvl/omnigibson-dev:latest
       options: --gpus=all --privileged --user=root
@@ -43,6 +51,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
         with:
+          repository: StanfordVL/OmniGibson
           submodules: true
           path: omnigibson-src
 
@@ -58,19 +67,152 @@ jobs:
         working-directory: omnigibson-src
         run: source scripts/build_docs.sh
 
-      - name: Copy benchmark index page
-        working-directory: omnigibson-src
-        run: mkdir site/benchmark && cp scripts/benchmark* site/benchmark/ && cd site/benchmark && mv benchmark.html index.html
-
-      - name: Fetch benchmark file from gh-pages branch
-        working-directory: omnigibson-src
-        run: |
-          git fetch origin gh-pages:gh-pages --force
-          git show gh-pages:benchmark/data.js > ./site/benchmark/data.js
-          git diff
-          
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy artifact
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./omnigibson-src/site
+          name: omnigibson-docs
+          path: omnigibson-src/site
+
+  build-knowledgebase:
+    runs-on: [self-hosted, linux]
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Checkout all repos
+      - name: Checkout website repo
+        uses: actions/checkout@v3
+        with:
+          path: website
+
+      - name: Clone BDDL Repo
+        uses: actions/checkout@v3
+        with:
+          repository: StanfordVL/bddl
+          path: bddl
+          ref: develop
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+          architecture: x64
+
+      # See if we need to rebuild the whole thing
+      - name: Get BDDL hash
+        id: bddl-hash
+        working-directory: bddl
+        run: echo hash=$(git rev-parse HEAD) >> "$GITHUB_OUTPUT"
+
+      - name: Get website hash
+        id: website-hash
+        working-directory: website
+        run: echo hash=$(git rev-parse HEAD) >> "$GITHUB_OUTPUT"
+
+      - name: Check cache for overall data
+        id: cache-integration
+        uses: actions/cache@v3
+        with:
+          key: integration-${{ steps.website-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}
+          path: README.md
+          lookup-only: true
+
+      # Rebuild if necessary
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Install BDDL
+        working-directory: bddl
+        run: pip install -e .
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Install other dependencies
+        working-directory: website/knowledgebase
+        run: pip install -r requirements.txt
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Start local server
+        working-directory: website/knowledgebase
+        run: flask --app knowledgebase.app run &
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Wait for server to come alive
+        working-directory: website/knowledgebase
+        run: curl --head -X GET --retry 20 --retry-connrefused --retry-delay 5 http://localhost:5000/knowledgebase/
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Freeze static files
+        working-directory: website/knowledgebase
+        run: wget -mpEk http://localhost:5000/knowledgebase/
+        
+      - name: Kill local server
+        if: success() || failure() 
+        run: kill $(lsof -t -i:5000) || true
+      
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: knowledgebase
+          path: website/knowledgebase/localhost:5000/knowledgebase
+
+  build-jekyll:
+    runs-on: [self-hosted, linux]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
+        with:
+          ruby-version: '3.1' # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          cache-version: 0 # Increment this number if you need to re-download cached gems
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v3
+      - name: Build with Jekyll
+        # Outputs to the './_site' directory by default
+        working-directory: jekyll
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        env:
+          JEKYLL_ENV: production
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: jekyll
+          path: _site
+
+  # Combine different artifacts into a single github pages artifact
+  combine-artifacts:
+    runs-on: [self-hosted, linux]
+    needs: [build-omnigibson-docs, build-knowledgebase, build-jekyll]
+    steps:
+      - name: Pull jekyll
+        uses: actions/download-artifact@v3
+        with:
+          name: jekyll
+          path: _site
+      - name: Pull docs
+        uses: actions/download-artifact@v3
+        with:
+          name: omnigibson-docs
+          path: _site/omnigibson
+      - name: Pull knowledgebase
+        uses: actions/download-artifact@v3
+        with:
+          name: knowledgebase
+          path: _site/knowledgebase
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v2
+
+  # Deploy on github pages
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: [self-hosted, linux]
+    needs: combine-artifacts
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
