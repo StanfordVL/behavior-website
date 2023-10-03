@@ -125,7 +125,7 @@ dmypy.json
 .pyre/
 
 
-# integration specific
+# knowledgebase specific
 data/migrations
 output
 /media

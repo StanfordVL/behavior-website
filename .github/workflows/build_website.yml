@@ -112,35 +112,35 @@ jobs:
         run: echo hash=$(git rev-parse HEAD) >> "$GITHUB_OUTPUT"
 
       - name: Check cache for overall data
-        id: cache-integration
+        id: cache-knowledgebase
         uses: actions/cache@v3
         with:
-          key: integration-${{ steps.website-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}
+          key: knowledgebase-${{ steps.website-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}
           path: README.md
           lookup-only: true
 
       # Rebuild if necessary
-      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Install BDDL
         working-directory: bddl
         run: pip install -e .
 
-      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Install other dependencies
         working-directory: website/knowledgebase
         run: pip install -r requirements.txt
 
-      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Start local server
         working-directory: website/knowledgebase
         run: flask --app knowledgebase.app run &
 
-      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Wait for server to come alive
         working-directory: website/knowledgebase
         run: curl --head -X GET --retry 20 --retry-connrefused --retry-delay 5 http://localhost:5000/knowledgebase/
 
-      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Freeze static files
         working-directory: website/knowledgebase
         run: wget -mpEk http://localhost:5000/knowledgebase/
@@ -153,7 +153,7 @@ jobs:
         working-directory: website/knowledgebase/localhost:5000/knowledgebase
         run: zip -r ${GITHUB_WORKSPACE}/knowledgebase.zip *
 
-      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
