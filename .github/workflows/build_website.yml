@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   build-omnigibson-docs:
-    runs-on: [self-hosted, linux, gpu-enabled]
+    runs-on: [self-hosted, linux]
     container:
       image: stanfordvl/omnigibson-dev:latest
       options: --gpus=all --privileged --user=root
