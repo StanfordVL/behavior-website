@@ -211,9 +211,9 @@ jobs:
           name: knowledgebase
           path: knowledgebase.zip
       - name: Unpack everything
-        run: |
-          unzip jekyll.zip -d _site
-          unzip omnigibson-docs.zip -d _site/omnigibson
+        run: >
+          unzip jekyll.zip -d _site &&
+          unzip omnigibson-docs.zip -d _site/omnigibson &&
           unzip knowledgebase.zip -d _site/knowledgebase
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
