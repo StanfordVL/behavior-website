@@ -40,6 +40,9 @@ menu_settings:
       - title: 'Overview'
         url: /behavior-1k
         icon: ni-bullet-list-67 text-default
+      - title: 'Knowledgebase'
+        url: /knowledgebase
+        icon: ni-atom text-warning
       - title: 'Getting Started'
         url: /omnigibson/getting_started/installation.html
         icon: ni-spaceship text-success
