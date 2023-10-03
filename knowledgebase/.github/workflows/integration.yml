@@ -1,0 +1,111 @@
+name: Update Integration
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # Every hour
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+
+jobs:
+  update:
+    runs-on: [self-hosted, linux]
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Checkout all repos
+      - name: Checkout integration repo
+        uses: actions/checkout@v3
+        with:
+          path: b1k-integration
+
+      - name: Clone BDDL Repo
+        uses: actions/checkout@v3
+        with:
+          repository: StanfordVL/bddl
+          path: bddl
+          ref: develop
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+          architecture: x64
+
+      # See if we need to rebuild the whole thing
+      - name: Get BDDL hash
+        id: bddl-hash
+        working-directory: bddl
+        run: echo hash=$(git rev-parse HEAD) >> "$GITHUB_OUTPUT"
+
+      - name: Get b1k-integration hash
+        id: b1k-integration-hash
+        working-directory: b1k-integration
+        run: echo hash=$(git rev-parse HEAD) >> "$GITHUB_OUTPUT"
+
+      - name: Check cache for overall data
+        id: cache-integration
+        uses: actions/cache@v3
+        with:
+          key: integration-${{ steps.b1k-integration-hash.outputs.hash }}-${{ steps.bddl-hash.outputs.hash }}
+          path: README.md
+          lookup-only: true
+
+      # Rebuild if necessary
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Install BDDL
+        working-directory: bddl
+        run: pip install -e .
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Install other dependencies
+        working-directory: b1k-integration
+        run: pip install -r requirements.txt
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Start local server
+        working-directory: b1k-integration
+        run: flask --app b1k_integration.app run &
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Wait for server to come alive
+        working-directory: b1k-integration
+        run: curl --head -X GET --retry 20 --retry-connrefused --retry-delay 5 http://localhost:5000/b1k-integration/
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Freeze static files
+        working-directory: b1k-integration
+        run: wget -mpEk http://localhost:5000/b1k-integration/
+        
+      - name: Kill local server
+        if: success() || failure() 
+        run: kill $(lsof -t -i:5000) || true
+      
+      # Deploy to github pages
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: b1k-integration/localhost:5000/b1k-integration
+
+      - if: ${{ steps.cache-integration.outputs.cache-hit != 'true' }}
+        name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+
