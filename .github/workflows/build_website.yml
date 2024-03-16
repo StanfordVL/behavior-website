@@ -21,6 +21,10 @@ jobs:
   build-omnigibson-docs:
     runs-on: [self-hosted, linux]
 
+    strategy:
+      matrix:
+        branch: [main, og-develop]
+
     defaults:
       run:
         shell: micromamba run -n omnigibson /bin/bash -leo pipefail {0}
@@ -33,6 +37,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: StanfordVL/OmniGibson
+          ref: ${{ matrix.branch }}
           submodules: true
           path: omnigibson-src
 
@@ -50,13 +55,13 @@ jobs:
 
       - name: Zip artifact for deployment
         working-directory: omnigibson-src/site
-        run: apt update && apt install -y zip && zip -r ${GITHUB_WORKSPACE}/omnigibson-docs.zip *
+        run: apt update && apt install -y zip && zip -r ${GITHUB_WORKSPACE}/omnigibson-docs-${{ matrix.branch }}.zip *
 
       - name: Deploy artifact
         uses: actions/upload-artifact@v3
         with:
-          name: omnigibson-docs
-          path: omnigibson-docs.zip
+          name: omnigibson-docs-${{ matrix.branch }}
+          path: omnigibson-docs-${{ matrix.branch }}.zip
 
   build-knowledgebase:
     runs-on: [self-hosted, linux]
@@ -181,10 +186,15 @@ jobs:
         with:
           name: jekyll
           path: .
-      - name: Pull docs
+      - name: Pull main docs
         uses: actions/download-artifact@v3
         with:
-          name: omnigibson-docs
+          name: omnigibson-docs-main
+          path: .
+      - name: Pull og-develop docs
+        uses: actions/download-artifact@v3
+        with:
+          name: omnigibson-docs-og-develop
           path: .
       - name: Pull knowledgebase
         uses: actions/download-artifact@v3
@@ -194,7 +204,8 @@ jobs:
       - name: Unpack everything
         run: >
           unzip jekyll.zip -d _site &&
-          unzip omnigibson-docs.zip -d _site/omnigibson &&
+          unzip omnigibson-docs-main.zip -d _site/omnigibson &&
+          unzip omnigibson-docs-og-develop.zip -d _site/omnigibson-develop &&
           unzip knowledgebase.zip -d _site/knowledgebase
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
