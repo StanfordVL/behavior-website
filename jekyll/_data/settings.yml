@@ -40,9 +40,12 @@ menu_settings:
       - title: 'Overview'
         url: /behavior-1k
         icon: ni-bullet-list-67 text-default
+      - title: 'Demo Colab'
+        url: https://colab.research.google.com/drive/1H4u06CPMzgbEk4M4N12h6bXnl7xyBGFE?usp=sharing
+        icon: ni-laptop text-warning
       - title: 'Knowledgebase'
         url: /knowledgebase
-        icon: ni-atom text-warning
+        icon: ni-atom text-info
       - title: 'Getting Started'
         url: /omnigibson/getting_started/installation.html
         icon: ni-spaceship text-success
@@ -51,7 +54,7 @@ menu_settings:
         icon: ni-single-copy-04 text-danger
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
-        icon: ni-chart-bar-32 text-info
+        icon: ni-chart-bar-32 text-warning
 
     - title: 'BEHAVIOR-100'
       url: /behavior-100
