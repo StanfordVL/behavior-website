@@ -41,7 +41,7 @@ menu_settings:
         url: /behavior-1k
         icon: ni-bullet-list-67 text-default
       - title: 'Demo Colab'
-        url: https://colab.research.google.com/drive/1H4u06CPMzgbEk4M4N12h6bXnl7xyBGFE?usp=sharing
+        url: https://bit.ly/b1k-colab
         icon: ni-laptop text-warning
       - title: 'Knowledgebase'
         url: /knowledgebase
