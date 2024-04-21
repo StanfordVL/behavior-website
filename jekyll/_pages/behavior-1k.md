@@ -1,6 +1,6 @@
 ---
 title: BEHAVIOR-1K
-subtitle: A Benchmark for Embodied AI with 1,000 Everyday Activities and Realistic Simulation
+subtitle: A Human-Centered, Embodied AI Benchmark with 1,000 Everyday Activities and Realistic Simulation
 description: None
 featured_image: /assets/img/behavior/b1k-feats/sim2real.png
 # featured_video: /assets/img/behavior/hundred-tile-recording.m4v
@@ -16,7 +16,7 @@ make it valuable for embodied AI and robot learning research.
 <p class="alert alert-default">The first BEHAVIOR-1K full release (v1.0.0) is now available! This release features 1,004 pre-sampled activities, 50 scenes, ~10,000 objects, and many usability improvements. <a href="https://behavior.stanford.edu/omnigibson/getting_started/installation.html" class="alert-link">Get started!</a></p>
 
 ###### Reference
-- [BEHAVIOR-1K: A Benchmark for Embodied AI with 1,000 Everyday Activities and Realistic Simulation](https://openreview.net/pdf?id=_8DoIe8G3t). Chengshu Li\*, Ruohan Zhang\*, Josiah Wong\*, Cem Gokmen\*, Sanjana Srivastava\*, Roberto Martín-Martín\*, Chen Wang\*, Gabrael Levine\*, Michael Lingelbach, Jiankai Sun, Mona Anvari, Minjune Hwang, Manasi Sharma, Arman Aydin, Dhruva Bansal, Samuel Hunter, Kyu-Young Kim, Alan Lou, Caleb R Matthews, Ivan Villa-Renteria, Jerry Huayang Tang, Claire Tang, Fei Xia, Silvio Savarese, Hyowon Gweon, Karen Liu, Jiajun Wu, Li Fei-Fei, Conference on Robot Learning (CoRL) 2022.
+- [BEHAVIOR-1K: A Human-Centered, Embodied AI Benchmark with 1,000 Everyday Activities and Realistic Simulation](https://arxiv.org/abs/2403.09227). Chengshu Li\*, Ruohan Zhang\*, Josiah Wong\*, Cem Gokmen\*, Sanjana Srivastava\*, Roberto Martín-Martín\*, Chen Wang\*, Gabrael Levine\*, Wensi Ai\*, Benjamin Martinez, Hang Yin, Michael Lingelbach, Minjune Hwang, Ayano Hiranaka, Sujay Garlanka, Arman Aydin, Sharon Lee, Jiankai Sun, Mona Anvari, Manasi Sharma, Dhruva Bansal, Samuel Hunter, Kyu-Young Kim, Alan Lou, Caleb R Matthews, Ivan Villa-Renteria, Jerry Huayang Tang, Claire Tang, Fei Xia, Yunzhu Li, Silvio Savarese, Hyowon Gweon, C. Karen Liu, Jiajun Wu, Li Fei-Fei. Conference on Robot Learning (CoRL) 2022.
 
 #### Building blocks of BEHAVIOR-1K
 BEHAVIOR-1K includes two components. The first is the definition of 1,000 everyday activities, grounded in 50
