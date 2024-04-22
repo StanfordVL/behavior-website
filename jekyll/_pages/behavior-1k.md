@@ -30,7 +30,7 @@ You can follow [installation guide](https://behavior.stanford.edu/omnigibson/get
 ###### * BEHAVIOR-1K scene and object assets (docs TBD).
 ###### * BEHAVIOR-1K [Activity definitions in Behavior Domain Definition Language (BDDL)](https://github.com/StanfordVL/bddl/tree/master/bddl/activity_definitions).
 
-{% include components/features/pull-video.html %}
+{% include components/features/b1k-demo-video.html %}
 
 
 {% include components/features/b1k-feat.html %}
