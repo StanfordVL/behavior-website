@@ -20,7 +20,7 @@ make it valuable for embodied AI and robot learning research.
 
 #### Building blocks of BEHAVIOR-1K
 BEHAVIOR-1K includes two components. The first is the definition of 1,000 everyday activities, grounded in 50
-scenes (houses, gardens, restaurants, offices, etc.) with more than 5,000 objects
+scenes (houses, gardens, restaurants, offices, etc.) with more than 9,000 objects
 annotated with rich physical and semantic properties. The second is OmniGibson (based on [**Nvidia's Omniverse**](https://www.nvidia.com/en-us/omniverse/)),
 a novel simulation environment that supports these activities via realistic physics
 simulation and rendering of rigid bodies, deformable bodies, and liquids. 
