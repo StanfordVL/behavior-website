@@ -1,123 +1,23 @@
-<div class="section features-1">
+{% for category in site.data.settings.team_info %}
+  <div class="section features-1">
     <div class="container">
-      <div class="row text-left justify-content-left">
-        <div class="col-lg-8">
-          <h4>The BEHAVIOR Team</h4>
-          <br>
+        <div class="row text-left justify-content-left">
+            <div class="col-lg-8">
+                <h4>{{ category.title }}</h4>
+                <br>
+            </div>
         </div>
-      </div>
-      <div class="row text-center justify-content-center" align="middle">
-        <div class="col">
-          <a href="http://chengshuli.me" class="avatar avatar-xl rounded-circle" align="middle">
-            <img alt="Chengshu (Eric) Li" src="{{ '/assets/img/people/chengshu.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Chengshu (Eric) Li</small>
+        <div class="row text-center justify-content-center" align="middle">
+            {% for member in category.members %}
+                <div class="col">
+                    <a href="{{ member.url }}" class="avatar avatar-xl rounded-circle" align="middle">
+                        <img alt="{{ member.name }}" src="/assets/img/people/{{ member.picture }}">
+                    </a>
+                    <small class="d-block font-weight-bold mb-4">{{ member.name }}</small>
+                </div>
+            {% endfor %}
         </div>
-        <div class="col">
-          <a href="https://ai.stanford.edu/~zharu/" class="avatar avatar-xl rounded-circle">
-            <img alt="Image placeholder" src="{{ '/assets/img/people/ruohan_zhang_photo.jpeg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Ruohan Zhang</small>
-        </div>
-        <div class="col">
-          <a href="http://jowo.me" class="avatar avatar-xl rounded-circle">
-            <img alt="Image placeholder" src="{{ '/assets/img/people/josiah_wong.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Josiah Wong</small>
-        </div>
-        <div class="col">
-          <a href="https://www.cemgokmen.com/" class="avatar avatar-xl rounded-circle">
-            <img alt="Cem Gokmen" src="https://www.cemgokmen.com/assets/img/bio-photo.jpg">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Cem Gokmen</small>
-        </div>
-        <div class="col">
-          <a href="https://www.linkedin.com/in/sanjana-srivastava5/" class="avatar avatar-xl rounded-circle">
-            <img alt="Sanjana Srivastava" src="{{ '/assets/img/people/sanjana.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Sanjana Srivastava</small>
-        </div>
-        <div class="col">
-          <a href="https://www.chenwangjeremy.net/" class="avatar avatar-xl rounded-circle">
-            <img alt="Chen Wang" src="{{ '/assets/img/people/chen_wang.jpeg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Chen Wang</small>
-        </div>
-        <div class="w-100"></div>
-
-        <div class="col">
-          <a href="https://www.gabrael.io/" class="avatar avatar-xl rounded-circle">
-            <img alt="Gabrael Levine" src="{{ '/assets/img/people/gabrael.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Gabrael<br/>Levine</small>
-        </div>
-        <div class="col">
-          <a href="https://github.com/mjlbach/" class="avatar avatar-xl rounded-circle">
-            <img alt="Michael Lingelbach" src="https://pbs.twimg.com/profile_images/1291846610414997505/J5QTYSTN_400x400.jpg">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Michael Lingelbach</small>
-        </div>
-        <div class="col">
-          <a href="https://monaanvari.github.io/portfolio/" class="avatar avatar-xl rounded-circle">
-            <img alt="Mona Anvari" src="{{ '/assets/img/people/mona.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Mona Anvari</small>
-        </div>
-        <div class="col">
-          <a href="http://emilyjin.me/" class="avatar avatar-xl rounded-circle">
-            <img alt="Emily Jin" src="{{ '/assets/img/people/emily_jin.png' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Emily Jin</small>
-        </div>
-        <div class="col">
-          <a href="http://wensi-ai.github.io/" class="avatar avatar-xl rounded-circle">
-            <img alt="Wensi Ai" src="{{ '/assets/img/people/wensi_ai.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Wensi Ai</small>
-        </div>
-        <div class="col">
-          <a href="https://yunzhuli.github.io/" class="avatar avatar-xl rounded-circle">
-            <img alt="Yunzhu Li" src="{{ '/assets/img/people/yunzhu.jpeg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Yunzhu Li</small>
-        </div>
-        <div class="w-100"></div>
-        <div class="col">
-          <a href="https://robertomartinmartin.com/" class="avatar avatar-xl rounded-circle">
-            <img alt="Roberto Martín-Martín" src="{{ '/assets/img/people/roberto_martinmartin.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Roberto<br>Martín-Martín</small>
-        </div>
-        <div class="col">
-          <a href="http://cvgl.stanford.edu/silvio/" class="avatar avatar-xl rounded-circle">
-            <img alt="Silvio Savarese" src="{{ '/assets/img/people/silvio_savarese.jpg' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Silvio Savarese</small>
-        </div>
-        <div class="col">
-          <a href="https://web.stanford.edu/~hyo/Home.html" class="avatar avatar-xl rounded-circle">
-            <img alt="Hyowon Gweon" src="https://bingschool.stanford.edu/sites/bingschool/files/styles/hs_medium_square_360x360/public/media/capx/gweon1582179036530.jpg?h=1641edec&itok=a3TcTu8Y">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Hyowon Gweon</small>
-        </div>
-        <div class="col">
-          <a href="https://ckllab.stanford.edu/c-karen-liu" class="avatar avatar-xl rounded-circle">
-            <img alt="Karen Liu" src="{{ '/assets/img/people/Karen.png' | relative_url }}">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Karen Liu</small>
-        </div>
-        <div class="col">
-          <a href="https://jiajunwu.com/" class="avatar avatar-xl rounded-circle">
-            <img alt="Jiajun Wu" src="https://jiajunwu.com/images/Jiajun_Wu.jpg">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Jiajun Wu</small>
-        </div>
-        <div class="col">
-          <a href="https://engineering.stanford.edu/people/fei-fei-li" class="avatar avatar-xl rounded-circle">
-            <img alt="Li Fei-Fei" src="https://engineering.stanford.edu/sites/default/files/styles/medium_square/public/media/person/fei-fei-li1550534393295.jpg">
-          </a>
-          <small class="d-block font-weight-bold mb-4">Li Fei-Fei</small>
-        </div>
-      </div>
     </div>
   </div>
+{% endfor %}
+

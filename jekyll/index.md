@@ -27,8 +27,6 @@ The broader goal of BEHAVIOR is to fuel the development of general, effective EA
 
 {% include components/features/members.html %}
 
-{% include components/features/alumni.html %}
-
 <!-- {% include components/features/join-us.html %} -->
 
 
