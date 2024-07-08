@@ -104,8 +104,10 @@ menu_settings:
         icon: ni-spaceship text-primary
 
     - title: 'Research'
-      url: /research
       submenu_items:
+      - title: 'Publications'
+        url: /research
+        icon: ni-books text-success
       - title: 'BEHAVIOR Vision Suite'
         url: "https://behavior-vision-suite.github.io/"
         icon: ni-camera-compact text-primary
