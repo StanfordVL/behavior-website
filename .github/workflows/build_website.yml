@@ -2,7 +2,7 @@ name: Build and deploy BEHAVIOR website
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Every hour
+    - cron: "0 10 * * *"  # Every day at 10am
   workflow_dispatch:
   push:
     branches:
@@ -64,8 +64,7 @@ jobs:
           path: omnigibson-docs-${{ matrix.branch }}.zip
 
   build-knowledgebase:
-    runs-on: [self-hosted, linux]
-
+    runs-on: ubuntu-latest
     steps:
       # Checkout all repos
       - name: Checkout website repo
@@ -147,7 +146,7 @@ jobs:
           path: knowledgebase.zip
 
   build-jekyll:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -178,7 +177,7 @@ jobs:
 
   # Combine different artifacts into a single github pages artifact
   combine-artifacts:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     needs: [build-omnigibson-docs, build-knowledgebase, build-jekyll]
     steps:
       - name: Pull jekyll
@@ -215,7 +214,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     needs: combine-artifacts
     steps:
       - name: Deploy to GitHub Pages
