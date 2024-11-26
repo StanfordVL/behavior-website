@@ -55,6 +55,9 @@ menu_settings:
       - title: 'BDDL'
         url: https://github.com/StanfordVL/bddl
         icon: ni-chart-bar-32 text-warning
+      - title: 'Asset Sources'
+        url: /asset-sources
+        icon: ni-shop text-info
 
     - title: 'BEHAVIOR-100'
       url: /behavior-100
@@ -65,9 +68,6 @@ menu_settings:
       # - title: 'Benchmark Setup'
       #   url: /benchmark-guide
       #   icon: ni-settings-gear-65 text-default
-      - title: 'List of Activities'
-        url: /behavior-gallery/activity.html
-        icon: ni-bullet-list-67 text-warning
       # - title: 'Installation Instructions'
       #   url: https://stanfordvl.github.io/behavior/installation.html
       #   icon: ni-single-copy-04 text-default
@@ -83,6 +83,9 @@ menu_settings:
       - title: 'Dataset of VR Demos'
         url: /vr-demos
         icon: ni-glasses-2 text-info
+      - title: 'VR Demo Video Gallery'
+        url: /behavior-gallery/activity.html
+        icon: ni-bullet-list-67 text-warning
       # - title: 'BEHAVIOR-100 Doc'
       #   url: https://stanfordvl.github.io/behavior/intro.html
       #   icon: ni-bullet-list-67 text-success
