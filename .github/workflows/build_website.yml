@@ -47,7 +47,7 @@ jobs:
 
       - name: Install dev dependencies if they exist (backwards compatibility w/ main branch)
         working-directory: omnigibson-src
-        run: "[ -x requirements-dev.txt ] && pip install -r requirements-dev.txt"
+        run: "[ ! -f requirements-dev.txt ] || pip install -r requirements-dev.txt"
 
       - name: Build docs
         working-directory: omnigibson-src
