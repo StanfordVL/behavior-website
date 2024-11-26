@@ -7,7 +7,11 @@ featured_image: /assets/img/behavior/b1k-feats/sim2real.png
 The objects in the BEHAVIOR-1K dataset were sourced mainly through TurboSquid and edited to match the requirements of robotics simulation.
 Here, you can find the source links of all 3D models purchased for the BEHAVIOR-1K dataset. Note that, while all of these links were purchased
 during the construction of the dataset, not necessarily all of the files, or all of the models from each of the files, were included in the
-dataset, due to various requirements. Also note that you do NOT need to purchase these assets to use the encrypted copy of the dataset
+dataset, due to various requirements. Also note that this dataset does not include grandfathered BEHAVIOR-100 (or iGibson) objects that
+may have been obtained from various sources such as ShapeNet. For more information about BEHAVIOR-100 objects' sources please refer to the
+BEHAVIOR paper appendix.
+
+Also note that you do NOT need to purchase these assets to use the encrypted copy of the dataset
 distributed with OmniGibson.
 
 1. [https://www.turbosquid.com/3d-models/visor-cap-3d-model/704654](https://www.turbosquid.com/3d-models/visor-cap-3d-model/704654)
