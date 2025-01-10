@@ -128,7 +128,7 @@ jobs:
       - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Freeze static files
         working-directory: website/knowledgebase
-        run: wget -mpEk http://localhost:5000/knowledgebase/
+        run: wget -mpEk http://localhost:5000/knowledgebase/ && wget -P localhost:5000/knowledgebase/ http://localhost:5000/knowledgebase/searchable_items.json
         
       - name: Kill local server
         if: success() || failure() 
