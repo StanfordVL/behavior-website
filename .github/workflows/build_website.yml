@@ -58,7 +58,7 @@ jobs:
         run: apt update && apt install -y zip && zip -r ${GITHUB_WORKSPACE}/omnigibson-docs-${{ matrix.branch }}.zip *
 
       - name: Deploy artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: omnigibson-docs-${{ matrix.branch }}
           path: omnigibson-docs-${{ matrix.branch }}.zip
@@ -140,7 +140,7 @@ jobs:
 
       - if: ${{ steps.cache-knowledgebase.outputs.cache-hit != 'true' }}
         name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: knowledgebase
           path: knowledgebase.zip
@@ -170,7 +170,7 @@ jobs:
         working-directory: jekyll/_site
         run: zip -r ${GITHUB_WORKSPACE}/jekyll.zip *
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jekyll
           path: jekyll.zip
@@ -181,22 +181,22 @@ jobs:
     needs: [build-omnigibson-docs, build-knowledgebase, build-jekyll]
     steps:
       - name: Pull jekyll
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: jekyll
           path: .
       - name: Pull main docs
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: omnigibson-docs-main
           path: .
       - name: Pull og-develop docs
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: omnigibson-docs-og-develop
           path: .
       - name: Pull knowledgebase
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: knowledgebase
           path: .
