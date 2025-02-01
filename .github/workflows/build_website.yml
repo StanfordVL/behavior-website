@@ -207,7 +207,7 @@ jobs:
           unzip omnigibson-docs-og-develop.zip -d _site/omnigibson-develop &&
           unzip knowledgebase.zip -d _site/knowledgebase
       - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
 
   # Deploy on github pages
   deploy:
@@ -219,4 +219,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
